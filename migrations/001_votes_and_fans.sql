@@ -158,3 +158,34 @@ create policy "fans update own" on storage.objects for update to authenticated
 -- Supabase usually reloads on its own, but this removes the guesswork:
 -- without it you get "Could not find the table in the schema cache".
 notify pgrst, 'reload schema';
+
+-- ---------- 7. realtime ----------
+-- Subscribing in the browser does nothing unless Postgres publishes the table.
+-- Without this the boards never move for anyone until they reload.
+-- Realtime still honours RLS: `people`, `bids` and `fan_totals` are publicly
+-- readable so everyone sees those; `users` is readable only by its owner, so a
+-- balance change reaches that person's other tabs and nobody else's.
+alter table people      replica identity full;
+alter table bids        replica identity full;
+alter table fan_totals  replica identity full;
+alter table users       replica identity full;
+
+do $$
+begin
+  if not exists (select 1 from pg_publication where pubname = 'supabase_realtime') then
+    create publication supabase_realtime;
+  end if;
+end $$;
+
+do $$
+declare t text;
+begin
+  foreach t in array array['people','bids','fan_totals','users'] loop
+    if not exists (
+      select 1 from pg_publication_tables
+      where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = t
+    ) then
+      execute format('alter publication supabase_realtime add table public.%I', t);
+    end if;
+  end loop;
+end $$;

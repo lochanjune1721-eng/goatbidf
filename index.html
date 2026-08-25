@@ -144,6 +144,7 @@
   const catBySlug = Object.fromEntries(cats.map(c=>[c.slug,c]));
   const _totals = {};
   const catTotal  = id => (_totals[id] ??= (peopleByCat[id]||[]).reduce((s,p)=>s+(p.total_cents||0),0));
+  // realtime clears entries in _totals when a board's numbers move
 
   document.getElementById('board-count').textContent = cats.length ? `(${cats.length})` : '';
 
@@ -483,9 +484,9 @@
 
   // ---------- realtime ----------
   // One repaint per 500ms at most, so a burst of votes can't thrash the page.
-  let queued = false;
+  let queued = false, feedQueued = false;
   async function repaint(){
-    queued = false;
+    feedQueued = false;
     try{
       const today = new Date(); today.setHours(0,0,0,0);
       const [t, r] = await Promise.all([
@@ -505,9 +506,22 @@
   }
   try{
     sb.channel('home-feed')
+      // a vote anywhere on the site: move that person's number here too, so the
+      // closest-race ordering stays honest without polling
+      .on('postgres_changes', {event:'UPDATE', schema:'public', table:'people'}, payload => {
+        const row = payload.new;
+        const p = people.find(x => x.id === row.id);
+        if(p && p.total_cents !== row.total_cents){
+          p.total_cents = row.total_cents;
+          _totals[p.category_id] = undefined;      // recompute that board's total
+          if(queued) return;
+          queued = true;
+          setTimeout(() => { queued = false; render(); }, 500);
+        }
+      })
       .on('postgres_changes', {event:'INSERT', schema:'public', table:'bids'}, () => {
-        if(queued) return;
-        queued = true;
+        if(feedQueued) return;
+        feedQueued = true;
         setTimeout(repaint, 500);
       }).subscribe();
   }catch(e){}

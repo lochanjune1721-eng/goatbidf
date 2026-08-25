@@ -182,35 +182,99 @@
     }catch(e){ return null; }
   };
 
-  // ---- realtime, throttled so a burst can't thrash the layout ----
-  Board.prototype.live = function(){
+  // ---- realtime ----
+  // Votes land continuously, so every open board has to move without a reload.
+  // Two rules keep that cheap: apply the row from the event payload rather than
+  // refetching the board, and coalesce to at most one reorder per 500ms so a
+  // burst of votes cannot thrash the layout.
+  Board.prototype.live = function(categoryId){
     const self = this;
-    let pending = false;
-    const flush = () => {
-      pending = false;
-      self.refresh().catch(()=>{});
+    let dirty = false, timer = null, flashId = null;
+
+    const schedule = (id) => {
+      if(id) flashId = id;
+      if(dirty) return;                       // a repaint is already queued
+      dirty = true;
+      timer = setTimeout(() => {
+        dirty = false;
+        const f = flashId; flashId = null;
+        self.reorder(f);
+      }, 500);
     };
+
+    const applyRow = (row) => {
+      if(!row || !row.id) return false;
+      const p = self.people.find(x => x.id === row.id);
+      if(!p) return false;                    // not on this board
+      if(row.total_cents === p.total_cents) return false;
+      p.total_cents = row.total_cents;
+      p.backer_count = row.backer_count ?? p.backer_count;
+      p.first_backed_at = row.first_backed_at ?? p.first_backed_at;
+      return true;
+    };
+
     try{
-      sb.channel('board-'+Math.random().toString(36).slice(2))
-        .on('postgres_changes', {event:'*', schema:'public', table:'people'}, () => {
-          if(pending) return;
-          pending = true;
-          setTimeout(flush, 500);
-        }).subscribe();
+      const filter = categoryId ? `category_id=eq.${categoryId}` : undefined;
+      const ch = sb.channel('board-' + (categoryId || Math.random().toString(36).slice(2)));
+
+      ch.on('postgres_changes',
+        { event:'UPDATE', schema:'public', table:'people', ...(filter?{filter}:{}) },
+        payload => { if(applyRow(payload.new)) schedule(payload.new.id); });
+
+      // someone added a contender — that row is not in memory, so refetch once
+      ch.on('postgres_changes',
+        { event:'INSERT', schema:'public', table:'people', ...(filter?{filter}:{}) },
+        () => { self.refresh().catch(()=>{}); });
+
+      // the GOAT fan can change without the person's total changing on this
+      // client's copy, so refresh the halves on a throttle too
+      ch.on('postgres_changes',
+        { event:'*', schema:'public', table:'fan_totals' },
+        () => { self.refreshFans(); });
+
+      ch.subscribe();
+      this._channel = ch;
     }catch(e){}
     return this;
+  };
+
+  // Reload just the fan halves, coalesced. Cheaper than rebuilding rows.
+  Board.prototype.refreshFans = function(){
+    if(this._fanTimer) return;
+    this._fanTimer = setTimeout(async () => {
+      this._fanTimer = null;
+      if(!this.opts.reload) return;
+      try{
+        const fresh = await this.opts.reload();
+        const byId = new Map(fresh.map(p => [p.id, p]));
+        this.people.forEach((p, i) => {
+          const f = byId.get(p.id);
+          if(!f) return;
+          const changed = f.fan_id !== p.fan_id || f.fan_cents !== p.fan_cents;
+          Object.assign(p, f);
+          if(changed){
+            const row = this.rows.get(p.id);
+            const half = row && row.querySelector('.vfan');
+            if(half) half.outerHTML = V.fanHalf(p, i + 1);
+          }
+        });
+      }catch(e){}
+    }, 1500);
   };
 
   Board.prototype.refresh = async function(){
     if(!this.opts.reload) return;
     const fresh = await this.opts.reload();
     if(!fresh || !fresh.length) return;
+    const known = new Set(this.people.map(p => p.id));
+    const added = fresh.filter(p => !known.has(p.id));
     const byId = new Map(fresh.map(p=>[p.id,p]));
-    let changed = false;
+    let changed = added.length > 0;
     this.people.forEach(p => {
       const f = byId.get(p.id);
       if(f && f.total_cents !== p.total_cents){ Object.assign(p, f); changed = true; }
     });
+    if(added.length){ this.people.push(...added); this.mount(); return; }
     if(changed) this.reorder();
   };
 

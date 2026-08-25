@@ -25,12 +25,35 @@ export default async function handler(req, res){
     return res.status(400).json({ error: 'Whole votes only' });
   }
 
-  // Identify the buyer from their Supabase JWT — never from the request body,
-  // or anyone could top up anyone else's balance (or their own, unbounded).
-  const token = (req.headers.authorization || '').replace(/^Bearer /, '');
-  if(!token) return res.status(401).json({ error: 'Sign in first' });
-  const { data: { user }, error: authErr } = await supabaseAdmin.auth.getUser(token);
-  if(authErr || !user) return res.status(401).json({ error: 'Sign in first' });
+  // Identify the buyer from their Supabase JWT. The token is only ever read as
+  // a credential to verify — the user id comes from Supabase's answer, never
+  // from the request — so a forged body cannot top up someone else's balance.
+  // Header first; body is a fallback for proxies that strip Authorization.
+  const header = (req.headers.authorization || '').replace(/^Bearer\s+/i, '').trim();
+  const token = header || String(body.accessToken || '').trim();
+
+  if(!token){
+    return res.status(401).json({
+      error: 'No session token reached the server. Reload the page and sign in again.',
+      code: 'no_token'
+    });
+  }
+
+  const { data: { user } = {}, error: authErr } = await supabaseAdmin.auth.getUser(token);
+  if(authErr || !user){
+    // Distinguish an expired user session from a server that cannot verify
+    // anything — usually a SUPABASE_SERVICE_ROLE_KEY that no longer matches the
+    // project, which looks identical to the user but is not their problem.
+    const m = (authErr && authErr.message) || 'unknown';
+    const serverSide = /invalid api key|api key|jwt secret|signature/i.test(m);
+    return res.status(401).json({
+      error: serverSide
+        ? 'The server could not verify your session. Its Supabase keys look wrong — check SUPABASE_SERVICE_ROLE_KEY in the deployment.'
+        : 'Your session expired. Sign in again and retry.',
+      code: serverSide ? 'server_key' : 'expired',
+      detail: m.slice(0, 120)
+    });
+  }
 
   await new Promise(r => setTimeout(r, 800));   // simulate provider latency
 

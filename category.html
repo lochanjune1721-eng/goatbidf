@@ -102,7 +102,7 @@
   }
 
   const board = new window.GOATBoard(boardEl, people, { reload: load });
-  board.live();
+  board.live(cat.id);
 
   document.getElementById('add-btn').addEventListener('click', async ()=>{
     const name = document.getElementById('add-name').value.trim();

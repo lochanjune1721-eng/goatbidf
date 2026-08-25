@@ -113,12 +113,49 @@
     return m || 'Could not start a session';
   }
 
+  // A live access token, refreshing once if the stored one has lapsed.
+  // Sending an empty string is what produced "Sign in first" while the header
+  // still showed the user's name — getUser() reads cached state, getSession()
+  // can still come back without a token.
+  async function accessToken(){
+    let { data:{ session } } = await sb.auth.getSession();
+    if(!session?.access_token){
+      try{ const r = await sb.auth.refreshSession(); session = r.data?.session || null; }catch(e){}
+    }
+    return session?.access_token || null;
+  }
+
   async function refresh(){ paintBalance(await balance(true)); await paintAccount(); }
 
-  document.addEventListener('DOMContentLoaded', () => { refresh().catch(()=>paintBalance(0)); });
-  sb.auth.onAuthStateChange(() => { cachedProfile = null; refresh().catch(()=>{}); });
+  // Money moves while people are looking at the page — a top-up in another tab,
+  // a vote cast on a phone. RLS limits users rows to their owner, so this
+  // subscription only ever delivers this person's balance, never anyone else's.
+  let balanceChannel = null;
+  async function watchBalance(){
+    const user = await currentUser();
+    if(!user || balanceChannel) return;
+    try{
+      balanceChannel = sb.channel('me-' + user.id)
+        .on('postgres_changes',
+            { event:'UPDATE', schema:'public', table:'users', filter:`id=eq.${user.id}` },
+            payload => {
+              const c = payload.new && payload.new.balance_cents;
+              if(typeof c === 'number'){
+                if(cachedProfile) Object.assign(cachedProfile, payload.new);
+                paintBalance(c);
+              }
+            })
+        .subscribe();
+    }catch(e){}
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    refresh().catch(()=>paintBalance(0));
+    watchBalance().catch(()=>{});
+  });
+  sb.auth.onAuthStateChange(() => { cachedProfile = null; refresh().catch(()=>{}); watchBalance().catch(()=>{}); });
 
   window.GOATSession = { currentUser, ensureVoter, ensureRow, profile, balance,
-                         setLocalBalance, paintBalance, paintAccount, hasAccount, isAnonymousVoter, claimState,
+                         setLocalBalance, paintBalance, paintAccount, hasAccount, accessToken, watchBalance, isAnonymousVoter, claimState,
                          explainAuth, refresh };
 })();

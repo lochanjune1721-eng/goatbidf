@@ -14,34 +14,36 @@
     <span id="balance-pill" class="balance-pill"><a href="wallet.html">Get votes</a></span></nav>
 </div></header>
 
-<div class="container" style="max-width:640px;padding:20px 20px 40px">
+<div class="container wallet" style="max-width:600px;padding:16px 20px 40px">
   <div class="test-banner"><b>Test mode</b> — no real money is charged.</div>
 
-  <div class="job-card" style="text-align:center">
-    <div class="mono" style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Your balance</div>
-    <div class="display" style="font-size:52px;color:var(--gold);line-height:1.1"><span data-balance>0</span></div>
-    <div class="mono" style="font-size:12px;color:var(--muted)">votes</div>
-    <p style="font-size:13px;color:var(--muted);margin:10px 0 0">
-      Every dollar is one vote. <b style="color:var(--ink)">Votes are non-refundable</b> and never expire.
-    </p>
+  <section class="balance-card">
+    <div class="balance-figure">
+      <span class="display" data-balance>0</span>
+      <em>votes in your balance</em>
+    </div>
+    <p class="balance-note">Every dollar is one vote. <b>Non-refundable</b>, never expires.</p>
+  </section>
 
-    <h3 style="margin:18px 0 10px;font-size:15px">Get votes</h3>
+  <section class="buy-card">
+    <div class="buy-head">
+      <h2>Get votes</h2>
+      <span>Minimum 5 · no maximum</span>
+    </div>
     <div class="topup-grid" id="quick"></div>
-
-    <div style="display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap">
+    <div class="buy-custom">
       <span class="amount-field">
-        <input id="custom" type="number" min="5" step="1" placeholder="Custom" inputmode="numeric" aria-label="Custom number of votes">
+        <input id="custom" type="number" min="5" step="1" placeholder="Any amount" inputmode="numeric" aria-label="Custom number of votes">
         <span class="amount-unit">votes</span>
       </span>
-      <button id="buy-custom" class="btn-primary">Buy →</button>
+      <button id="buy-custom" class="btn-primary">Buy</button>
     </div>
-    <div class="mono" style="font-size:11px;color:var(--muted);margin-top:8px">Minimum 5 votes ($5). No maximum.</div>
     <div id="msg" class="notice" style="display:none"></div>
-  </div>
+  </section>
 
   <div id="who" class="job-card" style="margin-top:16px"></div>
 
-  <h3 style="margin:20px 0 8px;font-size:16px">History</h3>
+  <h2 class="hist-head">History</h2>
   <div id="history" class="list"></div>
 </div>
 
@@ -64,7 +66,7 @@
 
   const PACKS=[5,10,25,50,100];
   document.getElementById('quick').innerHTML=PACKS.map(v=>
-    `<button class="topup-btn" data-votes="${v}"><b>${v} votes</b><span>$${v}</span></button>`).join('');
+    `<button class="topup-btn" data-votes="${v}"><b>${v}</b><span>$${v}</span></button>`).join('');
 
   async function buy(votes){
     votes=Math.floor(Number(votes)||0);
@@ -72,14 +74,21 @@
     say('Processing… <span class="mono">(test mode)</span>');
     try{
       await S.ensureVoter();
-      const { data:{ session } } = await sb.auth.getSession();
+      const token = await S.accessToken();
+      if(!token){
+        return say('Your session has lapsed. <a href="account.html" style="color:var(--gold)">Sign in again</a> and retry.','error');
+      }
       const r=await fetch('/api/checkout',{
         method:'POST',
-        headers:{'Content-Type':'application/json','Authorization':'Bearer '+(session?.access_token||'')},
-        body: JSON.stringify({ amountCents: votes*100 })
+        headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+        // also in the body, in case a proxy strips Authorization
+        body: JSON.stringify({ amountCents: votes*100, accessToken: token })
       });
-      const j=await r.json();
-      if(!r.ok) throw new Error(j.error||('HTTP '+r.status));
+      const j=await r.json().catch(()=>({}));
+      if(!r.ok){
+        const e=new Error(j.error||('HTTP '+r.status));
+        e.code=j.code; throw e;
+      }
       S.setLocalBalance(j.newBalance);
       const signedIn = await S.hasAccount();
       say(`<b>${votes} votes added.</b> No real money was charged. `
@@ -89,7 +98,11 @@
       // money has changed hands — this is where we ask who they are
       if(window.GOATProfile) window.GOATProfile.facePrompt().catch(()=>{});
       document.getElementById('who').scrollIntoView({behavior:'smooth',block:'center'});
-    }catch(e){ say(V.esc(e.message),'error'); }
+    }catch(e){
+      const extra = e.code==='expired'
+        ? ' <a href="account.html" style="color:var(--gold)">Sign in again →</a>' : '';
+      say(V.esc(e.message)+extra,'error');
+    }
   }
 
   document.getElementById('quick').addEventListener('click',e=>{

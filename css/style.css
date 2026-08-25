@@ -467,11 +467,11 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[t
   .topnav{gap:10px}
 }
 .topup-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(94px,1fr));gap:8px}
-.topup-grid .topup-btn{width:100%;min-height:56px;background:var(--surface-2);color:var(--ink);
+.topup-grid .topup-btn{width:100%;min-height:62px;background:var(--surface-2);color:var(--ink);
   border:1px solid var(--border);border-radius:14px;display:flex;flex-direction:column;
   align-items:center;justify-content:center;gap:2px;cursor:pointer;padding:8px}
 .topup-grid .topup-btn:hover{border-color:var(--gold);background:var(--gold-lo)}
-.topup-grid .topup-btn b{font-family:'Anton',sans-serif;font-size:15px;color:var(--gold)}
+.topup-grid .topup-btn b{font-family:'Anton',sans-serif;font-size:22px;color:var(--gold);line-height:1}
 .topup-grid .topup-btn span{font-size:11px;color:var(--muted);letter-spacing:.04em;text-transform:none;opacity:1;font-weight:500}
 .claim-toast{position:fixed;left:14px;right:14px;bottom:88px;z-index:60;display:flex;align-items:center;gap:12px;
   background:var(--surface);border:1px solid var(--gold);border-radius:16px;padding:12px 14px;
@@ -596,3 +596,25 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[t
 .or-line{display:flex;align-items:center;gap:10px;margin:12px 0;color:var(--muted);font-size:11px;
   letter-spacing:.14em;text-transform:uppercase}
 .or-line::before,.or-line::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ---- wallet ---- */
+.wallet .test-banner{margin:0 0 14px;padding:9px 12px;font-size:12px}
+.balance-card{background:linear-gradient(180deg,var(--gold-lo),var(--surface));border:1px solid #3A2E14;
+  border-radius:20px;padding:22px 18px;text-align:center}
+.balance-figure .display{font-size:clamp(46px,13vw,68px);color:var(--gold);line-height:1;display:block}
+.balance-figure em{display:block;font-style:normal;font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--muted);margin-top:6px;font-weight:600}
+.balance-note{font-size:12px;color:var(--muted);margin:12px 0 0}
+.balance-note b{color:var(--ink)}
+
+.buy-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:16px;margin-top:12px}
+.buy-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:12px}
+.buy-head h2{font-family:'Anton',sans-serif;font-size:17px;margin:0}
+.buy-head span{font-size:11px;color:var(--muted)}
+.buy-custom{display:flex;gap:8px;margin-top:10px}
+.buy-custom .amount-field{flex:1;justify-content:space-between;padding-left:14px}
+.buy-custom .amount-field input{width:100%;text-align:left;font-size:16px}
+.buy-custom .btn-primary{flex:0 0 auto;min-height:46px;padding:0 22px}
+.wallet .notice{margin:12px 0 0;font-size:13px;padding:10px 12px;border-radius:12px}
+.hist-head{font-family:'Anton',sans-serif;font-size:16px;margin:22px 0 8px}
+.wallet .list .job-card{padding:11px 13px;border-radius:12px}
