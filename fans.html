@@ -2,25 +2,101 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Fans — GOAT.lol</title>
+<meta name="referrer" content="no-referrer">
+<title>Top voters — GOAT.lol</title>
 <link rel="stylesheet" href="css/style.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-<header class="topbar"><div class="topbar-inner"><div class="brand"><a href="index.html">GOAT<span>.lol</span></a></div><nav class="topnav"><a href="index.html">Categories</a><a href="fans.html" class="active">Fans</a><span id="balance-pill" class="balance-pill"></span></nav></div></header>
-<div class="container" style="padding:20px">
-  <h1 class="display" style="font-size:32px">Top backers</h1>
-  <p class="mono" style="font-size:12px;color:var(--muted)">Global leaderboard of the biggest backers — handles and totals. Status people will chase.</p>
-  <div id="fans" class="list" style="margin-top:12px"></div>
+<header class="topbar"><div class="topbar-inner">
+  <div class="brand"><a href="index.html">GOAT<span>.lol</span></a></div>
+  <div class="search"><i>⌕</i><input id="search" placeholder="Search boards and people"></div>
+  <nav class="topnav"><a href="index.html">Boards</a><a href="fans.html" class="active">Fans</a>
+    <span id="balance-pill" class="balance-pill"><a href="wallet.html">Get votes</a></span></nav>
+</div></header>
+
+<div class="container" style="padding:20px 20px 40px">
+  <h1 class="display" style="font-size:clamp(28px,6vw,40px);margin:8px 0 4px">The biggest voters</h1>
+  <p style="color:var(--muted);font-size:14px;max-width:600px;margin:0 0 6px">
+    Everyone who has put money behind an opinion, ranked. Anyone can argue — these are the people who backed it.
+  </p>
+  <div id="totals" class="mono" style="font-size:12px;color:var(--muted);margin-bottom:16px"></div>
+  <div id="fans" class="fanboard" aria-live="polite">
+    <div class="fanrow skeleton" style="height:64px"></div>
+    <div class="fanrow skeleton" style="height:64px"></div>
+    <div class="fanrow skeleton" style="height:64px"></div>
+  </div>
 </div>
+
+<div class="stickybar">
+  <span class="bal"><span data-balance>0</span><small>your votes</small></span>
+  <a href="wallet.html">Get votes</a>
+</div>
+
+<footer class="footer">GOAT.lol · <a href="rules.html">Rules</a> · <a href="wallet.html">Wallet</a></footer>
+
 <script src="js/supabase.js"></script>
+<script src="js/optimized-image.js"></script>
+<script src="js/session.js"></script>
+<script src="js/vote.js"></script>
 <script>
 (async function(){
-  const sb=window.supabaseClient;
-  const {data: users}=await sb.from('users').select('display_name,is_anonymous,total_spent_cents').order('total_spent_cents',{ascending:false}).limit(100);
-  const el=document.getElementById('fans');
-  if(!users||!users.length){ el.innerHTML='<div class="empty">No backers yet.</div>'; return; }
-  el.innerHTML=users.map((u,i)=> `<div class="job-card" style="display:flex;justify-content:space-between;align-items:center"><span>#${i+1} <b>${u.is_anonymous?'Anonymous':u.display_name||'Unknown'}</b></span><b class="display" style="color:var(--gold)">${window.GOAT.cents(u.total_spent_cents||0)}</b></div>`).join('');
+  const sb=window.supabaseClient, V=window.GOATVote, el=document.getElementById('fans');
+  document.getElementById('search').addEventListener('keydown',e=>{
+    if(e.key==='Enter') location.href='index.html?q='+encodeURIComponent(e.target.value.trim());
+  });
+
+  // public_profiles carries no spend, so rank by fan_totals and join the profile.
+  const {data:rows,error}=await sb.from('fan_totals').select('user_id,total_cents,person_id').limit(4000);
+  if(error){
+    el.innerHTML=`<div class="empty"><b>Could not load the leaderboard.</b><br>${V.esc(error.message)}
+      <br><button class="btn-ghost" style="margin-top:10px" onclick="location.reload()">Try again</button></div>`;
+    return;
+  }
+  const agg={};
+  for(const r of (rows||[])){
+    const a=agg[r.user_id]||(agg[r.user_id]={cents:0,people:new Set()});
+    a.cents+=r.total_cents||0; a.people.add(r.person_id);
+  }
+  const list=Object.entries(agg).map(([id,a])=>({id,cents:a.cents,backed:a.people.size}))
+    .sort((x,y)=>y.cents-x.cents).slice(0,200);
+
+  if(!list.length){
+    el.innerHTML=`<div class="empty"><b>Nobody has voted yet.</b><br>
+      The first person to back anyone tops this board. <a href="index.html" style="color:var(--gold)">Pick a fight →</a></div>`;
+    document.getElementById('totals').textContent='';
+    return;
+  }
+
+  const {data:profs}=await sb.from('public_profiles').select('*').in('id',list.map(l=>l.id));
+  const by=Object.fromEntries((profs||[]).map(p=>[p.id,p]));
+  const grand=list.reduce((s,l)=>s+l.cents,0);
+  document.getElementById('totals').textContent=
+    `${list.length.toLocaleString()} voters · ${V.voteNum(grand)} votes cast between them`;
+
+  el.innerHTML=list.map((l,i)=>{
+    const u=by[l.id]||{};
+    const anon=u.is_anonymous||!u.display_name;
+    const nm=anon?'Anonymous':u.display_name;
+    const showPhoto=!anon&&u.photo_path&&u.photo_status!=='rejected';
+    let handle='';
+    if(!anon&&u.social_handle){
+      const url=V.handleUrl(u.social_platform,u.social_handle);
+      const icon=V.PLATFORM_ICON[(u.social_platform||'').toLowerCase()]||V.PLATFORM_ICON.link;
+      const txt=`<span>${V.esc(u.social_handle.startsWith('@')?u.social_handle:'@'+u.social_handle)}</span>`;
+      handle=url?`<a class="vfan-handle" href="${V.esc(url)}" target="_blank" rel="noopener nofollow ugc">${icon}${txt}</a>`:`<span class="vfan-handle">${icon}${txt}</span>`;
+    }
+    return `<div class="fanrow${i===0?' goat':''}">
+      <span class="fanrank">#${i+1}</span>
+      <span class="fanpic">${showPhoto?window.OptimizedImage.render({photoPath:u.photo_path,name:nm,size:48,priority:i<8?'eager':'lazy'}):`<div class="fallback">${V.esc(window.GOAT.initials(nm))}</div>`}</span>
+      <span class="fanmeta">
+        <span class="fanname">${V.esc(nm)}${i===0?' <em>GOAT voter</em>':''}</span>
+        ${handle}
+        <span class="vgap">backing <b>${l.backed}</b> ${l.backed===1?'name':'names'}</span>
+      </span>
+      <span class="fanvotes display">${V.voteNum(l.cents)}<em>votes</em></span>
+    </div>`;
+  }).join('');
 })();
 </script>
 </body>

@@ -1,59 +1,45 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Dodo Payments — top-ups only $5 $10 $25 $50 $100, non-refundable credit
-const ALLOWED = [500,1000,2500,5000,10000];
+// TEMPORARY: fake payment. No card is charged. Swap for Dodo before launch —
+// create a real checkout session here and call credit_balance from the webhook
+// instead of from this handler. Everything downstream (topups row, balance,
+// ranking, fan boards) is already production-shaped, so that is the only change.
+const MIN_CENTS = 500;   // $5 = 5 votes
 
-export default async function handler(req,res){
-  if(req.method!=='POST') return res.status(405).json({error:'Method not allowed'});
-  const { SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, DODO_API_KEY } = process.env;
-  if(!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) return res.status(500).json({error:'Supabase not configured'});
-  const auth = req.headers.authorization?.replace('Bearer ','');
-  // get user from Supabase auth header if present, else allow anon for dev
-  const supaAuth = createClient(SUPABASE_URL, process.env.SUPABASE_ANON_KEY||'');
-  let userId=null;
-  if(auth){
-    try{ const {data:{user}}=await supaAuth.auth.getUser(auth); userId=user?.id||null; }catch{}
+export default async function handler(req, res){
+  if(req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+
+  const { SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } = process.env;
+  if(!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY){
+    return res.status(500).json({ error: 'Supabase not configured' });
   }
-  // fallback: try to get user via service key + body user_id (dev only)
-  const body=typeof req.body==='string'? JSON.parse(req.body||'{}'): req.body;
-  const cents=Number(body.amount_cents);
-  if(!ALLOWED.includes(cents)) return res.status(400).json({error:'Allowed top-ups: $5, $10, $25, $50, $100'});
-  // need authenticated user
-  if(!userId){
-    // try cookie/session fallback — for now require auth
-    return res.status(401).json({error:'Sign in to top up. Email magic-link in wallet.'});
+  const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+
+  const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
+  const amountCents = Math.floor(Number(body.amountCents));
+
+  if(!Number.isFinite(amountCents) || amountCents < MIN_CENTS){
+    return res.status(400).json({ error: 'Minimum is 5 votes' });
   }
-
-  const supa=createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
-  const {data: topup, error}=await supa.from('topups').insert({user_id: userId, amount_cents: cents, status:'pending'}).select('id').maybeSingle();
-  if(error) return res.status(500).json({error:error.message});
-
-  const origin=req.headers.origin || `https://${req.headers.host}`;
-  if(!DODO_API_KEY){
-    // dev: immediately confirm
-    await supa.from('topups').update({status:'confirmed', dodo_payment_id: `fake_${Date.now()}`}).eq('id', topup.id);
-    await supa.from('users').update({balance_cents: supa.rpc ? undefined : undefined}).eq('id', userId); // placeholder
-    // add balance via direct update (since no webhook)
-    const {data: u}=await supa.from('users').select('balance_cents').eq('id', userId).maybeSingle();
-    await supa.from('users').update({balance_cents: (u?.balance_cents||0)+cents}).eq('id', userId);
-    return res.status(200).json({ok:true, fake:true, topup_id: topup.id});
+  if(amountCents % 100 !== 0){
+    return res.status(400).json({ error: 'Whole votes only' });
   }
 
-  try{
-    const resp=await fetch('https://api.dodopayments.com/v1/checkout/sessions',{
-      method:'POST',
-      headers:{'Authorization':`Bearer ${DODO_API_KEY}`,'Content-Type':'application/json'},
-      body: JSON.stringify({
-        amount_cents: cents, currency:'USD',
-        description:`GOAT.lol credit top-up $${(cents/100).toFixed(0)} — non-refundable`,
-        success_url:`${origin}/wallet.html?topup=success`,
-        cancel_url:`${origin}/wallet.html?topup=cancel`,
-        metadata:{user_id: userId, topup_id: topup.id}
-      })
-    });
-    const j=await resp.json().catch(()=>({}));
-    if(!resp.ok) throw new Error(j.error||`Dodo ${resp.status}`);
-    const url=j.url||j.checkout_url;
-    return res.status(200).json({url, topup_id: topup.id});
-  }catch(e){ return res.status(500).json({error:e.message}); }
+  // Identify the buyer from their Supabase JWT — never from the request body,
+  // or anyone could top up anyone else's balance (or their own, unbounded).
+  const token = (req.headers.authorization || '').replace(/^Bearer /, '');
+  if(!token) return res.status(401).json({ error: 'Sign in first' });
+  const { data: { user }, error: authErr } = await supabaseAdmin.auth.getUser(token);
+  if(authErr || !user) return res.status(401).json({ error: 'Sign in first' });
+
+  await new Promise(r => setTimeout(r, 800));   // simulate provider latency
+
+  const { data, error } = await supabaseAdmin.rpc('credit_balance', {
+    p_user_id: user.id,
+    p_amount_cents: amountCents,
+    p_payment_id: `fake_${user.id}_${Date.now()}`
+  });
+  if(error) return res.status(500).json({ error: error.message });
+
+  return res.json({ ok: true, test_mode: true, newBalance: data });
 }

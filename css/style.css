@@ -300,3 +300,228 @@ a{color:inherit;text-decoration:none}
 .topup-btn b{font-family:'Anton',sans-serif;font-size:17px}
 .topup-btn span{font-size:9px;letter-spacing:.12em;text-transform:uppercase;opacity:.72;font-weight:600}
 .rank-badge{z-index:2}
+
+/* ============================================================
+   THE ROW — person left, GOAT fan right, hairline between.
+   Mobile-first: base rules are the 360px layout, then widen.
+   ============================================================ */
+.vrow{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:18px;
+  box-shadow:var(--shadow);overflow:hidden;margin-bottom:12px}
+.vrow-main{display:grid;grid-template-columns:40% minmax(0,1fr) 23%;gap:9px;align-items:start;padding:12px}
+/* the hairline is a 4th child; at phone widths it would steal the fan's column,
+   so it only exists from 640px up where the template has room for it */
+.vdivider{display:none;width:1px;background:var(--border);align-self:stretch;justify-self:center;min-height:100%}
+@media (min-width:640px){ .vdivider{display:block} }
+
+.vphoto{width:100%;aspect-ratio:1/1;border-radius:14px;overflow:hidden;background:var(--surface-2);
+  border:1px solid var(--border);position:relative;contain:paint}
+.vphoto img{width:100%;height:100%;object-fit:cover;object-position:center 30%;filter:saturate(.85) contrast(1.05);display:block}
+
+.vname{line-height:1.06;margin:0;overflow-wrap:break-word;hyphens:auto}
+.vblurb{color:var(--muted);font-size:12px;line-height:1.35;margin:4px 0 0;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.vcount{color:var(--gold);line-height:1;margin-top:6px}
+.vcount span{font-family:'Inter',sans-serif;font-size:.32em;color:var(--muted);letter-spacing:.18em;
+  text-transform:uppercase;margin-left:5px;font-weight:600}
+.vgap{font-size:11px;color:var(--muted);margin-top:4px}
+.vgap b{color:var(--ink)}
+
+/* right half — the fan */
+.vfan{text-align:center;min-width:0}
+.vfan-label{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.vfan-photo{width:100%;max-width:90px;aspect-ratio:1/1;border-radius:50%;overflow:hidden;margin:0 auto;
+  background:var(--surface-2);border:1px solid var(--border);position:relative}
+.vfan-photo img{width:100%;height:100%;object-fit:cover;display:block}
+.vfan-photo .fallback{border-radius:50%;font-size:1.1em}
+.vfan-name{font-size:12px;font-weight:700;margin-top:7px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vfan-handle{display:inline-flex;align-items:center;gap:3px;font-size:11px;color:var(--muted);margin-top:2px;max-width:100%}
+.vfan-handle:hover{color:var(--gold)}
+.vfan-handle svg{width:11px;height:11px;flex:0 0 auto;fill:currentColor}
+.vfan-handle span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vfan-count{font-family:'Anton',sans-serif;color:var(--gold);font-size:14px;margin-top:4px;line-height:1.1}
+.vfan .vgap{font-size:10px;line-height:1.3}
+.vfan-name{font-size:11px}
+@media (min-width:640px){ .vfan-count{font-size:15px} .vfan .vgap{font-size:11px} .vfan-name{font-size:12px} }
+.vfan-empty{font-size:11px;color:var(--gold);line-height:1.4;margin-top:8px}
+.vfan-empty b{display:block;font-family:'Anton',sans-serif;font-size:13px}
+
+/* vote controls — full width beneath the row on mobile */
+.vrow-actions{display:flex;gap:8px;align-items:center;padding:0 12px 12px;flex-wrap:wrap}
+.vstep{display:inline-flex;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:999px;padding:3px}
+.vstep button{width:44px;height:44px;border-radius:50%;border:none;background:var(--surface);color:var(--ink);
+  cursor:pointer;font-size:20px;line-height:1;display:grid;place-items:center}
+.vstep button:hover{background:var(--surface-2)}
+.vstep input{width:66px;height:44px;border:none;background:transparent;color:var(--ink);text-align:center;
+  font-family:'Anton',sans-serif;font-size:17px;padding:0;-moz-appearance:textfield}
+.vstep input::-webkit-outer-spin-button,.vstep input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.vstep input:focus{outline:none}
+.vstep .u{font-size:10px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;padding-right:12px}
+.btn-vote{flex:1 1 100%;min-height:44px;background:var(--gold);color:var(--bg);border:none;border-radius:999px;
+  font-weight:800;font-size:15px;cursor:pointer;padding:0 20px}
+.btn-vote:hover{background:var(--gold-hover)}
+.btn-vote:disabled{opacity:.55;cursor:default}
+.vstakes{font-size:11px;color:var(--muted);flex:1 1 100%}
+
+/* rank scale — mobile keeps proportional photos, types down a notch */
+.vrow.r1{background:var(--gold-lo);border:2px solid var(--gold)}
+.vrow.r2{border-color:var(--silver)}
+.vrow.r3{border-color:var(--bronze)}
+.vrow.r1 .vname{font-size:18px}   .vrow.r1 .vcount{font-size:22px}
+.vrow.r2 .vname{font-size:17px}   .vrow.r2 .vcount{font-size:20px}
+.vrow.r2 .vcount{color:var(--silver)}
+.vrow.r3 .vname{font-size:16px}   .vrow.r3 .vcount{font-size:19px}
+.vrow.r3 .vcount{color:var(--bronze)}
+.vrow.r4 .vname{font-size:15px}   .vrow.r4 .vcount{font-size:18px}
+.vrow.r11 .vname{font-size:14px}  .vrow.r11 .vcount{font-size:16px}
+/* the unit sits under the number on phones so it can't collide with the fan column */
+.vcount{display:flex;flex-direction:column;align-items:flex-start;gap:1px}
+.vcount span{margin-left:0}
+@media (min-width:640px){ .vcount{display:block} .vcount span{margin-left:5px} }
+.vrow.r11 .vblurb{display:none}
+
+/* ---- desktop: halves genuinely side by side, spec sizes ---- */
+@media (min-width:640px){
+  .vrow-main{grid-template-columns:auto 1fr auto auto;gap:18px;padding:16px;align-items:center}
+  .vrow .vphoto{width:var(--pp,90px);height:var(--pp,90px);aspect-ratio:auto;flex:0 0 auto}
+  .vfan{width:var(--fw,150px)}
+  .vfan-photo{max-width:var(--fp,44px)}
+  .vrow-actions{padding:0 16px 16px}
+  .btn-vote{flex:0 0 auto}
+  .vstakes{flex:0 0 auto;margin-left:4px}
+
+  .vrow.r1{--pp:220px;--fp:90px;--fw:190px}
+  .vrow.r1 .vname{font-size:40px}  .vrow.r1 .vcount{font-size:38px}
+  .vrow.r2{--pp:160px;--fp:70px;--fw:175px}
+  .vrow.r2 .vname{font-size:32px}  .vrow.r2 .vcount{font-size:30px}
+  .vrow.r3{--pp:130px;--fp:60px;--fw:165px}
+  .vrow.r3 .vname{font-size:27px}  .vrow.r3 .vcount{font-size:26px}
+  .vrow.r4{--pp:90px;--fp:44px;--fw:150px}
+  .vrow.r4 .vname{font-size:21px}  .vrow.r4 .vcount{font-size:20px}
+  .vrow.r11{--pp:60px;--fp:32px;--fw:140px}
+  .vrow.r11 .vname{font-size:18px} .vrow.r11 .vcount{font-size:17px}
+}
+
+/* reorder animation, off when the user asks for less motion */
+.vrow{transition:transform .38s cubic-bezier(.2,.8,.2,1)}
+.vrow.flash{animation:voteflash .7s ease-out}
+@keyframes voteflash{0%{box-shadow:0 0 0 0 rgba(212,162,76,.55)}100%{box-shadow:0 0 0 14px rgba(212,162,76,0)}}
+@media (prefers-reduced-motion:reduce){
+  .vrow{transition:none!important}
+  .vrow.flash{animation:none!important}
+  *{scroll-behavior:auto!important}
+}
+
+/* sticky bottom bar — mobile only */
+.stickybar{position:fixed;left:0;right:0;bottom:0;z-index:40;display:none;
+  align-items:center;justify-content:space-between;gap:12px;padding:10px 14px;
+  background:rgba(15,14,12,.96);border-top:1px solid var(--border);
+  padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+.stickybar .bal{font-family:'Anton',sans-serif;font-size:18px;color:var(--gold)}
+.stickybar .bal small{display:block;font-family:'Inter',sans-serif;font-size:9px;color:var(--muted);
+  letter-spacing:.14em;text-transform:uppercase;font-weight:600}
+.stickybar a{background:var(--gold);color:var(--bg);border-radius:999px;padding:0 18px;height:44px;
+  display:inline-flex;align-items:center;font-weight:800;font-size:14px}
+@media (max-width:860px){ .stickybar{display:flex} body{padding-bottom:78px} }
+
+/* focus visible in gold, everywhere */
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{
+  outline:2px solid var(--gold);outline-offset:2px;border-radius:6px}
+
+.test-banner{background:var(--gold-lo);border:1px dashed var(--gold);color:var(--gold);
+  border-radius:12px;padding:10px 14px;font-size:13px;text-align:center;margin:12px 0}
+.field-inline{flex:1;min-width:200px;height:44px;border-radius:999px;border:1px solid var(--border);
+  background:var(--surface);color:var(--ink);padding:0 16px;font-size:14px}
+.field-inline:focus{outline:none;border-color:var(--gold)}
+.vrow.skeleton{border:1px solid var(--border)}
+.vmeta{min-width:0}
+.rank-badge{position:static;display:inline-block;margin-bottom:6px}
+
+/* ---- header at phone widths ----
+   The topbar was built for desktop and overflowed 360px by ~60px. The balance
+   pill is redundant on mobile (the sticky bar carries it), so drop it there and
+   let the search fall to its own line. */
+@media (max-width:860px){
+  .topbar-inner{flex-wrap:wrap;padding:10px 14px;gap:8px}
+  .topbar-inner .balance-pill{display:none}
+  .search{order:3;flex:1 1 100%;max-width:none}
+  .topnav{gap:12px;font-size:12px;margin-left:auto}
+  .brand a{font-size:19px}
+}
+@media (max-width:400px){
+  .topnav a{font-size:12px}
+  .topnav{gap:10px}
+}
+.topup-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(94px,1fr));gap:8px}
+.topup-grid .topup-btn{width:100%;min-height:56px;background:var(--surface-2);color:var(--ink);
+  border:1px solid var(--border);border-radius:14px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:2px;cursor:pointer;padding:8px}
+.topup-grid .topup-btn:hover{border-color:var(--gold);background:var(--gold-lo)}
+.topup-grid .topup-btn b{font-family:'Anton',sans-serif;font-size:15px;color:var(--gold)}
+.topup-grid .topup-btn span{font-size:11px;color:var(--muted);letter-spacing:.04em;text-transform:none;opacity:1;font-weight:500}
+.claim-toast{position:fixed;left:14px;right:14px;bottom:88px;z-index:60;display:flex;align-items:center;gap:12px;
+  background:var(--surface);border:1px solid var(--gold);border-radius:16px;padding:12px 14px;
+  box-shadow:var(--shadow);opacity:0;transform:translateY(12px);transition:opacity .25s,transform .25s;max-width:520px;margin:0 auto}
+.claim-toast.in{opacity:1;transform:none}
+.claim-toast div{flex:1;min-width:0;font-size:13px;line-height:1.35}
+.claim-toast b{display:block;color:var(--gold);font-size:14px}
+.claim-toast span{color:var(--muted)}
+.claim-toast .btn-primary{flex:0 0 auto;min-height:40px}
+.claim-x{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;width:32px;height:32px}
+@media (min-width:861px){ .claim-toast{bottom:20px} }
+@media (prefers-reduced-motion:reduce){ .claim-toast{transition:none} }
+
+/* ---- person page ---- */
+.person-hero{display:grid;grid-template-columns:1fr;gap:16px;margin-top:12px}
+.person-hero-photo{width:100%;max-width:320px;aspect-ratio:1/1;border-radius:20px;overflow:hidden;
+  background:var(--surface-2);border:1px solid var(--border);position:relative}
+.person-hero-photo img{width:100%;height:100%;object-fit:cover;object-position:center 30%}
+.person-hero-meta h1{font-size:clamp(28px,7vw,48px);line-height:1.02;margin:0}
+.person-hero-meta .blurb{color:var(--muted);font-size:14px;line-height:1.45;margin:8px 0 0}
+.hero-count{font-size:clamp(34px,8vw,52px);color:var(--gold);line-height:1;margin-top:12px}
+.hero-count .u{font-family:'Inter',sans-serif;font-size:.28em;color:var(--muted);letter-spacing:.2em;
+  text-transform:uppercase;margin-left:8px;font-weight:600}
+.credits{font-size:11px;color:var(--muted);margin-top:14px;line-height:1.5;word-break:break-word}
+.credits a{color:var(--muted);text-decoration:underline}
+@media (min-width:760px){ .person-hero{grid-template-columns:320px 1fr;gap:28px;align-items:start} }
+
+/* ---- fan leaderboard ---- */
+.fanboard{display:flex;flex-direction:column;gap:8px}
+.fanrow{display:grid;grid-template-columns:auto auto 1fr auto;gap:10px;align-items:center;
+  background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:10px 12px;position:relative}
+.fanrow.goat{background:var(--gold-lo);border-color:var(--gold)}
+.fanrank{font-family:'Anton',sans-serif;color:var(--muted);font-size:13px;min-width:26px}
+.fanrow.goat .fanrank{color:var(--gold)}
+.fanpic{width:44px;height:44px;border-radius:50%;overflow:hidden;background:var(--surface-2);
+  border:1px solid var(--border);position:relative;flex:0 0 auto}
+.fanpic img{width:100%;height:100%;object-fit:cover}
+.fanpic .fallback{border-radius:50%;font-size:15px}
+.fanmeta{min-width:0;display:flex;flex-direction:column;gap:1px}
+.fanname{font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fanname em{font-style:normal;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-left:6px}
+.fanvotes{font-size:17px;color:var(--gold);text-align:right;line-height:1.1}
+.fanvotes em{display:block;font-family:'Inter',sans-serif;font-style:normal;font-size:9px;
+  color:var(--muted);letter-spacing:.16em;text-transform:uppercase}
+.fanreport{position:absolute;top:4px;right:6px;background:none;border:none;color:var(--muted);
+  font-size:9px;cursor:pointer;opacity:.5;letter-spacing:.06em;text-transform:uppercase}
+.fanreport:hover{opacity:1;color:#fecaca}
+.fanreport:disabled{opacity:.4;cursor:default}
+.modtabs{display:flex;gap:8px;margin:18px 0 12px;flex-wrap:wrap}
+.modtab{border:1px solid var(--border);background:var(--surface);color:var(--muted);border-radius:999px;
+  padding:9px 16px;font-size:13px;cursor:pointer;min-height:44px}
+.modtab.active{background:var(--gold-lo);border-color:var(--gold);color:var(--gold);font-weight:700}
+.modtab span{opacity:.7;margin-left:4px;font-size:11px}
+.modgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.modcard{margin:0;background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.modpic{aspect-ratio:1/1;background:var(--surface-2);position:relative}
+.modpic img{width:100%;height:100%;object-fit:cover}
+.modcard figcaption{padding:8px 10px;display:flex;flex-direction:column;gap:2px;font-size:12px;min-width:0}
+.modcard figcaption b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.modcard figcaption .mono{font-size:10px}
+.modacts{display:flex;gap:6px;padding:0 10px 10px}
+.modacts button{flex:1;min-height:44px;font-size:12px}
+.btn-reject{background:#3a1414;color:#fecaca;border:1px solid #7f1d1d;border-radius:999px;cursor:pointer}
+.btn-reject:hover{background:#4a1919}
+.unclaimed{background:linear-gradient(180deg,var(--gold-lo),transparent);border:1px dashed #3A2E14;
+  border-radius:18px;padding:14px 16px;text-align:center;margin:0 0 18px;display:flex;gap:10px;
+  align-items:center;justify-content:center;flex-wrap:wrap}
+.unclaimed strong{color:var(--gold);font-size:14px}

@@ -30,7 +30,7 @@
   <div class="hero">
     <h1 class="display">Who is the greatest<br><span class="hero-goat">of all time?</span></h1>
     <p class="hero-line">Anyone can argue. Can you actually <b>put your money where your mouth is?</b></p>
-    <p class="hero-sub">Every dollar is one vote. No likes, no accounts farming karma — the only thing that moves a name up this board is money you actually spent.</p>
+    <p class="hero-sub">Every argument is free. This one isn't. Buy votes, back who you believe in — the board is the votes, nothing else.</p>
   </div>
 
   <!-- ============ FILTER BAR ============ -->
@@ -49,8 +49,8 @@
       <div class="filter-sort">
         <label for="sort">Sort</label>
         <select id="sort">
-          <option value="hot">Hottest</option>
-          <option value="money">Most money</option>
+          <option value="hot">Closest race</option>
+          <option value="money">Most votes</option>
           <option value="open">Unclaimed first</option>
           <option value="az">A–Z</option>
         </select>
@@ -60,6 +60,8 @@
     <div class="chips" id="chips"></div>
   </div>
 
+  <div id="unclaimed" class="unclaimed" style="display:none"></div>
+
   <div id="results"></div>
 
   <div style="margin:26px 0">
@@ -68,11 +70,18 @@
   </div>
 </div>
 
-<footer class="footer">GOAT.lol — pay to rank. <a href="rules.html">Rules</a> · <a href="wallet.html">Wallet</a> · <a href="fans.html">Fans</a></footer>
+<div class="stickybar">
+  <span class="bal"><span data-balance>0</span><small>your votes</small></span>
+  <a href="wallet.html">Get votes</a>
+</div>
+
+<footer class="footer">GOAT.lol — put your money where your mouth is. <a href="rules.html">Rules</a> · <a href="wallet.html">Wallet</a> · <a href="fans.html">Fans</a></footer>
 
 <script src="js/supabase.js"></script>
 <script src="js/optimized-image.js"></script>
 <script src="js/wiki-fallback.js"></script>
+<script src="js/session.js"></script>
+<script src="js/vote.js"></script>
 <script src="js/fights.js"></script>
 <script>
 (async function(){
@@ -275,12 +284,24 @@
     return list.slice().sort((a,b)=> catTotal(b.id)-catTotal(a.id) || (a.sort_order||0)-(b.sort_order||0));
   }
 
+  // "Hottest" means closest, not biggest. A tight race is what makes someone
+  // vote; a blowout doesn't. Boards with no votes yet sort last — there is no
+  // contest to be close.
+  function gapOf(f){
+    const at=f.a?.total_cents||0, bt=f.b?.total_cents||0;
+    return Math.abs(at-bt);
+  }
   function sortFights(list){
     const s = state.sort;
     if(s==='az')    return list.slice().sort((a,b)=>a.cat.name.localeCompare(b.cat.name));
     if(s==='open')  return list.slice().sort((a,b)=>a.total-b.total);
     if(s==='money') return list.slice().sort((a,b)=>b.total-a.total);
-    return list; // curated order = "hottest"
+    return list.slice().sort((a,b)=>{
+      const aLive = a.total>0, bLive = b.total>0;
+      if(aLive !== bLive) return aLive ? -1 : 1;      // contests first
+      if(!aLive) return 0;                            // both untouched: curated order
+      return gapOf(a)-gapOf(b);                       // then closest first
+    });
   }
 
   function render(){
@@ -383,6 +404,24 @@
 
   render();
 
+  // ---------- unclaimed ----------
+  const emptyCats = cats.filter(c => catTotal(c.id) === 0);
+  const unclaimedEl = document.getElementById('unclaimed');
+  if(emptyCats.length && unclaimedEl){
+    unclaimedEl.style.display = 'block';
+    unclaimedEl.innerHTML =
+      `<strong>${emptyCats.length} boards where #1 is still open. 1 vote takes it.</strong>
+       <button class="linkish" data-view="boards" data-sort="open">Show me the open ones →</button>`;
+    unclaimedEl.addEventListener('click', e => {
+      const b = e.target.closest('[data-sort]'); if(!b) return;
+      state.sort = 'open'; sortEl.value = 'open';
+      state.view = 'boards';
+      document.querySelectorAll('.seg-btn').forEach(x => x.classList.toggle('active', x.dataset.view==='boards'));
+      render();
+      document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  }
+
   // ---------- secondary data ----------
   try {
     const today = new Date(); today.setHours(0,0,0,0);
@@ -403,6 +442,37 @@
   } catch(e){
     activityEl.innerHTML = '<div class="mono" style="color:var(--muted)">No activity yet. Be the first.</div>';
   }
+
+  // ---------- realtime ----------
+  // One repaint per 500ms at most, so a burst of votes can't thrash the page.
+  let queued = false;
+  async function repaint(){
+    queued = false;
+    try{
+      const today = new Date(); today.setHours(0,0,0,0);
+      const [t, r] = await Promise.all([
+        sb.from('bids').select('amount_cents').gte('created_at', today.toISOString()),
+        sb.from('bids').select('amount_cents,created_at,people(name,slug),users(display_name,is_anonymous)')
+          .order('created_at',{ascending:false}).limit(10)
+      ]);
+      const sum = (t.data||[]).reduce((s,x)=>s+(x.amount_cents||0),0);
+      document.getElementById('backed-today').textContent = votes(sum) + ' cast today';
+      if(r.data && r.data.length){
+        activityEl.innerHTML = r.data.map(b => {
+          const who = b.users?.is_anonymous ? 'Anonymous' : (b.users?.display_name || 'Someone');
+          return `<div><b>${esc(who)}</b> put ${votes(b.amount_cents)} on <a href="person.html?slug=${encodeURIComponent(b.people?.slug||'')}" style="color:var(--gold)">${esc(b.people?.name)}</a> · ${window.GOAT.fmtAgo(b.created_at)}</div>`;
+        }).join('');
+      }
+    }catch(e){}
+  }
+  try{
+    sb.channel('home-feed')
+      .on('postgres_changes', {event:'INSERT', schema:'public', table:'bids'}, () => {
+        if(queued) return;
+        queued = true;
+        setTimeout(repaint, 500);
+      }).subscribe();
+  }catch(e){}
 })();
 </script>
 </body>

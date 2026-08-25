@@ -2,53 +2,110 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer">
 <title>Admin — GOAT.lol</title>
 <link rel="stylesheet" href="css/style.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-<header class="topbar"><div class="topbar-inner"><div class="brand"><a href="index.html">GOAT<span>.lol</span></a><small style="color:var(--muted);font-size:11px">admin</small></div></div></header>
-<div class="container" style="max-width:900px;padding:20px">
-  <h1 class="display" style="font-size:28px">Admin</h1>
-  <p class="mono" style="font-size:12px;color:var(--muted)">Manage categories and people, swap photos, moderate — budget an evening, ~3 min/board.</p>
-  <div id="login-card" class="job-card" style="margin-top:12px">
-    <div class="field"><label>Password</label><input id="admin-pass" type="password" placeholder="ADMIN_PASSWORD"></div>
-    <button id="login-btn" class="btn-primary">Unlock</button>
-    <div id="login-msg" class="notice" style="display:none"></div>
+<header class="topbar"><div class="topbar-inner">
+  <div class="brand"><a href="index.html">GOAT<span>.lol</span></a></div>
+  <nav class="topnav"><a href="index.html">Boards</a></nav>
+</div></header>
+
+<div class="container" style="max-width:900px;padding:20px 20px 40px">
+  <h1 class="display" style="font-size:26px">Photo moderation</h1>
+  <p style="color:var(--muted);font-size:13px;max-width:620px">
+    Photos go live the moment they are uploaded and land here for review. Flagged ones are what
+    people reported. Manual for now — worth automating once the volume justifies it.
+  </p>
+
+  <div id="gate" class="job-card" style="max-width:420px;margin-top:14px">
+    <div class="field"><label for="pw">Admin password</label><input id="pw" type="password" autocomplete="current-password"></div>
+    <button id="go" class="btn-primary">Open</button>
+    <div id="gate-msg" class="notice" style="display:none"></div>
   </div>
+
   <div id="panel" style="display:none">
-    <div class="job-card" style="margin-top:12px"><h3 class="mono" style="font-size:11px;letter-spacing:.08em;text-transform:uppercase">Categories</h3><div id="cats"></div></div>
-    <div class="job-card" style="margin-top:12px"><h3 class="mono" style="font-size:11px;letter-spacing:.08em;text-transform:uppercase">People in category</h3><select id="cat-select"></select><div id="people" style="margin-top:10px"></div></div>
+    <div class="modtabs">
+      <button class="modtab active" data-status="flagged">Reported <span id="c-flagged"></span></button>
+      <button class="modtab" data-status="pending">Awaiting review <span id="c-pending"></span></button>
+      <button class="modtab" data-status="rejected">Rejected <span id="c-rejected"></span></button>
+    </div>
+    <div id="grid" class="modgrid" aria-live="polite"></div>
   </div>
 </div>
+
+<footer class="footer">GOAT.lol admin</footer>
+
 <script src="js/supabase.js"></script>
+<script src="js/optimized-image.js"></script>
+<script src="js/vote.js"></script>
 <script>
 (async function(){
-  const sb=window.supabaseClient;
-  let pw='';
-  document.getElementById('login-btn').addEventListener('click', async()=>{
-    pw=document.getElementById('admin-pass').value;
-    const r=await fetch('/api/admin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:pw})});
-    const j=await r.json(); if(r.ok&&j.ok){ document.getElementById('login-card').style.display='none'; document.getElementById('panel').style.display='block'; load(); } else { const m=document.getElementById('login-msg'); m.textContent=j.error||'Unauthorized'; m.className='notice error'; m.style.display='block'; }
-  });
-  async function load(){
-    const {data: cats}=await sb.from('categories').select('*').order('sort_order');
-    document.getElementById('cats').innerHTML=cats.map(c=> `<span class="mono" style="font-size:11px;border:1px solid var(--border);padding:4px 8px;border-radius:999px;margin:2px;display:inline-block">${c.name} (${c.group_name})</span>`).join('');
-    const sel=document.getElementById('cat-select'); sel.innerHTML=cats.map(c=> `<option value="${c.id}">${c.group_name} — ${c.name}</option>`).join('');
-    async function loadPeople(){
-      const cid=sel.value;
-      const {data}=await sb.from('people').select('*').eq('category_id', cid).order('total_cents',{ascending:false});
-      const el=document.getElementById('people');
-      if(!data||!data.length) el.innerHTML='<div class="mono" style="color:var(--muted)">Empty — 1 vote will take #1.</div>';
-      else el.innerHTML=data.map(p=> {
-        const photoUrl = window.GOAT.getPhotoUrl(p.photo_path);
-        const imgHtml = photoUrl ? `<img src="${photoUrl}" style="width:48px;height:48px;border-radius:12px;object-fit:cover;filter:saturate(.85) contrast(1.05)" onerror="this.outerHTML='<div style=\'width:48px;height:48px;border-radius:12px;background:var(--surface-2);color:var(--gold);display:grid;place-items:center;font-weight:bold\'>${window.GOAT.initials(p.name)}</div>'">` : `<div style="width:48px;height:48px;border-radius:12px;background:var(--surface-2);color:var(--gold);display:grid;place-items:center;font-weight:bold">${window.GOAT.initials(p.name)}</div>`;
-        return `<div style="display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)">${imgHtml}<div style="flex:1"><b>${p.name}</b> <span class="mono" style="font-size:11px;color:var(--muted)">${p.blurb||''}</span><div class="mono" style="font-size:11px;color:var(--muted)">${window.GOAT.cents(p.total_cents)} · ${p.photo_license||''}</div></div><button class="btn-ghost" data-del="${p.id}" style="font-size:12px">Delete</button></div>`;
-      }).join('') + `<div style="margin-top:10px"><input id="swap-slug" placeholder="slug to delete/swap" style="height:36px;border-radius:999px;border:1px solid var(--border);background:var(--bg);color:var(--ink);padding:0 12px;font-size:12px"></div>`;
-      el.querySelectorAll('[data-del]').forEach(b=> b.addEventListener('click', async()=>{ if(!confirm('Delete?')) return; await sb.from('people').delete().eq('id', b.dataset.del); loadPeople(); }));
-    }
-    sel.addEventListener('change', loadPeople); loadPeople();
+  const V=window.GOATVote;
+  let pw='', status='flagged';
+  const gate=document.getElementById('gate'), panel=document.getElementById('panel');
+  const gmsg=document.getElementById('gate-msg'), grid=document.getElementById('grid');
+
+  async function api(action, body){
+    const r=await fetch('/api/admin',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({password:pw,action,...body})});
+    const j=await r.json();
+    if(!r.ok) throw new Error(j.error||('HTTP '+r.status));
+    return j;
   }
+
+  document.getElementById('go').addEventListener('click',async()=>{
+    pw=document.getElementById('pw').value;
+    gmsg.style.display='block'; gmsg.className='notice'; gmsg.textContent='Checking…';
+    try{
+      await api();
+      gate.style.display='none'; panel.style.display='block';
+      load();
+    }catch(e){ gmsg.className='notice error'; gmsg.textContent=e.message; }
+  });
+
+  document.querySelectorAll('.modtab').forEach(t=>t.addEventListener('click',()=>{
+    document.querySelectorAll('.modtab').forEach(x=>x.classList.toggle('active',x===t));
+    status=t.dataset.status; load();
+  }));
+
+  async function load(){
+    grid.innerHTML='<div class="empty">Loading…</div>';
+    try{
+      const {photos,counts}=await api('photos',{status});
+      for(const k of ['flagged','pending','rejected']){
+        const el=document.getElementById('c-'+k);
+        if(el) el.textContent=counts&&counts[k]!=null?counts[k]:'';
+      }
+      if(!photos.length){
+        grid.innerHTML=`<div class="empty">Nothing ${status==='flagged'?'reported':status==='pending'?'awaiting review':'rejected'} right now.</div>`;
+        return;
+      }
+      grid.innerHTML=photos.map(p=>`
+        <figure class="modcard">
+          <div class="modpic">${window.OptimizedImage.render({photoPath:p.photo_path,name:p.display_name,size:180,priority:'lazy'})}</div>
+          <figcaption>
+            <b>${V.esc(p.display_name||'—')}</b>
+            ${p.social_handle?`<span class="mono">${V.esc(p.social_handle)}</span>`:''}
+            <span class="mono" style="color:var(--muted)">${V.esc(p.photo_status)}</span>
+          </figcaption>
+          <div class="modacts">
+            <button class="btn-ghost" data-act="approve" data-id="${V.esc(p.id)}">Keep</button>
+            <button class="btn-reject" data-act="reject" data-id="${V.esc(p.id)}">Reject</button>
+          </div>
+        </figure>`).join('');
+    }catch(e){ grid.innerHTML=`<div class="empty">${V.esc(e.message)}</div>`; }
+  }
+
+  grid.addEventListener('click',async e=>{
+    const b=e.target.closest('[data-act]'); if(!b) return;
+    b.disabled=true; const card=b.closest('.modcard'); card.style.opacity='.45';
+    try{ await api('set_photo_status',{id:b.dataset.id,
+      photo_status:b.dataset.act==='approve'?'approved':'rejected'}); card.remove(); load(); }
+    catch(err){ card.style.opacity='1'; b.disabled=false; alert(err.message); }
+  });
 })();
 </script>
 </body>

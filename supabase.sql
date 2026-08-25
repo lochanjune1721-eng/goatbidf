@@ -75,67 +75,100 @@ insert into site_stats (id) values (1) on conflict (id) do nothing;
 insert into storage.buckets (id, name, public) values ('people','people', true) on conflict (id) do nothing;
 insert into storage.buckets (id, name, public) values ('logos','logos', true) on conflict (id) do nothing;
 
--- place_bid RPC — the only way to spend credit
-create or replace function place_bid(p_person_id uuid, p_amount_cents int)
-returns jsonb
-language plpgsql
-security definer
-set search_path = public
-as $$
+-- ============================================================
+-- VOTES. 1 vote = 100 cents. Everything is stored in cents;
+-- the display layer converts, so the two can never drift.
+-- ============================================================
+
+-- Old money-era RPC. place_vote replaces it; drop so there is one code path.
+drop function if exists place_bid(uuid, int);
+
+-- place_vote — the ONLY way to spend a balance. security definer, one txn,
+-- row lock on the voter to prevent double-spend.
+create or replace function place_vote(p_person_id uuid, p_votes int)
+returns json language plpgsql security definer set search_path = public as $$
 declare
-  v_user_id uuid := auth.uid();
+  v_user uuid := auth.uid();
+  v_cents int;
   v_balance int;
-  v_slug text;
+  v_new_total int;
+  v_fan_total int;
 begin
-  if v_user_id is null then
-    raise exception 'not authenticated';
-  end if;
-  if p_amount_cents is null or p_amount_cents < 100 or p_amount_cents % 100 != 0 then
-    raise exception 'minimum $1, whole dollars only';
+  if v_user is null then raise exception 'Not signed in'; end if;
+  if p_votes is null or p_votes < 1 then raise exception 'Minimum 1 vote'; end if;
+  if p_votes <> floor(p_votes) then raise exception 'Whole votes only'; end if;
+  v_cents := p_votes * 100;
+
+  if not exists (select 1 from people where id = p_person_id) then
+    raise exception 'Person not found';
   end if;
 
-  -- lock user row
-  select balance_cents into v_balance from users where id = v_user_id for update;
-  if not found then
-    insert into users (id, balance_cents) values (v_user_id, 0) returning balance_cents into v_balance;
-  end if;
-  if v_balance < p_amount_cents then
-    raise exception 'insufficient balance';
-  end if;
+  select balance_cents into v_balance from users where id = v_user for update;
+  if v_balance is null then raise exception 'No account'; end if;
+  if v_balance < v_cents then raise exception 'Not enough votes'; end if;
 
-  -- check #1 +$5 rule
-  select slug into v_slug from people where id = p_person_id;
-  if not found then raise exception 'person not found'; end if;
+  update users
+     set balance_cents = balance_cents - v_cents,
+         total_spent_cents = total_spent_cents + v_cents
+   where id = v_user;
 
-  -- deduct, insert bid, update totals in one txn
-  update users set balance_cents = balance_cents - p_amount_cents, total_spent_cents = total_spent_cents + p_amount_cents where id = v_user_id;
-  insert into bids (user_id, person_id, amount_cents) values (v_user_id, p_person_id, p_amount_cents);
-  update people set total_cents = total_cents + p_amount_cents,
-    backer_count = (select count(distinct user_id) from bids where person_id = p_person_id),
-    first_backed_at = coalesce(first_backed_at, now())
-    where id = p_person_id;
+  insert into bids (user_id, person_id, amount_cents)
+  values (v_user, p_person_id, v_cents);
+
+  update people
+     set total_cents = total_cents + v_cents,
+         first_backed_at = coalesce(first_backed_at, now())
+   where id = p_person_id
+  returning total_cents into v_new_total;
 
   insert into fan_totals (person_id, user_id, total_cents)
-    values (p_person_id, v_user_id, p_amount_cents)
-    on conflict (person_id, user_id) do update set total_cents = fan_totals.total_cents + excluded.total_cents;
+  values (p_person_id, v_user, v_cents)
+  on conflict (person_id, user_id)
+  do update set total_cents = fan_totals.total_cents + excluded.total_cents
+  returning total_cents into v_fan_total;
 
-  -- enforce #1 +$5 at app layer is advisory; DB does not reject lower bids that would still be #2+
-  -- but if this bid would make p_person #1 and gap <500, we reject here
-  -- compute leader totals
-  declare v_new_total int; v_leader_total int;
-  begin
-    select total_cents into v_new_total from people where id = p_person_id;
-    select max(total_cents) into v_leader_total from people where category_id = (select category_id from people where id = p_person_id) and id <> p_person_id;
-    if v_leader_total is not null and v_new_total > v_leader_total and v_new_total < v_leader_total + 500 then
-      raise exception 'taking #1 costs at least $5 more than the current leader';
-    end if;
-  end;
+  update people
+     set backer_count = (select count(*) from fan_totals where person_id = p_person_id)
+   where id = p_person_id;
 
-  return jsonb_build_object('ok', true, 'new_total', (select total_cents from people where id = p_person_id));
-exception when others then
-  raise;
-end;
-$$;
+  return json_build_object(
+    'new_total', v_new_total,
+    'balance',   v_balance - v_cents,
+    'fan_total', v_fan_total
+  );
+end $$;
+
+-- credit_balance — called by the payment layer (service role only), never by a
+-- client. Idempotent on p_payment_id so a webhook retry cannot double-credit.
+create or replace function credit_balance(p_user_id uuid, p_amount_cents int, p_payment_id text)
+returns int language plpgsql security definer set search_path = public as $$
+declare v_balance int;
+begin
+  if p_amount_cents is null or p_amount_cents < 500 then
+    raise exception 'Minimum is 5 votes';
+  end if;
+
+  -- already applied? return the balance unchanged
+  if exists (select 1 from topups where dodo_payment_id = p_payment_id and status = 'confirmed') then
+    select balance_cents into v_balance from users where id = p_user_id;
+    return coalesce(v_balance, 0);
+  end if;
+
+  insert into topups (user_id, amount_cents, dodo_payment_id, status)
+  values (p_user_id, p_amount_cents, p_payment_id, 'confirmed')
+  on conflict (dodo_payment_id) do nothing;
+
+  update users
+     set balance_cents = balance_cents + p_amount_cents
+   where id = p_user_id
+  returning balance_cents into v_balance;
+
+  if v_balance is null then raise exception 'No account'; end if;
+  return v_balance;
+end $$;
+
+revoke all on function credit_balance(uuid, int, text) from public, anon, authenticated;
+
 
 -- add person to board (costs $1 from balance) — if not exists create with $0, else just bid
 create or replace function add_person(p_category_id uuid, p_name text, p_blurb text, p_wikipedia_url text, p_photo_path text)
@@ -154,8 +187,30 @@ begin
 end;
 $$;
 
+-- report_photo — a Report link on any fan photo flags it for manual review.
+-- security definer because the reporter has no update rights on someone else's row.
+create or replace function report_photo(p_user_id uuid)
+returns void language plpgsql security definer set search_path = public as $$
+begin
+  if auth.uid() is null then raise exception 'Not signed in'; end if;
+  update users set photo_status = 'flagged'
+   where id = p_user_id and photo_status in ('pending','approved','none');
+end $$;
+
 -- visitor counter
 create or replace function inc_visitor() returns void as $$ begin update site_stats set visitor_count = visitor_count + 1 where id=1; end; $$ language plpgsql;
+
+-- profile columns for the fan half of every row
+alter table users
+  add column if not exists photo_path text,
+  add column if not exists social_handle text,
+  add column if not exists social_platform text,
+  add column if not exists photo_status text default 'none',   -- none|pending|approved|flagged|rejected
+  add column if not exists anon_session_id text unique;
+
+create index if not exists fan_totals_person_idx on fan_totals (person_id, total_cents desc);
+create index if not exists people_category_total_idx on people (category_id, total_cents desc);
+create index if not exists users_spent_idx on users (total_spent_cents desc);
 
 -- RLS
 alter table users enable row level security;
@@ -181,14 +236,76 @@ create policy "users self read" on users for select using (auth.uid() = id);
 drop policy if exists "users self insert" on users;
 create policy "users self insert" on users for insert with check (auth.uid() = id);
 drop policy if exists "users self update" on users;
-create policy "users self update" on users for update using (auth.uid() = id);
+create policy "users self update" on users for update using (auth.uid() = id) with check (auth.uid() = id);
+
+-- RLS scopes rows, not columns. Without the column grants below, "users self
+-- update" lets any signed-in user set their own balance_cents to anything they
+-- like straight through the anon key. Balance and spend move ONLY through
+-- place_vote / credit_balance, which are security definer.
+revoke update on users from anon, authenticated;
+grant update (display_name, is_anonymous, photo_path, social_handle, social_platform, photo_status)
+  on users to authenticated;
+
+-- Same reasoning for INSERT: the self-insert policy would otherwise let someone
+-- create their own row with balance_cents already set. Both balance columns are
+-- absent here, so they take their DEFAULT 0 and can never be client-supplied.
+revoke insert on users from anon, authenticated;
+grant insert (id, email, display_name, is_anonymous, photo_path, social_handle, social_platform, anon_session_id)
+  on users to authenticated;
+
+-- fan cards are public, so publish exactly the display fields and nothing else.
+-- (email, balance_cents and total_spent_cents are deliberately absent.)
+drop view if exists public_profiles;
+create view public_profiles as
+  select id, display_name, is_anonymous, photo_path, social_handle, social_platform, photo_status
+  from users;
+grant select on public_profiles to anon, authenticated;
+
+-- One query per board instead of N+1: each person with their GOAT fan and the
+-- runner-up fan's total, so the card can show "40 votes ahead of the next fan".
+drop view if exists people_with_top_fan;
+create view people_with_top_fan as
+select
+  p.id, p.slug, p.category_id, p.name, p.blurb, p.wikipedia_url,
+  p.photo_path, p.photo_credit, p.photo_license,
+  p.total_cents, p.backer_count, p.first_backed_at,
+  f1.user_id            as fan_id,
+  f1.total_cents        as fan_cents,
+  f2.total_cents        as fan_runner_up_cents,
+  u.display_name        as fan_name,
+  u.is_anonymous        as fan_anonymous,
+  u.photo_path          as fan_photo,
+  u.social_handle       as fan_handle,
+  u.social_platform     as fan_platform,
+  u.photo_status        as fan_photo_status
+from people p
+left join lateral (
+  select user_id, total_cents from fan_totals
+  where person_id = p.id order by total_cents desc, user_id asc limit 1
+) f1 on true
+left join lateral (
+  select total_cents from fan_totals
+  where person_id = p.id order by total_cents desc, user_id asc offset 1 limit 1
+) f2 on true
+left join users u on u.id = f1.user_id;
+grant select on people_with_top_fan to anon, authenticated;
 drop policy if exists "topups self read" on topups;
 create policy "topups self read" on topups for select using (auth.uid() = user_id);
 -- no public writes on people/bids/fan_totals — only via RPC or service key
 -- no public insert on users except self; balance only via RPC/webhook
 
 drop policy if exists "public read people photos" on storage.objects;
-create policy "public read people photos" on storage.objects for select using (bucket_id in ('people','logos'));
+create policy "public read people photos" on storage.objects for select using (bucket_id in ('people','logos','fans'));
+
+-- fan photos: anyone signed in may upload, but only inside a folder named after
+-- their own uid, so nobody can overwrite someone else's picture.
+insert into storage.buckets (id, name, public) values ('fans','fans',true) on conflict (id) do nothing;
+drop policy if exists "fans upload own" on storage.objects;
+create policy "fans upload own" on storage.objects for insert to authenticated
+  with check (bucket_id = 'fans' and (storage.foldername(name))[1] = auth.uid()::text);
+drop policy if exists "fans update own" on storage.objects;
+create policy "fans update own" on storage.objects for update to authenticated
+  using (bucket_id = 'fans' and (storage.foldername(name))[1] = auth.uid()::text);
 
 -- seed categories (~65) — minimal starter, seed script fills people
 insert into categories (slug,name,group_name,sort_order) values

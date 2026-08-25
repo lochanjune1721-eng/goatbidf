@@ -3,195 +3,117 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="referrer" content="no-referrer">
-<title>Category — GOAT.lol</title>
+<title>Board — GOAT.lol</title>
 <link rel="preconnect" href="https://iuvmzlrnbwptgrbkdbbn.supabase.co" crossorigin>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="css/style.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-<header class="topbar"><div class="topbar-inner">
-  <div class="brand"><a href="index.html">GOAT<span>.lol</span></a></div>
-  <div class="search"><i>⌕</i><input id="search" placeholder="Search people, categories"></div>
-  <nav class="topnav"><a href="index.html">Categories</a><a href="fans.html">Fans</a><a href="about.html">About</a><span id="balance-pill" class="balance-pill"><a href="wallet.html">Sign in</a></span></nav>
-</div></header>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><a href="index.html">GOAT<span>.lol</span></a></div>
+    <div class="search"><i>⌕</i><input id="search" placeholder="Search boards and people"></div>
+    <nav class="topnav">
+      <a href="index.html">Boards</a>
+      <a href="fans.html">Fans</a>
+      <span id="balance-pill" class="balance-pill"><a href="wallet.html">Get votes</a></span>
+    </nav>
+  </div>
+</header>
 
-<div class="container" style="padding:16px 20px">
-  <div id="cat-head" style="margin:12px 0">
-    <h1 id="cat-title" class="display" style="font-size:36px;letter-spacing:.02em">—</h1>
-    <div class="mono" style="font-size:12px;color:var(--muted)">Rank is the money. Nothing else. <a href="rules.html" style="color:var(--gold);text-decoration:underline">Rules →</a></div>
+<div class="container" style="padding:20px 20px 40px">
+  <div id="crumb" class="mono" style="font-size:12px;color:var(--muted)"></div>
+  <h1 id="cat-title" class="display" style="font-size:clamp(26px,5vw,38px);margin:6px 0 4px">Loading…</h1>
+  <p class="mono" style="font-size:12px;color:var(--muted)">Rank is the votes. Nothing else. <a href="rules.html" style="color:var(--gold)">Rules →</a></p>
+
+  <div style="display:flex;gap:8px;margin:14px 0;flex-wrap:wrap">
+    <input id="add-name" class="field-inline" placeholder="Add someone — real public figure with a Wikipedia page">
+    <button id="add-btn" class="btn-primary">Add for 1 vote →</button>
   </div>
 
-  <div style="display:flex;gap:8px;margin:10px 0">
-    <input id="add-name" placeholder="Add a person — real public figure with Wikipedia" style="flex:1;height:42px;border-radius:999px;border:1px solid var(--border);background:var(--bg);color:var(--ink);padding:0 14px">
-    <button id="add-btn" class="btn-primary" style="width:auto">Add for 1 vote →</button>
+  <div id="board" aria-live="polite">
+    <div class="vrow skeleton" style="height:180px"></div>
+    <div class="vrow skeleton" style="height:140px"></div>
+    <div class="vrow skeleton" style="height:110px"></div>
   </div>
-
-  <div id="board" class="list"></div>
-  <div id="pagination" class="pagination"></div>
 </div>
 
-<footer class="footer">GOAT.lol — pay to rank. <a href="rules.html">Rules</a></footer>
+<div class="stickybar">
+  <span class="bal"><span data-balance>0</span><small>your votes</small></span>
+  <a href="wallet.html">Get votes</a>
+</div>
+
+<footer class="footer">GOAT.lol — put your money where your mouth is. <a href="rules.html">Rules</a> · <a href="wallet.html">Wallet</a></footer>
 
 <script src="js/supabase.js"></script>
 <script src="js/optimized-image.js"></script>
 <script src="js/wiki-fallback.js"></script>
+<script src="js/session.js"></script>
+<script src="js/vote.js"></script>
+<script src="js/profile.js"></script>
+<script src="js/board.js"></script>
 <script>
 (async function(){
-  const slug=window.GOAT.qs('slug')||'footballers';
-  const sb=window.supabaseClient;
-  const {data: cat}=await sb.from('categories').select('*').eq('slug',slug).maybeSingle();
-  if(!cat){ document.getElementById('cat-title').textContent='Category not found'; return; }
-  document.getElementById('cat-title').textContent=cat.name;
-  document.title=cat.name+' — GOAT.lol';
-  let people=[];
+  const sb = window.supabaseClient, V = window.GOATVote;
+  const slug = window.GOAT.qs('slug') || 'greatest-footballer';
+  const boardEl = document.getElementById('board');
 
-  async function fetchPeople(){
-    const {data}=await sb.from('people').select('*').eq('category_id', cat.id).order('total_cents',{ascending:false}).order('first_backed_at',{ascending:true}).limit(200);
-    people=data||[];
-    if(!people.length){
-      const fb=await window.WIKI_FALLBACK?.();
-      if(fb){
-        const slug=cat.slug;
-        const raw=fb.people.filter(p=> p.category_slug===slug);
-        people=raw.map(p=>({id:p.id, slug:p.slug, name:p.name, blurb:p.blurb, wikipedia_url:p.wikipedia_url, photo_path:p.photo_path, total_cents:0, first_backed_at:null, category_id:cat.id}));
-      }
-    }
+  document.getElementById('search').addEventListener('keydown', e=>{
+    if(e.key==='Enter') location.href='index.html?q='+encodeURIComponent(e.target.value.trim());
+  });
+
+  const { data: cat, error: catErr } = await sb.from('categories').select('*').eq('slug', slug).maybeSingle();
+  if(catErr){
+    boardEl.innerHTML = `<div class="empty"><b>Could not load this board.</b><br>${V.esc(catErr.message)}<br>
+      <button class="btn-ghost" style="margin-top:10px" onclick="location.reload()">Try again</button></div>`;
+    return;
+  }
+  if(!cat){
+    document.getElementById('cat-title').textContent = 'Board not found';
+    boardEl.innerHTML = `<div class="empty"><b>No board with that name.</b><br><a href="index.html" style="color:var(--gold)">See all 147 boards →</a></div>`;
+    return;
+  }
+  document.getElementById('cat-title').textContent = cat.name;
+  document.title = cat.name + ' — GOAT.lol';
+  document.getElementById('crumb').textContent = cat.group_name || '';
+
+  // one query, fan already joined — no N+1
+  async function load(){
+    const { data, error } = await sb.from('people_with_top_fan')
+      .select('*').eq('category_id', cat.id)
+      .order('total_cents', {ascending:false})
+      .order('first_backed_at', {ascending:true})
+      .limit(300);
+    if(error) throw error;
+    return data || [];
   }
 
-  async function fetchFans(personIds){
-    if(!personIds.length) return {};
-    const {data}=await sb.from('fan_totals').select('person_id,total_cents,users(display_name,is_anonymous)').in('person_id', personIds).order('total_cents',{ascending:false});
-    const map={};
-    (data||[]).forEach(r=>{
-      if(!map[r.person_id]) map[r.person_id]=[];
-      if(map[r.person_id].length<3) map[r.person_id].push(r);
-    });
-    return map;
+  let people = [];
+  try{ people = await load(); }
+  catch(e){
+    boardEl.innerHTML = `<div class="empty"><b>Could not load the contenders.</b><br>${V.esc(e.message)}<br>
+      <button class="btn-ghost" style="margin-top:10px" onclick="location.reload()">Try again</button></div>`;
+    return;
   }
 
-  function rankClass(r){
-    if(r===1) return 'rank-1';
-    if(r===2) return 'rank-2';
-    if(r===3) return 'rank-3';
-    if(r<=10) return 'rank-4-10';
-    return 'rank-11-plus';
-  }
+  const board = new window.GOATBoard(boardEl, people, { reload: load });
+  board.live();
 
-  async function render(){
-    const board=document.getElementById('board');
-    if(!people.length){
-      board.innerHTML='<div class="empty">No one on this board yet. <b>1 vote takes #1.</b></div>';
-      return;
-    }
-    const fanMap=await fetchFans(people.map(p=>p.id));
-    board.innerHTML='';
-
-    people.forEach((p,i)=>{
-      const rank=i+1, cls=rankClass(rank);
-      const priority = i < 3 ? 'eager' : 'lazy';
-      const size = rank === 1 ? 280 : (rank === 2 ? 200 : (rank === 3 ? 160 : (rank <= 10 ? 100 : 64)));
-      const fans=fanMap[p.id]||[];
-      const fanStr=fans.length? fans.map(f=> f.users?.is_anonymous? 'Anonymous': (f.users?.display_name||'Unknown')).join(' · ') : '—';
-      // who is beating whom, by how many votes
-      let verdict='';
-      if(rank===1){
-        const chaser=people[1];
-        verdict = chaser
-          ? `<span class="verdict-line lead"><b>${p.name}</b> is beating <b>${chaser.name}</b> by <b class="by">${window.GOAT.voteNum((p.total_cents||0)-(chaser.total_cents||0))}</b> votes</span>`
-          : `<span class="verdict-line lead">Unopposed &mdash; nobody else on this board yet</span>`;
-      } else {
-        const ahead=people[rank-2], diff=(ahead.total_cents||0)-(p.total_cents||0);
-        verdict = `<span class="verdict-line"><b>${ahead.name}</b> is beating <b>${p.name}</b> by <b class="by">${window.GOAT.voteNum(diff)}</b> votes</span>`;
-      }
-      const gap='';
-      const card=document.createElement('div'); card.className=`person-card ${cls}`;
-
-      const photoHtml = window.OptimizedImage.render({
-        photoPath: p.photo_path,
-        name: p.name,
-        size,
-        priority,
-        slug: p.slug
-      });
-
-      card.innerHTML=`
-        <div class="rank-badge">#${rank}</div>
-        <div class="photo">${photoHtml}</div>
-        <div class="body">
-          <div class="name display">${p.name}</div>
-          <div class="blurb">${p.blurb||''}</div>
-          <div class="total display">${window.GOAT.voteNum(p.total_cents||0)}<span class="unit">votes</span></div>
-          ${verdict}
-          <div class="fans">Top fans: <b>${fanStr}</b>${gap}</div>
-          <div class="back-row">
-            <span class="amount-field">
-              <input type="number" data-amt inputmode="numeric" min="1" step="1" value="1" aria-label="Votes to cast">
-              <span class="amount-unit">votes</span>
-            </span>
-            <button class="btn-back" data-back>Vote</button>
-            <span class="stakes" data-stakes></span>
-          </div>
-        </div>`;
-
-      // Free-form amount: vote as many as you like, no fixed steps. 1 vote minimum
-      // because the bids table enforces amount_cents >= 100.
-      const amtEl=card.querySelector('[data-amt]'), stakesEl=card.querySelector('[data-stakes]');
-      const readAmt=()=> Math.max(1, Math.floor(Number(amtEl.value)||0)) * 100;
-      function updateStakes(){
-        const amt=readAmt();
-        const newTotal=(p.total_cents||0)+amt;
-        let newRank=1;
-        for(const other of people){
-          if(other.id===p.id) continue;
-          if((other.total_cents||0) > newTotal) newRank++;
-        }
-        stakesEl.textContent = newRank < rank
-          ? `takes them to #${newRank}`
-          : `takes them to ${window.GOAT.voteNum(newTotal)} votes`;
-      }
-      amtEl.addEventListener('input', updateStakes);
-      amtEl.addEventListener('blur', ()=>{ const v=Math.max(1, Math.floor(Number(amtEl.value)||0)); amtEl.value=v; updateStakes(); });
-      updateStakes();
-
-      card.querySelector('[data-back]').addEventListener('click', async()=>{
-        const btn=card.querySelector('[data-back]'); btn.disabled=true; btn.textContent='…';
-        try{
-          const {error}=await sb.rpc('place_bid', {p_person_id: p.id, p_amount_cents: readAmt()});
-          if(error) throw error;
-          await fetchPeople(); await render(); await window.refreshBalance();
-        }catch(e){
-          alert(e.message.includes('insufficient')? 'Not enough votes left — top up in wallet.': e.message);
-          btn.disabled=false; btn.textContent='Vote';
-        }
-      });
-
-      card.addEventListener('click', ev=>{ if(ev.target.closest('button') || ev.target.closest('.amount-field')) return; location.href=`person.html?slug=${p.slug}`; });
-      board.appendChild(card);
-    });
-  }
-
-  document.getElementById('add-btn').addEventListener('click', async()=>{
-    const name=document.getElementById('add-name').value.trim();
-    if(!name) return alert('Enter a name — must have a Wikipedia entry.');
-    const {data:{user}}=await sb.auth.getUser();
-    if(!user) return location.href='wallet.html';
+  document.getElementById('add-btn').addEventListener('click', async ()=>{
+    const name = document.getElementById('add-name').value.trim();
+    if(!name) return alert('Enter a name — must be a real public figure with a Wikipedia page.');
     try{
-      const {data: person, error: addErr}=await sb.rpc('add_person', {p_category_id: cat.id, p_name: name, p_blurb:'', p_wikipedia_url:`https://en.wikipedia.org/wiki/${encodeURIComponent(name.replace(/ /g,'_'))}`, p_photo_path: null});
-      if(addErr) throw addErr;
-      const pid=person;
-      const {error}=await sb.rpc('place_bid', {p_person_id: pid, p_amount_cents: 100});
+      await window.GOATSession.ensureVoter();
+      const { data: id, error } = await sb.rpc('add_person', {
+        p_category_id: cat.id, p_name: name, p_blurb: '',
+        p_wikipedia_url: 'https://en.wikipedia.org/wiki/'+encodeURIComponent(name.replace(/ /g,'_')),
+        p_photo_path: null });
       if(error) throw error;
+      const { error: vErr } = await sb.rpc('place_vote', { p_person_id: id, p_votes: 1 });
+      if(vErr) throw vErr;
       location.reload();
     }catch(e){ alert(e.message); }
   });
-
-  document.getElementById('search').addEventListener('keydown', e=>{ if(e.key==='Enter'){ location.href='index.html?q='+encodeURIComponent(e.target.value); }});
-  await fetchPeople();
-  await render();
-
-  try{ sb.channel('people-'+slug).on('postgres_changes',{event:'INSERT',schema:'public',table:'bids'}, async()=>{ await fetchPeople(); await render(); }).subscribe(); }catch{}
 })();
 </script>
 </body>
