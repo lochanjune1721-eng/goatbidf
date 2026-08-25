@@ -150,9 +150,21 @@
 
   // ---------- fights ----------
   // Curated pair while the board is at $0; the live top 2 once real money lands.
+  // Boards exist under two slug schemes ("greatest-singer" and "singers"), so
+  // try the fight's own slug, then its alt, then the category name with any
+  // "greatest" prefix and trailing plural stripped. Anything still unmatched is
+  // reported rather than silently vanishing.
+  const catByKey = {};
+  const key = s => norm(s).replace(/^greatest\s+/,'').replace(/[^a-z0-9]+/g,'').replace(/(e?s)$/,'');
+  for(const c of cats){
+    catByKey[key(c.name)] ??= c;
+    catByKey[key(c.slug)] ??= c;
+  }
+  const unresolved = [];
+
   function resolveFight(f){
-    const cat = catBySlug[f.slug];
-    if(!cat) return null;
+    const cat = catBySlug[f.slug] || (f.alt && catBySlug[f.alt]) || catByKey[key(f.cat)];
+    if(!cat){ unresolved.push(f.cat); return null; }
     const list = peopleByCat[cat.id] || [];
     const byName = n => list.find(p => norm(p.name) === norm(n));
     const hasMoney = list.some(p => (p.total_cents||0) > 0);
@@ -166,6 +178,9 @@
   }
 
   const fights = (window.GOAT_FIGHTS || []).map(resolveFight).filter(f => f && f.a);
+  if(unresolved.length){
+    console.warn(`GOAT: ${unresolved.length} of ${(window.GOAT_FIGHTS||[]).length} fights have no matching board — ${unresolved.join(', ')}`);
+  }
 
   // ---------- group chips ----------
   const groupCounts = {};
@@ -342,7 +357,10 @@
     if(state.view==='fights'){
       const list = sortFights(fights.filter(f => inGroup(f.cat)));
       if(!list.length){
-        resultsEl.innerHTML = `<div class="empty">No headline fights in ${esc(state.group)}. <button class="linkish" data-view="boards">See all boards →</button></div>`;
+        const n = cats.filter(c => inGroup(c)).length;
+        resultsEl.innerHTML = `<div class="empty"><b>No headline fights in ${esc(state.group)} yet.</b><br>
+          ${n} ${n===1?'board':'boards'} here are still open.
+          <button class="linkish" data-view="boards">See all ${esc(state.group)} boards →</button></div>`;
         return;
       }
       resultsEl.innerHTML = section(

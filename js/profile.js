@@ -76,12 +76,19 @@
       show(msg,'Sending…');
       try{
         const user = await S.currentUser();
+        // Always send the link back to THIS deployment. Without an explicit
+        // redirect, Supabase falls back to the project's Site URL — which is
+        // how magic links end up pointing at localhost in production.
+        const redirect = new URL('account.html', location.href).href;
         // An anonymous voter is upgraded in place: same auth user, same votes.
         const { error } = user
-          ? await sb.auth.updateUser({ email })
-          : await sb.auth.signInWithOtp({ email, options:{ emailRedirectTo: location.href } });
+          ? await sb.auth.updateUser({ email }, { emailRedirectTo: redirect })
+          : await sb.auth.signInWithOtp({ email, options:{ emailRedirectTo: redirect } });
         if(error) throw error;
-        show(msg,'Check your email for the link. Your votes are already safe.','ok');
+        show(msg, `Check <b>${esc(email)}</b> for the link. Your votes are already safe.`
+          + (/^https?:\/\/(localhost|127\.)/.test(redirect)
+             ? ''
+             : `<br><span class="mono" style="font-size:11px;color:var(--muted)">The link returns to ${esc(location.host)}.</span>`), 'ok');
       }catch(e){ show(msg, esc(e.message), 'error'); }
     });
   }
