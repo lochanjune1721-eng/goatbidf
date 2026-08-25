@@ -121,6 +121,71 @@
     return el;
   }
 
+  // ---- loading a board ----
+  // people_with_top_fan gets each contender and their GOAT fan in one query.
+  // If the migration hasn't been run yet the view won't exist, and PostgREST
+  // answers "Could not find the table ... in the schema cache". Rather than
+  // showing an error page, fall back to the plain tables and assemble the same
+  // shape client-side. Slower, but the board still renders.
+  const MISSING = e => /schema cache|does not exist|not find the table|PGRST205|42P01/i.test(e?.message || '');
+
+  async function loadBoard(sb, categoryId){
+    const cols = 'id,slug,category_id,name,blurb,wikipedia_url,photo_path,photo_credit,photo_license,total_cents,backer_count,first_backed_at';
+
+    // preferred path
+    const view = await sb.from('people_with_top_fan').select('*')
+      .eq('category_id', categoryId)
+      .order('total_cents',{ascending:false}).order('first_backed_at',{ascending:true}).limit(300);
+    if(!view.error) return { people: view.data || [], degraded: false };
+    if(!MISSING(view.error)) throw view.error;
+
+    // fallback: base table, then stitch the fan on
+    const base = await sb.from('people').select(cols)
+      .eq('category_id', categoryId)
+      .order('total_cents',{ascending:false}).order('first_backed_at',{ascending:true}).limit(300);
+    if(base.error) throw base.error;
+    const people = (base.data || []).map(p => ({ ...p, fan_id:null, fan_cents:null, fan_runner_up_cents:null }));
+    if(!people.length) return { people, degraded: true };
+
+    try{
+      const ids = people.map(p => p.id);
+      const { data: fans, error: fe } = await sb.from('fan_totals')
+        .select('person_id,user_id,total_cents').in('person_id', ids)
+        .order('total_cents',{ascending:false});
+      if(fe) throw fe;
+
+      const top = {};
+      for(const f of (fans || [])){
+        const slot = top[f.person_id] || (top[f.person_id] = []);
+        if(slot.length < 2) slot.push(f);
+      }
+      const fanIds = Object.values(top).map(v => v[0]?.user_id).filter(Boolean);
+      let profiles = {};
+      if(fanIds.length){
+        // public_profiles is new too; if it is missing, fall back to no names
+        const pr = await sb.from('public_profiles').select('*').in('id', fanIds);
+        if(!pr.error) profiles = Object.fromEntries((pr.data || []).map(u => [u.id, u]));
+      }
+      for(const p of people){
+        const t = top[p.id];
+        if(!t || !t.length) continue;
+        const u = profiles[t[0].user_id] || {};
+        p.fan_id = t[0].user_id;
+        p.fan_cents = t[0].total_cents;
+        p.fan_runner_up_cents = t[1] ? t[1].total_cents : null;
+        p.fan_name = u.display_name || null;
+        p.fan_anonymous = u.is_anonymous ?? true;
+        p.fan_photo = u.photo_path || null;
+        p.fan_handle = u.social_handle || null;
+        p.fan_platform = u.social_platform || null;
+        p.fan_photo_status = u.photo_status || null;
+      }
+    }catch(e){ /* fan data is optional — the board still ranks correctly without it */ }
+
+    return { people, degraded: true };
+  }
+
   window.GOATVote = { toVotes, voteNum, voteWord, esc, renderRow, personGap, fanHalf,
-                      rankClass, photoSize, fanSize, handleUrl, PLATFORM_ICON };
+                      rankClass, photoSize, fanSize, handleUrl, PLATFORM_ICON,
+                      loadBoard, isMissingRelation: MISSING };
 })();

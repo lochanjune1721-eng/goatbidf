@@ -100,8 +100,10 @@
       return;
     }
     const ids=rows.map(r=>r.user_id);
-    const {data:profs}=await sb.from('public_profiles').select('*').in('id',ids);
-    const by=Object.fromEntries((profs||[]).map(p=>[p.id,p]));
+    // public_profiles arrives with the migration; without it, fall back to
+    // unnamed backers rather than failing the whole leaderboard
+    const pr=await sb.from('public_profiles').select('*').in('id',ids);
+    const by=pr.error?{}:Object.fromEntries((pr.data||[]).map(p=>[p.id,p]));
     document.getElementById('fans').innerHTML=rows.map((r,i)=>{
       const u=by[r.user_id]||{};
       const anon=u.is_anonymous||!u.display_name;

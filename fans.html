@@ -68,8 +68,8 @@
     return;
   }
 
-  const {data:profs}=await sb.from('public_profiles').select('*').in('id',list.map(l=>l.id));
-  const by=Object.fromEntries((profs||[]).map(p=>[p.id,p]));
+  const pr=await sb.from('public_profiles').select('*').in('id',list.map(l=>l.id));
+  const by=pr.error?{}:Object.fromEntries((pr.data||[]).map(p=>[p.id,p]));
   const grand=list.reduce((s,l)=>s+l.cents,0);
   document.getElementById('totals').textContent=
     `${list.length.toLocaleString()} voters · ${V.voteNum(grand)} votes cast between them`;

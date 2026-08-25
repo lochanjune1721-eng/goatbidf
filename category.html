@@ -77,15 +77,13 @@
   document.title = cat.name + ' — GOAT.lol';
   document.getElementById('crumb').textContent = cat.group_name || '';
 
-  // one query, fan already joined — no N+1
+  // one query with the fan already joined; falls back to the base tables if the
+  // migration hasn't been applied yet (see GOATVote.loadBoard)
+  let degraded = false;
   async function load(){
-    const { data, error } = await sb.from('people_with_top_fan')
-      .select('*').eq('category_id', cat.id)
-      .order('total_cents', {ascending:false})
-      .order('first_backed_at', {ascending:true})
-      .limit(300);
-    if(error) throw error;
-    return data || [];
+    const r = await V.loadBoard(sb, cat.id);
+    degraded = r.degraded;
+    return r.people;
   }
 
   let people = [];
@@ -94,6 +92,12 @@
     boardEl.innerHTML = `<div class="empty"><b>Could not load the contenders.</b><br>${V.esc(e.message)}<br>
       <button class="btn-ghost" style="margin-top:10px" onclick="location.reload()">Try again</button></div>`;
     return;
+  }
+  if(degraded){
+    const n = document.createElement('div');
+    n.className = 'test-banner';
+    n.innerHTML = 'Running without <code>people_with_top_fan</code> — apply <code>migrations/001_votes_and_fans.sql</code> in the Supabase SQL editor for the fan half and faster boards.';
+    boardEl.parentNode.insertBefore(n, boardEl);
   }
 
   const board = new window.GOATBoard(boardEl, people, { reload: load });
