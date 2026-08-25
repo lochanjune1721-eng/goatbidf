@@ -51,12 +51,14 @@
   }
 
   // ---- right half: the GOAT fan ----
+  // Structured so one markup serves both layouts: a centred column beside the
+  // person on desktop, a full-width strip beneath them on phones.
   function fanHalf(p, rank){
     const size = fanSize(rank);
     if(!p.fan_id || !p.fan_cents){
-      return `<div class="vfan">
+      return `<div class="vfan is-empty">
         <div class="vfan-label">GOAT fan</div>
-        <div class="vfan-empty"><b>No GOAT fan yet</b>1 vote claims it.</div>
+        <div class="vfan-body"><div class="vfan-empty"><b>No GOAT fan yet</b>1 vote claims it.</div></div>
       </div>`;
     }
     const anon = p.fan_anonymous;
@@ -81,10 +83,12 @@
       <div class="vfan-label">GOAT fan</div>
       <div class="vfan-photo">${showPhoto ? img(p.fan_photo, name, size, 'lazy')
         : `<div class="fallback">${esc(G.initials(name))}</div>`}</div>
-      <div class="vfan-name">${esc(name)}</div>
-      ${handleHtml}
-      <div class="vfan-count">${voteWord(p.fan_cents)}</div>
-      <div class="vgap">${lead}</div>
+      <div class="vfan-body">
+        <div class="vfan-name">${esc(name)}</div>
+        ${handleHtml}
+        <div class="vgap">${lead}</div>
+      </div>
+      <div class="vfan-count">${voteNum(p.fan_cents)}<em>votes</em></div>
     </div>`;
   }
 

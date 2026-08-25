@@ -126,16 +126,21 @@
   let shown = false;
   async function claimPrompt(personName, rank){
     if(shown) return;
-    if(!(await S.isAnonymousVoter())) return;
+    const st = await S.claimState();
+    if(!st.needs) return;                       // their card is already set up
     shown = true;
+    const ask = st.reason === 'signin' ? 'Claim your spot on the card.'
+              : st.reason === 'name'   ? 'Add a name so it is you on the card, not "Anonymous".'
+                                       : 'Add a photo — your face goes on the card.';
+    const cta = st.reason === 'signin' ? 'Claim it' : 'Set it up';
     const t = document.createElement('div');
     t.className = 'claim-toast';
     t.innerHTML = `
       <div>
         <b>You're now ${esc(personName)}'s #${rank} fan.</b>
-        <span>Claim your spot on the card.</span>
+        <span>${ask}</span>
       </div>
-      <a href="wallet.html#who" class="btn-primary">Claim it</a>
+      <a href="wallet.html#who" class="btn-primary">${cta}</a>
       <button class="claim-x" aria-label="Dismiss">×</button>`;
     document.body.appendChild(t);
     t.querySelector('.claim-x').addEventListener('click', ()=>t.remove());

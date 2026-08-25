@@ -20,7 +20,7 @@
     let user = await currentUser();
     if(!user){
       const { data, error } = await sb.auth.signInAnonymously();
-      if(error) throw new Error('Could not start a session: ' + error.message);
+      if(error) throw new Error(explainAuth(error));
       user = data.user;
     }
     await ensureRow(user);
@@ -73,11 +73,35 @@
     return !!user && !user.email;
   }
 
+  // Broader than "anonymous": a signed-in voter with no display name or photo
+  // still has a blank card, so they should be asked too. Returns what is
+  // missing so the prompt can say the right thing.
+  async function claimState(){
+    const user = await currentUser();
+    if(!user) return { needs:true, reason:'signin' };
+    if(!user.email) return { needs:true, reason:'signin' };
+    const me = await profile();
+    if(!me || !me.display_name) return { needs:true, reason:'name' };
+    if(!me.photo_path) return { needs:true, reason:'photo' };
+    return { needs:false };
+  }
+
+  // Anonymous sign-in has to be switched on in the Supabase dashboard. If it is
+  // not, say so plainly instead of surfacing a raw auth error.
+  function explainAuth(err){
+    const m = (err && err.message) || '';
+    if(/anonymous.*(disabled|not enabled)|signups not allowed/i.test(m)){
+      return 'Anonymous voting is switched off for this project. Enable "Allow anonymous sign-ins" in Supabase → Authentication → Sign In / Providers, or sign in from the wallet first.';
+    }
+    return m || 'Could not start a session';
+  }
+
   async function refresh(){ paintBalance(await balance(true)); }
 
   document.addEventListener('DOMContentLoaded', () => { refresh().catch(()=>paintBalance(0)); });
   sb.auth.onAuthStateChange(() => { cachedProfile = null; refresh().catch(()=>{}); });
 
   window.GOATSession = { currentUser, ensureVoter, ensureRow, profile, balance,
-                         setLocalBalance, paintBalance, isAnonymousVoter, refresh };
+                         setLocalBalance, paintBalance, isAnonymousVoter, claimState,
+                         explainAuth, refresh };
 })();
