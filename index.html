@@ -15,9 +15,8 @@
 <header class="topbar">
   <div class="topbar-inner">
     <div class="brand"><a href="index.html">GOAT<span>.lol</span></a></div>
-    <div class="search"><i>⌕</i><input id="search" placeholder="Search people, categories"></div>
     <nav class="topnav">
-      <a href="index.html" class="active">Categories</a>
+      <a href="index.html" class="active">Boards</a>
       <a href="fans.html">Fans</a>
       <a href="about.html">About</a>
       <span id="balance-pill" class="balance-pill"><a href="wallet.html">Sign in</a></span>
@@ -33,11 +32,36 @@
     <p>Every argument is free. This one isn't. Load $5, back who you believe in — the board is the money, nothing else.</p>
   </div>
 
-  <div id="groups"></div>
+  <!-- ============ FILTER BAR ============ -->
+  <div class="filterbar" id="filterbar">
+    <div class="filter-search">
+      <i>⌕</i>
+      <input id="q" type="search" autocomplete="off" placeholder="Search boards and people — try “Messi”, “tennis”, “president”">
+      <button id="q-clear" class="q-clear" type="button" aria-label="Clear search" hidden>×</button>
+    </div>
 
-  <div id="unclaimed" class="unclaimed" style="display:none"></div>
+    <div class="filter-row">
+      <div class="seg" role="tablist">
+        <button class="seg-btn active" data-view="fights" role="tab">Top fights</button>
+        <button class="seg-btn" data-view="boards" role="tab">All boards <span id="board-count" class="seg-count"></span></button>
+      </div>
+      <div class="filter-sort">
+        <label for="sort">Sort</label>
+        <select id="sort">
+          <option value="hot">Hottest</option>
+          <option value="money">Most money</option>
+          <option value="open">Unclaimed first</option>
+          <option value="az">A–Z</option>
+        </select>
+      </div>
+    </div>
 
-  <div style="margin:20px 0">
+    <div class="chips" id="chips"></div>
+  </div>
+
+  <div id="results"></div>
+
+  <div style="margin:26px 0">
     <h2 class="display" style="font-size:18px">Live activity</h2>
     <div id="activity" class="activity"></div>
   </div>
@@ -48,181 +72,308 @@
 <script src="js/supabase.js"></script>
 <script src="js/optimized-image.js"></script>
 <script src="js/wiki-fallback.js"></script>
+<script src="js/fights.js"></script>
 <script>
 (async function(){
-  const sb=window.supabaseClient;
-  const groupsEl=document.getElementById('groups'), unclaimedEl=document.getElementById('unclaimed'), activityEl=document.getElementById('activity');
-  const search=document.getElementById('search');
-  if(search){
-    search.addEventListener('keydown', e=>{ if(e.key==='Enter'){ const q=e.target.value.trim(); if(q) location.href='category.html?slug='+encodeURIComponent(q); }});
-  }
+  const sb = window.supabaseClient;
+  const resultsEl = document.getElementById('results');
+  const chipsEl   = document.getElementById('chips');
+  const qEl       = document.getElementById('q');
+  const qClear    = document.getElementById('q-clear');
+  const sortEl    = document.getElementById('sort');
+  const activityEl= document.getElementById('activity');
 
-  // Clear old stale cache
+  // ?q= makes search deep-linkable and is where the topbar search on other pages lands
+  const initialQ = new URLSearchParams(location.search).get('q') || '';
+  const state = { q:initialQ, group:'all', view:'fights', sort:'hot' };
+  if(initialQ){ qEl.value = initialQ; qClear.hidden = false; }
+
+  // strip diacritics so "Pele" finds "Pelé" and "mbappe" finds "Mbappé"
+  const norm = s => (s||'').toString().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+  const cents = c => window.GOAT.cents(c||0);
+  // person/category names are user-supplied (adding a person costs $1) and the
+  // search term is reflected, so everything interpolated below is escaped.
+  const esc = s => (s==null?'':String(s)).replace(/[&<>"']/g, ch =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+
+  // ---------- load ----------
+  let cats = [], people = [];
   try {
-    localStorage.removeItem('goat_home_cache');
-    localStorage.removeItem('goat_home_cache_v2');
-  } catch(e) {}
+    const PAGE = 1000, pages = 6;
+    const reqs = [ sb.from('categories').select('*').order('sort_order') ];
+    for(let i=0;i<pages;i++){
+      reqs.push(sb.from('people')
+        .select('id,slug,name,photo_path,total_cents,category_id,first_backed_at')
+        .order('total_cents',{ascending:false})
+        .range(i*PAGE, i*PAGE + PAGE - 1));
+    }
+    const [catsRes, ...pageRes] = await Promise.all(reqs);
+    cats   = catsRes?.data || [];
+    people = pageRes.flatMap(r => r?.data || []);
+  } catch(e){ console.warn('DB fetch error:', e); }
 
-  let cats = [];
-  let people = [];
-
-  try {
-    const [catsRes, p0, p1, p2, p3, p4, p5] = await Promise.all([
-      sb.from('categories').select('*').order('sort_order'),
-      sb.from('people').select('id,slug,name,photo_path,total_cents,category_id,first_backed_at').order('total_cents',{ascending:false}).range(0, 999),
-      sb.from('people').select('id,slug,name,photo_path,total_cents,category_id,first_backed_at').order('total_cents',{ascending:false}).range(1000, 1999),
-      sb.from('people').select('id,slug,name,photo_path,total_cents,category_id,first_backed_at').order('total_cents',{ascending:false}).range(2000, 2999),
-      sb.from('people').select('id,slug,name,photo_path,total_cents,category_id,first_backed_at').order('total_cents',{ascending:false}).range(3000, 3999),
-      sb.from('people').select('id,slug,name,photo_path,total_cents,category_id,first_backed_at').order('total_cents',{ascending:false}).range(4000, 4999),
-      sb.from('people').select('id,slug,name,photo_path,total_cents,category_id,first_backed_at').order('total_cents',{ascending:false}).range(5000, 5999)
-    ]);
-    cats = catsRes?.data || [];
-    people = [
-      ...(p0?.data || []),
-      ...(p1?.data || []),
-      ...(p2?.data || []),
-      ...(p3?.data || []),
-      ...(p4?.data || []),
-      ...(p5?.data || [])
-    ];
-  } catch(e) {
-    console.warn('DB fetch error:', e);
-  }
-
-  // Fallback if DB empty
-  if((!cats || !cats.length) || (!people || !people.length)){
-    const fallback = await window.WIKI_FALLBACK?.();
-    if(fallback){
-      if(!cats || !cats.length) cats = fallback.categories.map((c,i)=>({id:'fallback-'+c.slug, slug:c.slug, name:c.name, group_name:c.group, sort_order:i}));
-      if(!people || !people.length){
-        const idBySlug={}; cats.forEach(c=> idBySlug[c.slug]=c.id);
-        people = fallback.people.map(p=>({id:p.id, slug:p.slug, name:p.name, photo_path:p.photo_path, total_cents:0, category_id:idBySlug[p.category_slug]||cats[0].id, first_backed_at:null}));
+  // fallback when the DB is empty
+  if(!cats.length || !people.length){
+    const fb = await window.WIKI_FALLBACK?.();
+    if(fb){
+      if(!cats.length) cats = fb.categories.map((c,i)=>({id:'fallback-'+c.slug, slug:c.slug, name:c.name, group_name:c.group, sort_order:i}));
+      if(!people.length){
+        const idBySlug = Object.fromEntries(cats.map(c=>[c.slug,c.id]));
+        people = fb.people.map(p=>({id:p.id, slug:p.slug, name:p.name, photo_path:p.photo_path, total_cents:0, category_id:idBySlug[p.category_slug]||cats[0].id, first_backed_at:null}));
       }
     }
   }
 
-  function renderHomepage(cats, people) {
-    if(!cats || !cats.length) return;
-    
-    // Pre-index people by category_id for instant lookups
-    const peopleByCat = {};
-    for(const p of (people || [])){
-      if(!peopleByCat[p.category_id]) peopleByCat[p.category_id] = [];
-      peopleByCat[p.category_id].push(p);
-    }
+  // ---------- indexes ----------
+  const peopleByCat = {};
+  for(const p of people){ (peopleByCat[p.category_id] ||= []).push(p); }
+  for(const id in peopleByCat) peopleByCat[id].sort((a,b)=>(b.total_cents||0)-(a.total_cents||0));
 
-    // Group categories
-    const groupMap = {};
-    cats.forEach(c => {
-      const grp = c.group_name || 'Other';
-      if(!groupMap[grp]) groupMap[grp] = [];
-      groupMap[grp].push(c);
-    });
+  const catById   = Object.fromEntries(cats.map(c=>[c.id,c]));
+  const catBySlug = Object.fromEntries(cats.map(c=>[c.slug,c]));
+  const _totals = {};
+  const catTotal  = id => (_totals[id] ??= (peopleByCat[id]||[]).reduce((s,p)=>s+(p.total_cents||0),0));
 
-    // Sort groups by total money
-    const groupTotals = {};
-    Object.keys(groupMap).forEach(g => {
-      const ids = groupMap[g].map(c => c.id);
-      groupTotals[g] = ids.reduce((sum, cid) => {
-        const pList = peopleByCat[cid] || [];
-        return sum + pList.reduce((s, p) => s + (p.total_cents || 0), 0);
-      }, 0);
-    });
-    const sortedGroups = Object.keys(groupMap).sort((a,b) => groupTotals[b] - groupTotals[a]);
+  document.getElementById('board-count').textContent = cats.length ? `(${cats.length})` : '';
 
-    groupsEl.innerHTML = '';
-    let tileIndex = 0;
+  // ---------- fights ----------
+  // Curated pair while the board is at $0; the live top 2 once real money lands.
+  function resolveFight(f){
+    const cat = catBySlug[f.slug];
+    if(!cat) return null;
+    const list = peopleByCat[cat.id] || [];
+    const byName = n => list.find(p => norm(p.name) === norm(n));
+    const hasMoney = list.some(p => (p.total_cents||0) > 0);
+    let a, b;
+    if(hasMoney){ [a,b] = list; }
+    else { a = byName(f.a); b = byName(f.b); }
+    // if a curated name isn't in the board, fall back to the top of the list
+    if(!a) a = list[0];
+    if(!b) b = list.find(p => p !== a);
+    return { ...f, cat, a, b, live: hasMoney, total: catTotal(cat.id), count: list.length };
+  }
 
-    for(const g of sortedGroups){
-      const groupCats = groupMap[g];
-      const section = document.createElement('div');
-      section.className = 'group';
-      section.innerHTML = `<div class="group-head"><h2>${g}</h2><span class="mono" style="font-size:11px;color:var(--muted)">${groupCats.length} boards</span></div><div class="cat-grid"></div>`;
-      const grid = section.querySelector('.cat-grid');
+  const fights = (window.GOAT_FIGHTS || []).map(resolveFight).filter(f => f && f.a);
 
-      for(const cat of groupCats){
-        const catPeople = peopleByCat[cat.id] || [];
-        const p1 = catPeople[0], p2 = catPeople[1];
-        const tile = document.createElement('a');
-        tile.href = `category.html?slug=${cat.slug}`;
-        tile.className = 'cat-tile';
+  // ---------- group chips ----------
+  const groupCounts = {};
+  for(const c of cats){ const g = c.group_name || 'Other'; groupCounts[g] = (groupCounts[g]||0)+1; }
+  const groups = Object.keys(groupCounts).sort((a,b)=> groupCounts[b]-groupCounts[a] || a.localeCompare(b));
 
-        const priority = tileIndex < 6 ? 'eager' : 'lazy';
-        tileIndex++;
+  chipsEl.innerHTML = [`<button class="chip active" data-group="all">All <span>${cats.length}</span></button>`]
+    .concat(groups.map(g => `<button class="chip" data-group="${esc(g)}">${esc(g)} <span>${groupCounts[g]}</span></button>`)).join('');
 
-        const p1Photo = p1 ? window.OptimizedImage.render({ photoPath: p1.photo_path, name: p1.name, size: 120, priority, slug: p1.slug }) : '<div class="fallback">?</div>';
-        const p2Photo = p2 ? window.OptimizedImage.render({ photoPath: p2.photo_path, name: p2.name, size: 80, priority, slug: p2.slug }) : '<div class="fallback" style="font-size:16px">?</div>';
-        const gap = p1 && p2 ? `$${(((p1.total_cents||0) - (p2.total_cents||0))/100).toFixed(0)} ahead` : p1 ? '—' : '$1 takes it';
+  // ---------- renderers ----------
+  function photo(p, size, priority){
+    return p
+      ? window.OptimizedImage.render({ photoPath:p.photo_path, name:p.name, size, priority, slug:p.slug })
+      : '<div class="fallback">?</div>';
+  }
 
-        tile.innerHTML = `
-          <div class="cat-tile-head"><strong>${cat.name}</strong><span>${catPeople.length} people</span></div>
-          <div class="cat-tile-body">
-            <div class="p1">
-              <div class="photo">${p1Photo}</div>
-              <div class="meta">
-                <div class="name display">${p1 ? p1.name : 'Empty'}</div>
-                <div class="total display">${p1 ? window.GOAT.cents(p1.total_cents||0) : '$0'}</div>
-                <div class="gap">${gap}</div>
-              </div>
-            </div>
-            <div class="p2">
-              <div class="photo" style="border-radius:12px">${p2Photo}</div>
-              <div class="meta">
-                <div class="name" style="font-size:12px;font-weight:600">${p2 ? p2.name : '—'}</div>
-                <div class="total" style="font-size:13px">${p2 ? window.GOAT.cents(p2.total_cents||0) : ''}</div>
-              </div>
-            </div>
+  function fightCard(f, i){
+    const at = f.a?.total_cents || 0, bt = f.b?.total_cents || 0, sum = at + bt;
+    const pct = sum ? Math.round(at/sum*100) : 50;
+    const prio = i < 6 ? 'eager' : 'lazy';
+    const status = f.total
+      ? `${cents(f.total)} on the board`
+      : `<span class="open">Unclaimed — $1 takes #1</span>`;
+    return `
+      <a class="fight" href="category.html?slug=${encodeURIComponent(f.cat.slug)}">
+        <div class="fight-head">
+          <strong>${esc(f.cat.name)}</strong>
+          <span class="fight-tag">${esc(f.tag)}</span>
+        </div>
+        <div class="fight-body">
+          <div class="fighter">
+            <div class="photo">${photo(f.a, 140, prio)}</div>
+            <div class="fname display">${f.a ? esc(f.a.name) : '—'}</div>
+            <div class="fmoney">${cents(at)}</div>
           </div>
-          <div class="cat-tile-foot"><span>${p1 ? window.GOAT.cents(p1.total_cents||0)+' total' : 'Unclaimed'}</span><span>View board →</span></div>`;
-        grid.appendChild(tile);
-      }
-      groupsEl.appendChild(section);
+          <div class="vs"><span>VS</span></div>
+          <div class="fighter">
+            <div class="photo">${photo(f.b, 140, prio)}</div>
+            <div class="fname display">${f.b ? esc(f.b.name) : '—'}</div>
+            <div class="fmoney">${cents(bt)}</div>
+          </div>
+        </div>
+        <div class="fight-bar" title="${pct}% / ${100-pct}%"><span style="width:${pct}%"></span></div>
+        <div class="fight-foot"><span>${status}</span><span class="go">Back one →</span></div>
+      </a>`;
+  }
+
+  function boardCard(c){
+    const list = peopleByCat[c.id] || [];
+    const p1 = list[0], p2 = list[1];
+    const total = catTotal(c.id);
+    return `
+      <a class="board" href="category.html?slug=${encodeURIComponent(c.slug)}">
+        <div class="board-head"><strong>${esc(c.name)}</strong><span>${esc(c.group_name||'Other')}</span></div>
+        <div class="board-body">
+          <div class="board-face">${photo(p1, 72, 'lazy')}</div>
+          <div class="board-face small">${photo(p2, 56, 'lazy')}</div>
+          <div class="board-meta">
+            <div class="board-lead">${p1 ? esc(p1.name) : 'Empty board'}</div>
+            <div class="board-total">${total ? cents(total) : '<span class="open">$1 takes #1</span>'}</div>
+          </div>
+        </div>
+        <div class="board-foot"><span>${list.length} contenders</span><span class="go">View →</span></div>
+      </a>`;
+  }
+
+  function personRow(p){
+    const c = catById[p.category_id];
+    const rank = c ? (peopleByCat[c.id]||[]).indexOf(p) + 1 : 0;
+    return `
+      <a class="presult" href="person.html?slug=${encodeURIComponent(p.slug)}">
+        <div class="presult-photo">${photo(p, 48, 'lazy')}</div>
+        <div class="presult-meta">
+          <div class="presult-name">${esc(p.name)}</div>
+          <div class="presult-cat">${c ? esc(c.name) : ''}${rank ? ` · #${rank}` : ''}</div>
+        </div>
+        <div class="presult-money">${cents(p.total_cents)}</div>
+      </a>`;
+  }
+
+  function section(title, count, html, extra=''){
+    return `<div class="group"><div class="group-head"><h2>${esc(title)}</h2><span class="mono" style="font-size:11px;color:var(--muted)">${count}</span></div>${extra}${html}</div>`;
+  }
+
+  function sortBoards(list){
+    const s = state.sort;
+    if(s==='az')    return list.slice().sort((a,b)=>a.name.localeCompare(b.name));
+    if(s==='money') return list.slice().sort((a,b)=>catTotal(b.id)-catTotal(a.id));
+    if(s==='open')  return list.slice().sort((a,b)=>catTotal(a.id)-catTotal(b.id) || a.name.localeCompare(b.name));
+    return list.slice().sort((a,b)=> catTotal(b.id)-catTotal(a.id) || (a.sort_order||0)-(b.sort_order||0));
+  }
+
+  function sortFights(list){
+    const s = state.sort;
+    if(s==='az')    return list.slice().sort((a,b)=>a.cat.name.localeCompare(b.cat.name));
+    if(s==='open')  return list.slice().sort((a,b)=>a.total-b.total);
+    if(s==='money') return list.slice().sort((a,b)=>b.total-a.total);
+    return list; // curated order = "hottest"
+  }
+
+  function render(){
+    const q = norm(state.q);
+    const inGroup = c => state.group==='all' || (c.group_name||'Other')===state.group;
+
+    // ---- search mode: boards + people together ----
+    if(q){
+      const mPeopleAll = people.filter(p => norm(p.name).includes(q) && inGroup(catById[p.category_id] || {}));
+      // a board matches on its own name/group, or because someone on it matches —
+      // searching "messi" should surface Greatest Footballer, not just the person row
+      const viaPerson = new Set(mPeopleAll.map(p => p.category_id));
+      const mBoards = sortBoards(cats.filter(c => inGroup(c) && (
+        norm(c.name).includes(q) || norm(c.group_name).includes(q) || viaPerson.has(c.id))));
+      const mFights = sortFights(fights.filter(f => inGroup(f.cat) && (
+        norm(f.cat.name).includes(q) ||
+        norm(f.a?.name).includes(q) ||
+        norm(f.b?.name).includes(q))));
+      const mPeople = mPeopleAll
+        .slice()
+        .sort((a,b)=>{
+          const ap = norm(a.name).startsWith(q), bp = norm(b.name).startsWith(q);
+          if(ap!==bp) return ap ? -1 : 1;              // prefix matches first
+          return (b.total_cents||0)-(a.total_cents||0);
+        })
+        .slice(0,60);
+
+      let html = '';
+      if(mFights.length) html += section('Fights', `${mFights.length}`, `<div class="fight-grid">${mFights.map(fightCard).join('')}</div>`);
+      if(mBoards.length) html += section('Boards', `${mBoards.length}`, `<div class="board-grid">${mBoards.map(boardCard).join('')}</div>`);
+      if(mPeople.length) html += section('People', `${mPeople.length}${mPeople.length===60?'+':''}`, `<div class="presult-list">${mPeople.map(personRow).join('')}</div>`);
+      resultsEl.innerHTML = html || `<div class="empty">Nothing matches “${esc(state.q)}”. Try a name, a sport, or a category.</div>`;
+      return;
     }
+
+    // ---- top fights ----
+    if(state.view==='fights'){
+      const list = sortFights(fights.filter(f => inGroup(f.cat)));
+      if(!list.length){
+        resultsEl.innerHTML = `<div class="empty">No headline fights in ${esc(state.group)}. <button class="linkish" data-view="boards">See all boards →</button></div>`;
+        return;
+      }
+      resultsEl.innerHTML = section(
+        state.group==='all' ? 'Top fights right now' : `${state.group} — top fights`,
+        `${list.length} of ${fights.length}`,
+        `<div class="fight-grid">${list.map(fightCard).join('')}</div>`
+      );
+      return;
+    }
+
+    // ---- all boards, grouped ----
+    const shown = cats.filter(inGroup);
+    if(state.group !== 'all'){
+      resultsEl.innerHTML = section(state.group, `${shown.length} boards`, `<div class="board-grid">${sortBoards(shown).map(boardCard).join('')}</div>`);
+      return;
+    }
+    const byGroup = {};
+    for(const c of shown){ (byGroup[c.group_name||'Other'] ||= []).push(c); }
+    const order = Object.keys(byGroup).sort((a,b)=>{
+      const t = g => byGroup[g].reduce((s,c)=>s+catTotal(c.id),0);
+      return t(b)-t(a) || byGroup[b].length-byGroup[a].length;
+    });
+    resultsEl.innerHTML = order.map(g =>
+      section(g, `${byGroup[g].length} boards`, `<div class="board-grid">${sortBoards(byGroup[g]).map(boardCard).join('')}</div>`)
+    ).join('');
   }
 
-  // Initial render with fresh data
-  renderHomepage(cats, people);
+  // ---------- events ----------
+  let t;
+  qEl.addEventListener('input', e => {
+    state.q = e.target.value;
+    qClear.hidden = !state.q;
+    clearTimeout(t); t = setTimeout(render, 120);
+  });
+  qClear.addEventListener('click', () => { qEl.value=''; state.q=''; qClear.hidden=true; qEl.focus(); render(); });
+  qEl.addEventListener('keydown', e => { if(e.key==='Escape'){ qEl.value=''; state.q=''; qClear.hidden=true; render(); } });
 
+  chipsEl.addEventListener('click', e => {
+    const b = e.target.closest('.chip'); if(!b) return;
+    state.group = b.dataset.group;
+    chipsEl.querySelectorAll('.chip').forEach(x => x.classList.toggle('active', x===b));
+    render();
+  });
 
-  // Unclaimed banner
-  const emptyCats = cats.filter(c => !(peopleByCat[c.id] && peopleByCat[c.id].length));
-  if(emptyCats.length && unclaimedEl){
-    unclaimedEl.style.display = 'block';
-    unclaimedEl.innerHTML = `<strong>${emptyCats.length} boards where #1 is still open. $1 takes it.</strong> <span class="mono" style="font-size:12px;color:var(--muted)">Most boards will be empty at launch — that's an offer, not a graveyard.</span>`;
-  }
+  document.querySelectorAll('.seg-btn').forEach(b => b.addEventListener('click', () => {
+    state.view = b.dataset.view;
+    document.querySelectorAll('.seg-btn').forEach(x => x.classList.toggle('active', x===b));
+    render();
+  }));
 
-  // Asynchronous secondary data (bids / activity)
+  // "see all boards" link inside the empty state
+  resultsEl.addEventListener('click', e => {
+    const b = e.target.closest('[data-view]'); if(!b || b.classList.contains('seg-btn')) return;
+    state.view = b.dataset.view;
+    document.querySelectorAll('.seg-btn').forEach(x => x.classList.toggle('active', x.dataset.view===state.view));
+    render();
+  });
+
+  sortEl.addEventListener('change', e => { state.sort = e.target.value; render(); });
+
+  render();
+
+  // ---------- secondary data ----------
   try {
     const today = new Date(); today.setHours(0,0,0,0);
-    const [todayBidsRes, activityBidsRes] = await Promise.all([
+    const [todayBids, recent] = await Promise.all([
       sb.from('bids').select('amount_cents').gte('created_at', today.toISOString()),
       sb.from('bids').select('amount_cents,created_at,people(name,slug),users(display_name,is_anonymous)').order('created_at',{ascending:false}).limit(10)
     ]);
-    const backedToday = (todayBidsRes.data || []).reduce((s,r) => s + (r.amount_cents || 0), 0);
-    const backedEl = document.getElementById('backed-today');
-    if(backedEl) backedEl.textContent = window.GOAT.cents(backedToday) + ' backed today';
+    const sum = (todayBids.data||[]).reduce((s,r)=>s+(r.amount_cents||0),0);
+    document.getElementById('backed-today').textContent = cents(sum) + ' backed today';
 
-    const bids = activityBidsRes.data;
-    if(activityEl){
-      if(bids && bids.length){
-        activityEl.innerHTML = bids.map(b => {
-          const handle = b.users?.is_anonymous ? 'Anonymous' : (b.users?.display_name || 'Someone');
-          return `<div><b>${handle}</b> put ${window.GOAT.cents(b.amount_cents)} on <a href="person.html?slug=${b.people?.slug}" style="color:var(--gold)">${b.people?.name}</a> · ${window.GOAT.fmtAgo(b.created_at)}</div>`;
-        }).join('');
-      } else {
-        activityEl.innerHTML = '<div class="mono" style="color:var(--muted)">No activity yet. Be the first.</div>';
-      }
-    }
-  } catch(e) {
-    if(activityEl) activityEl.innerHTML = '<div class="mono" style="color:var(--muted)">No activity yet. Be the first.</div>';
+    const bids = recent.data;
+    activityEl.innerHTML = (bids && bids.length)
+      ? bids.map(b => {
+          const who = b.users?.is_anonymous ? 'Anonymous' : (b.users?.display_name || 'Someone');
+          return `<div><b>${esc(who)}</b> put ${cents(b.amount_cents)} on <a href="person.html?slug=${encodeURIComponent(b.people?.slug||'')}" style="color:var(--gold)">${esc(b.people?.name)}</a> · ${window.GOAT.fmtAgo(b.created_at)}</div>`;
+        }).join('')
+      : '<div class="mono" style="color:var(--muted)">No activity yet. Be the first.</div>';
+  } catch(e){
+    activityEl.innerHTML = '<div class="mono" style="color:var(--muted)">No activity yet. Be the first.</div>';
   }
-
-  // Realtime subscription
-  try {
-    sb.channel('bids-index').on('postgres_changes', {event:'INSERT', schema:'public', table:'bids'}, async () => {
-      location.reload();
-    }).subscribe();
-  } catch(e) {}
 })();
 </script>
 </body>

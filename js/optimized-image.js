@@ -52,6 +52,15 @@
    */
   function render({ photoPath, name, size = 120, priority = 'lazy', className = '', style = '' }) {
     const safeName = (name || '').replace(/"/g, '&quot;');
+
+    // No photo on record: render initials directly. Going through getThumb here
+    // would emit an <img> pointing at an empty path, costing a guaranteed 404
+    // per contender before onerror swaps in the same initials.
+    if (!photoPath || !String(photoPath).trim()) {
+      const ini = window.GOAT?.initials ? window.GOAT.initials(name) : (name ? name.slice(0,2).toUpperCase() : '?');
+      return `<div class="fallback"${style ? ` style="${style}"` : ''}>${ini}</div>`;
+    }
+
     const resolvedUrl = getThumb(photoPath, size, name);
     const styleAttr = style ? ` style="${style}"` : '';
     const classAttr = className ? `goat-photo ${className}` : 'goat-photo';

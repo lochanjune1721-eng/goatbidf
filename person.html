@@ -39,6 +39,11 @@
 <footer class="footer">GOAT.lol — pay to rank. <a href="rules.html">Rules</a></footer>
 
 <script src="js/supabase.js"></script>
+<script>
+document.getElementById('search')?.addEventListener('keydown', e=>{
+  if(e.key==='Enter'){ location.href='index.html?q='+encodeURIComponent(e.target.value.trim()); }
+});
+</script>
 <script src="js/optimized-image.js"></script>
 <script>
 (async function(){

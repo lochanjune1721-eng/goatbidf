@@ -145,3 +145,91 @@ a{color:inherit;text-decoration:none}
 .empty{padding:24px;text-align:center;border:1px dashed var(--border);border-radius:20px;color:var(--muted);background:var(--surface)}
 .footer{padding:18px;text-align:center;font-size:12px;color:var(--muted);border-top:1px solid var(--border);margin-top:20px}
 .footer a{color:var(--gold)}
+
+/* ============================================================
+   HOMEPAGE — filter bar, fight cards, board grid, search results
+   ============================================================ */
+
+/* --- filter bar --- */
+.filterbar{position:sticky;top:0;z-index:20;background:linear-gradient(180deg,var(--bg) 72%,rgba(15,14,12,0));padding:12px 0 14px;margin:8px 0 18px}
+.filter-search{position:relative;margin-bottom:12px}
+.filter-search input{width:100%;height:52px;border-radius:999px;border:1px solid var(--border);background:var(--surface);color:var(--ink);padding:0 44px 0 46px;font-size:16px;box-shadow:var(--shadow);transition:border-color .15s}
+.filter-search input:focus{outline:none;border-color:var(--gold)}
+.filter-search input::placeholder{color:var(--muted)}
+.filter-search input::-webkit-search-cancel-button{display:none}
+.filter-search i{position:absolute;left:18px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:18px;font-style:normal;pointer-events:none}
+.q-clear{position:absolute;right:12px;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:50%;border:none;background:var(--surface-2);color:var(--muted);font-size:18px;line-height:1;cursor:pointer}
+.q-clear:hover{color:var(--ink)}
+
+.filter-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+.seg{display:inline-flex;background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:3px}
+.seg-btn{border:none;background:transparent;color:var(--muted);font-size:13px;font-weight:600;padding:7px 16px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.seg-btn.active{background:var(--gold);color:var(--bg);font-weight:800}
+.seg-count{opacity:.7;font-weight:500}
+.filter-sort{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.filter-sort select{height:34px;border-radius:999px;border:1px solid var(--border);background:var(--surface);color:var(--ink);padding:0 12px;font-size:13px;cursor:pointer}
+
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;border:1px solid var(--border);background:var(--surface);color:var(--muted);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;transition:.15s}
+.chip:hover{border-color:#3A2E14;color:var(--ink)}
+.chip span{opacity:.55;font-size:11px;margin-left:3px}
+.chip.active{background:var(--gold-lo);border-color:var(--gold);color:var(--gold);font-weight:700}
+
+/* --- fight card (head to head) --- */
+.fight-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px}
+.fight{background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;transition:transform .15s,border-color .15s}
+.fight:hover{transform:translateY(-2px);border-color:var(--gold)}
+.fight-head{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:2px}
+.fight-head strong{font-size:13px;letter-spacing:.01em}
+.fight-tag{font-size:11px;color:var(--muted)}
+.fight-body{display:grid;grid-template-columns:1fr auto 1fr;align-items:start;gap:8px;padding:14px 12px 10px}
+.fighter{min-width:0;text-align:center}
+.fighter .photo{aspect-ratio:1/1;border-radius:14px}
+.fighter .fname{font-size:14px;margin-top:8px;line-height:1.1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fighter .fmoney{font-family:'Anton',sans-serif;font-size:17px;color:var(--gold);margin-top:3px}
+.vs{align-self:center;padding-top:26px}
+.vs span{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--gold-lo);border:1px solid #3A2E14;color:var(--gold);font-family:'Anton',sans-serif;font-size:13px}
+.fight-bar{height:6px;background:var(--surface-2);margin:0 12px;border-radius:999px;overflow:hidden;display:flex}
+.fight-bar span{display:block;height:100%;background:var(--gold);border-radius:999px}
+.fight-foot{padding:10px 14px 12px;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted)}
+.fight-foot .go{color:var(--gold);font-weight:600}
+.open{color:var(--gold)}
+
+/* --- compact board card (all boards) --- */
+.board-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.board{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:transform .15s,border-color .15s}
+.board:hover{transform:translateY(-2px);border-color:#3A2E14}
+.board-head{padding:11px 13px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:8px}
+.board-head strong{font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.board-head span{font-size:10px;color:var(--muted);flex:0 0 auto;text-transform:uppercase;letter-spacing:.05em}
+.board-body{display:flex;align-items:center;gap:9px;padding:11px 13px}
+.board-face{width:46px;height:46px;flex:0 0 auto;border-radius:12px;overflow:hidden;background:var(--surface-2);border:1px solid var(--border);position:relative}
+.board-face.small{width:34px;height:34px;border-radius:10px;opacity:.8}
+.board-face img{width:100%;height:100%;object-fit:cover;object-position:center 30%}
+.board-meta{min-width:0;flex:1}
+.board-lead{font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.board-total{font-family:'Anton',sans-serif;font-size:15px;color:var(--gold);margin-top:2px}
+.board-foot{margin-top:auto;padding:9px 13px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}
+.board-foot .go{color:var(--gold);font-weight:600}
+
+/* --- people search results --- */
+.presult-list{display:flex;flex-direction:column;gap:8px}
+.presult{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:9px 13px;transition:border-color .15s}
+.presult:hover{border-color:var(--gold)}
+.presult-photo{width:44px;height:44px;flex:0 0 auto;border-radius:11px;overflow:hidden;background:var(--surface-2);border:1px solid var(--border);position:relative}
+.presult-photo img{width:100%;height:100%;object-fit:cover;object-position:center 30%}
+.presult-meta{flex:1;min-width:0}
+.presult-name{font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.presult-cat{font-size:11px;color:var(--muted);margin-top:2px}
+.presult-money{font-family:'Anton',sans-serif;font-size:16px;color:var(--gold);flex:0 0 auto}
+
+.linkish{background:none;border:none;color:var(--gold);font-weight:600;cursor:pointer;font-size:inherit;padding:0}
+
+@media (max-width:600px){
+  .fight-grid{grid-template-columns:1fr}
+  .board-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+  .filter-search input{height:46px;font-size:15px}
+  .filter-row{gap:8px}
+  .filter-sort label{display:none}
+}
