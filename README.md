@@ -1,4 +1,4 @@
-# GOAT.lol — Who's the greatest?
+# GOAT.lol — Who's the greatest of all time?
 
 Vanilla HTML/CSS/JS. No framework, no build step. Supabase via CDN. Vercel serverless (2 functions) + Node seed script.
 
