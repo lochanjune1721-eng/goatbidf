@@ -25,11 +25,12 @@
 </header>
 
 <div class="container">
-  <div class="live-pill"><span class="live-dot"></span> <span id="online">— online</span> · <span id="backed-today">$0 backed today</span></div>
+  <div class="live-pill"><span class="live-dot"></span> <span id="online">— online</span> · <span id="backed-today">0 votes cast today</span></div>
 
   <div class="hero">
-    <h1 class="display">Who's the greatest?</h1>
-    <p>Every argument is free. This one isn't. Load $5, back who you believe in — the board is the money, nothing else.</p>
+    <h1 class="display">Who is the greatest<br><span class="hero-goat">of all time?</span></h1>
+    <p class="hero-line">Anyone can argue. Can you actually <b>put your money where your mouth is?</b></p>
+    <p class="hero-sub">Every dollar is one vote. No likes, no accounts farming karma — the only thing that moves a name up this board is money you actually spent.</p>
   </div>
 
   <!-- ============ FILTER BAR ============ -->
@@ -90,7 +91,8 @@
 
   // strip diacritics so "Pele" finds "Pelé" and "mbappe" finds "Mbappé"
   const norm = s => (s||'').toString().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
-  const cents = c => window.GOAT.cents(c||0);
+  const votes = c => window.GOAT.votes(c||0);
+  const voteNum = c => window.GOAT.voteNum(c||0);
   // person/category names are user-supplied (adding a person costs $1) and the
   // search term is reflected, so everything interpolated below is escaped.
   const esc = s => (s==null?'':String(s)).replace(/[&<>"']/g, ch =>
@@ -173,31 +175,58 @@
   function fightCard(f, i){
     const at = f.a?.total_cents || 0, bt = f.b?.total_cents || 0, sum = at + bt;
     const pct = sum ? Math.round(at/sum*100) : 50;
-    const prio = i < 6 ? 'eager' : 'lazy';
-    const status = f.total
-      ? `${cents(f.total)} on the board`
-      : `<span class="open">Unclaimed — $1 takes #1</span>`;
+    const prio = i < 4 ? 'eager' : 'lazy';
+
+    // the headline: who is beating whom, by how many votes
+    let verdict, vclass;
+    if(!sum){
+      verdict = `Nobody has voted yet &mdash; <b>1 vote takes #1</b>`;
+      vclass = 'is-open';
+    } else if(at === bt){
+      verdict = `Dead heat &mdash; <b>${votes(at)} each</b>`;
+      vclass = 'is-tied';
+    } else {
+      const [win, lose, diff] = at > bt ? [f.a, f.b, at-bt] : [f.b, f.a, bt-at];
+      verdict = `<b>${esc(win.name)}</b> is beating <b>${esc(lose.name)}</b> by <b class="by">${voteNum(diff)}</b> votes`;
+      vclass = at > bt ? 'lead-a' : 'lead-b';
+    }
+
     return `
-      <a class="fight" href="category.html?slug=${encodeURIComponent(f.cat.slug)}">
+      <a class="fight ${vclass}" href="category.html?slug=${encodeURIComponent(f.cat.slug)}">
         <div class="fight-head">
           <strong>${esc(f.cat.name)}</strong>
           <span class="fight-tag">${esc(f.tag)}</span>
         </div>
+
         <div class="fight-body">
-          <div class="fighter">
-            <div class="photo">${photo(f.a, 140, prio)}</div>
-            <div class="fname display">${f.a ? esc(f.a.name) : '—'}</div>
-            <div class="fmoney">${cents(at)}</div>
+          <div class="fighter ${at>=bt?'winning':''}">
+            <div class="photo">${photo(f.a, 260, prio)}</div>
+            <div class="fname display">${f.a ? esc(f.a.name) : '&mdash;'}</div>
+            <div class="fmoney display">${voteNum(at)}</div>
+            <div class="fvotes">votes</div>
           </div>
+
           <div class="vs"><span>VS</span></div>
-          <div class="fighter">
-            <div class="photo">${photo(f.b, 140, prio)}</div>
-            <div class="fname display">${f.b ? esc(f.b.name) : '—'}</div>
-            <div class="fmoney">${cents(bt)}</div>
+
+          <div class="fighter ${bt>at?'winning':''}">
+            <div class="photo">${photo(f.b, 260, prio)}</div>
+            <div class="fname display">${f.b ? esc(f.b.name) : '&mdash;'}</div>
+            <div class="fmoney display">${voteNum(bt)}</div>
+            <div class="fvotes">votes</div>
           </div>
         </div>
-        <div class="fight-bar" title="${pct}% / ${100-pct}%"><span style="width:${pct}%"></span></div>
-        <div class="fight-foot"><span>${status}</span><span class="go">Back one →</span></div>
+
+        <div class="fight-bar" title="${pct}% / ${100-pct}%">
+          <span class="bar-a" style="width:${pct}%"></span>
+          <span class="bar-b" style="width:${100-pct}%"></span>
+        </div>
+
+        <div class="verdict">${verdict}</div>
+
+        <div class="fight-foot">
+          <span>${sum ? votes(f.total) + ' cast' : 'No votes cast'}</span>
+          <span class="go">Put your money on one &rarr;</span>
+        </div>
       </a>`;
   }
 
@@ -213,7 +242,7 @@
           <div class="board-face small">${photo(p2, 56, 'lazy')}</div>
           <div class="board-meta">
             <div class="board-lead">${p1 ? esc(p1.name) : 'Empty board'}</div>
-            <div class="board-total">${total ? cents(total) : '<span class="open">$1 takes #1</span>'}</div>
+            <div class="board-total">${total ? votes(total) : '<span class="open">1 vote takes #1</span>'}</div>
           </div>
         </div>
         <div class="board-foot"><span>${list.length} contenders</span><span class="go">View →</span></div>
@@ -230,7 +259,7 @@
           <div class="presult-name">${esc(p.name)}</div>
           <div class="presult-cat">${c ? esc(c.name) : ''}${rank ? ` · #${rank}` : ''}</div>
         </div>
-        <div class="presult-money">${cents(p.total_cents)}</div>
+        <div class="presult-money">${voteNum(p.total_cents)}<span class="pv">votes</span></div>
       </a>`;
   }
 
@@ -362,13 +391,13 @@
       sb.from('bids').select('amount_cents,created_at,people(name,slug),users(display_name,is_anonymous)').order('created_at',{ascending:false}).limit(10)
     ]);
     const sum = (todayBids.data||[]).reduce((s,r)=>s+(r.amount_cents||0),0);
-    document.getElementById('backed-today').textContent = cents(sum) + ' backed today';
+    document.getElementById('backed-today').textContent = votes(sum) + ' cast today';
 
     const bids = recent.data;
     activityEl.innerHTML = (bids && bids.length)
       ? bids.map(b => {
           const who = b.users?.is_anonymous ? 'Anonymous' : (b.users?.display_name || 'Someone');
-          return `<div><b>${esc(who)}</b> put ${cents(b.amount_cents)} on <a href="person.html?slug=${encodeURIComponent(b.people?.slug||'')}" style="color:var(--gold)">${esc(b.people?.name)}</a> · ${window.GOAT.fmtAgo(b.created_at)}</div>`;
+          return `<div><b>${esc(who)}</b> put ${votes(b.amount_cents)} on <a href="person.html?slug=${encodeURIComponent(b.people?.slug||'')}" style="color:var(--gold)">${esc(b.people?.name)}</a> · ${window.GOAT.fmtAgo(b.created_at)}</div>`;
         }).join('')
       : '<div class="mono" style="color:var(--muted)">No activity yet. Be the first.</div>';
   } catch(e){

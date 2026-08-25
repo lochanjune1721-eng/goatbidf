@@ -19,6 +19,13 @@ window.GOAT = {
     return `${SUPABASE_URL}/storage/v1/object/public/people/${cleanPath}`;
   },
   cents: (c)=> `$${(c/100).toLocaleString()}`,
+  // Every dollar is a vote. Money is stored in cents, so 100 cents = 1 vote.
+  toVotes: (c)=> Math.round((c||0)/100),
+  votes: (c)=> {
+    const v = Math.round((c||0)/100);
+    return `${v.toLocaleString()} ${v===1?'vote':'votes'}`;
+  },
+  voteNum: (c)=> Math.round((c||0)/100).toLocaleString(),
   fmtAgo: (iso)=>{
     if(!iso) return "—";
     const s=Math.floor((Date.now()-new Date(iso).getTime())/1000);
@@ -57,7 +64,7 @@ async function refreshBalance(){
   if(!user){ pill.innerHTML=`<a href="wallet.html">Sign in</a>`; return; }
   const {data}=await window.supabaseClient.from('users').select('balance_cents').eq('id', user.id).maybeSingle();
   const bal=data? data.balance_cents:0;
-  pill.innerHTML=`<b>$${(bal/100).toFixed(0)} credit</b> <a href="wallet.html">Add</a>`;
+  pill.innerHTML=`<b>${window.GOAT.voteNum(bal)} votes</b> <a href="wallet.html">Add</a>`;
 }
 window.refreshBalance=refreshBalance;
 document.addEventListener('DOMContentLoaded', refreshBalance);

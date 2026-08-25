@@ -25,7 +25,7 @@
 
   <div style="display:flex;gap:8px;margin:10px 0">
     <input id="add-name" placeholder="Add a person — real public figure with Wikipedia" style="flex:1;height:42px;border-radius:999px;border:1px solid var(--border);background:var(--bg);color:var(--ink);padding:0 14px">
-    <button id="add-btn" class="btn-primary" style="width:auto">Add for $1 →</button>
+    <button id="add-btn" class="btn-primary" style="width:auto">Add for 1 vote →</button>
   </div>
 
   <div id="board" class="list"></div>
@@ -82,7 +82,7 @@
   async function render(){
     const board=document.getElementById('board');
     if(!people.length){
-      board.innerHTML='<div class="empty">No one on this board yet. $1 takes #1.</div>';
+      board.innerHTML='<div class="empty">No one on this board yet. <b>1 vote takes #1.</b></div>';
       return;
     }
     const fanMap=await fetchFans(people.map(p=>p.id));
@@ -94,7 +94,18 @@
       const size = rank === 1 ? 280 : (rank === 2 ? 200 : (rank === 3 ? 160 : (rank <= 10 ? 100 : 64)));
       const fans=fanMap[p.id]||[];
       const fanStr=fans.length? fans.map(f=> f.users?.is_anonymous? 'Anonymous': (f.users?.display_name||'Unknown')).join(' · ') : '—';
-      const gap = rank>1 && people[0] ? ` · $${(((people[0].total_cents||0) - (p.total_cents||0))/100).toFixed(0)} behind #1` : '';
+      // who is beating whom, by how many votes
+      let verdict='';
+      if(rank===1){
+        const chaser=people[1];
+        verdict = chaser
+          ? `<span class="verdict-line lead"><b>${p.name}</b> is beating <b>${chaser.name}</b> by <b class="by">${window.GOAT.voteNum((p.total_cents||0)-(chaser.total_cents||0))}</b> votes</span>`
+          : `<span class="verdict-line lead">Unopposed &mdash; nobody else on this board yet</span>`;
+      } else {
+        const ahead=people[rank-2], diff=(ahead.total_cents||0)-(p.total_cents||0);
+        verdict = `<span class="verdict-line"><b>${ahead.name}</b> is beating <b>${p.name}</b> by <b class="by">${window.GOAT.voteNum(diff)}</b> votes</span>`;
+      }
+      const gap='';
       const card=document.createElement('div'); card.className=`person-card ${cls}`;
 
       const photoHtml = window.OptimizedImage.render({
@@ -111,48 +122,52 @@
         <div class="body">
           <div class="name display">${p.name}</div>
           <div class="blurb">${p.blurb||''}</div>
-          <div class="total display">${window.GOAT.cents(p.total_cents||0)}</div>
+          <div class="total display">${window.GOAT.voteNum(p.total_cents||0)}<span class="unit">votes</span></div>
+          ${verdict}
           <div class="fans">Top fans: <b>${fanStr}</b>${gap}</div>
           <div class="back-row">
-            <span class="stepper"><button data-dec>-</button><span data-amt>$1</span><button data-inc>+</button></span>
-            <button class="btn-back" data-back>Back</button>
-            <span class="stakes" data-stakes>$1 puts them at #${rank}</span>
+            <span class="amount-field">
+              <input type="number" data-amt inputmode="numeric" min="1" step="1" value="1" aria-label="Votes to cast">
+              <span class="amount-unit">votes</span>
+            </span>
+            <button class="btn-back" data-back>Vote</button>
+            <span class="stakes" data-stakes></span>
           </div>
         </div>`;
 
-      // Stepper logic
-      let amt=100;
+      // Free-form amount: vote as many as you like, no fixed steps. 1 vote minimum
+      // because the bids table enforces amount_cents >= 100.
       const amtEl=card.querySelector('[data-amt]'), stakesEl=card.querySelector('[data-stakes]');
+      const readAmt=()=> Math.max(1, Math.floor(Number(amtEl.value)||0)) * 100;
       function updateStakes(){
-        amtEl.textContent=`$${(amt/100).toFixed(0)}`;
+        const amt=readAmt();
         const newTotal=(p.total_cents||0)+amt;
         let newRank=1;
-        for(let j=0;j<people.length;j++){
-          if(people[j].id===p.id) continue;
-          if((people[j].total_cents||0) > newTotal) newRank++;
-          else if((people[j].total_cents||0)===newTotal && people[j].first_backed_at && p.first_backed_at && new Date(people[j].first_backed_at) < new Date()) newRank++;
-          else break;
+        for(const other of people){
+          if(other.id===p.id) continue;
+          if((other.total_cents||0) > newTotal) newRank++;
         }
-        stakesEl.textContent=`$${(amt/100).toFixed(0)} puts them at #${newRank}`;
-        if(rank===1) stakesEl.textContent=`$${(amt/100).toFixed(0)} → $${(newTotal/100).toFixed(0)}`;
+        stakesEl.textContent = newRank < rank
+          ? `takes them to #${newRank}`
+          : `takes them to ${window.GOAT.voteNum(newTotal)} votes`;
       }
-      card.querySelector('[data-dec]').addEventListener('click',()=>{ amt=Math.max(100, amt-100); updateStakes(); });
-      card.querySelector('[data-inc]').addEventListener('click',()=>{ amt=Math.min(100000, amt+100); updateStakes(); });
+      amtEl.addEventListener('input', updateStakes);
+      amtEl.addEventListener('blur', ()=>{ const v=Math.max(1, Math.floor(Number(amtEl.value)||0)); amtEl.value=v; updateStakes(); });
       updateStakes();
 
       card.querySelector('[data-back]').addEventListener('click', async()=>{
         const btn=card.querySelector('[data-back]'); btn.disabled=true; btn.textContent='…';
         try{
-          const {error}=await sb.rpc('place_bid', {p_person_id: p.id, p_amount_cents: amt});
+          const {error}=await sb.rpc('place_bid', {p_person_id: p.id, p_amount_cents: readAmt()});
           if(error) throw error;
           await fetchPeople(); await render(); await window.refreshBalance();
         }catch(e){
-          alert(e.message.includes('insufficient')? 'Insufficient credit — top up in wallet.': e.message);
-          btn.disabled=false; btn.textContent='Back';
+          alert(e.message.includes('insufficient')? 'Not enough votes left — top up in wallet.': e.message);
+          btn.disabled=false; btn.textContent='Vote';
         }
       });
 
-      card.addEventListener('click', ev=>{ if(ev.target.closest('button') || ev.target.closest('.stepper')) return; location.href=`person.html?slug=${p.slug}`; });
+      card.addEventListener('click', ev=>{ if(ev.target.closest('button') || ev.target.closest('.amount-field')) return; location.href=`person.html?slug=${p.slug}`; });
       board.appendChild(card);
     });
   }

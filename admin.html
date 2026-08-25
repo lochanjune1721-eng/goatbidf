@@ -39,7 +39,7 @@
       const cid=sel.value;
       const {data}=await sb.from('people').select('*').eq('category_id', cid).order('total_cents',{ascending:false});
       const el=document.getElementById('people');
-      if(!data||!data.length) el.innerHTML='<div class="mono" style="color:var(--muted)">Empty — $1 will take #1.</div>';
+      if(!data||!data.length) el.innerHTML='<div class="mono" style="color:var(--muted)">Empty — 1 vote will take #1.</div>';
       else el.innerHTML=data.map(p=> {
         const photoUrl = window.GOAT.getPhotoUrl(p.photo_path);
         const imgHtml = photoUrl ? `<img src="${photoUrl}" style="width:48px;height:48px;border-radius:12px;object-fit:cover;filter:saturate(.85) contrast(1.05)" onerror="this.outerHTML='<div style=\'width:48px;height:48px;border-radius:12px;background:var(--surface-2);color:var(--gold);display:grid;place-items:center;font-weight:bold\'>${window.GOAT.initials(p.name)}</div>'">` : `<div style="width:48px;height:48px;border-radius:12px;background:var(--surface-2);color:var(--gold);display:grid;place-items:center;font-weight:bold">${window.GOAT.initials(p.name)}</div>`;
