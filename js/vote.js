@@ -137,29 +137,30 @@
     const cols = 'id,slug,category_id,name,blurb,wikipedia_url,photo_path,photo_credit,photo_license,total_cents,backer_count,first_backed_at';
 
     // preferred path
-    const view = await sb.from('people_with_top_fan').select('*')
+    const mkView = () => sb.from('people_with_top_fan').select('*')
       .eq('category_id', categoryId)
-      .order('total_cents',{ascending:false}).order('first_backed_at',{ascending:true}).limit(300);
-    if(!view.error) return { people: view.data || [], degraded: false };
-    if(!MISSING(view.error)) throw view.error;
+      .order('total_cents',{ascending:false}).order('first_backed_at',{ascending:true});
+    try{
+      return { people: await G.fetchAll(mkView), degraded: false };
+    }catch(err){
+      if(!MISSING(err)) throw err;
+    }
 
     // fallback: base table, then stitch the fan on
-    const base = await sb.from('people').select(cols)
+    const rows = await G.fetchAll(() => sb.from('people').select(cols)
       .eq('category_id', categoryId)
-      .order('total_cents',{ascending:false}).order('first_backed_at',{ascending:true}).limit(300);
-    if(base.error) throw base.error;
-    const people = (base.data || []).map(p => ({ ...p, fan_id:null, fan_cents:null, fan_runner_up_cents:null }));
+      .order('total_cents',{ascending:false}).order('first_backed_at',{ascending:true}));
+    const people = rows.map(p => ({ ...p, fan_id:null, fan_cents:null, fan_runner_up_cents:null }));
     if(!people.length) return { people, degraded: true };
 
     try{
       const ids = people.map(p => p.id);
-      const { data: fans, error: fe } = await sb.from('fan_totals')
+      const fans = await G.fetchAll(() => sb.from('fan_totals')
         .select('person_id,user_id,total_cents').in('person_id', ids)
-        .order('total_cents',{ascending:false});
-      if(fe) throw fe;
+        .order('total_cents',{ascending:false}));
 
       const top = {};
-      for(const f of (fans || [])){
+      for(const f of fans){
         const slot = top[f.person_id] || (top[f.person_id] = []);
         if(slot.length < 2) slot.push(f);
       }

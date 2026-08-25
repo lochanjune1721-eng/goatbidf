@@ -588,3 +588,11 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[t
 .nav-account{color:var(--ink);font-weight:600}
 .nav-account.is-in{color:var(--gold);max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block;vertical-align:bottom}
 @media (max-width:860px){ .nav-account.is-in{max-width:72px} }
+.show-more{display:block;width:100%;margin-top:10px;min-height:44px;font-size:13px}
+.btn-google{width:100%;min-height:46px;display:flex;align-items:center;justify-content:center;gap:10px;
+  background:#fff;color:#1f1f1f;border:1px solid #dadce0;border-radius:999px;font-size:14px;font-weight:600;cursor:pointer}
+.btn-google:hover{background:#f6f6f6}
+.btn-google svg{width:18px;height:18px}
+.or-line{display:flex;align-items:center;gap:10px;margin:12px 0;color:var(--muted);font-size:11px;
+  letter-spacing:.14em;text-transform:uppercase}
+.or-line::before,.or-line::after{content:'';flex:1;height:1px;background:var(--border)}

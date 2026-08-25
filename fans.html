@@ -48,19 +48,22 @@
   });
 
   // public_profiles carries no spend, so rank by fan_totals and join the profile.
-  const {data:rows,error}=await sb.from('fan_totals').select('user_id,total_cents,person_id').limit(4000);
+  let rows=[], error=null;
+  try{
+    rows=await window.GOAT.fetchAll(()=>sb.from('fan_totals').select('user_id,total_cents,person_id'));
+  }catch(e){ error=e; }
   if(error){
     el.innerHTML=`<div class="empty"><b>Could not load the leaderboard.</b><br>${V.esc(error.message)}
       <br><button class="btn-ghost" style="margin-top:10px" onclick="location.reload()">Try again</button></div>`;
     return;
   }
   const agg={};
-  for(const r of (rows||[])){
+  for(const r of rows){
     const a=agg[r.user_id]||(agg[r.user_id]={cents:0,people:new Set()});
     a.cents+=r.total_cents||0; a.people.add(r.person_id);
   }
   const list=Object.entries(agg).map(([id,a])=>({id,cents:a.cents,backed:a.people.size}))
-    .sort((x,y)=>y.cents-x.cents).slice(0,200);
+    .sort((x,y)=>y.cents-x.cents);
 
   if(!list.length){
     el.innerHTML=`<div class="empty"><b>Nobody has voted yet.</b><br>

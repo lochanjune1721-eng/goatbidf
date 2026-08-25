@@ -96,7 +96,7 @@
 
   // ?q= makes search deep-linkable and is where the topbar search on other pages lands
   const initialQ = new URLSearchParams(location.search).get('q') || '';
-  const state = { q:initialQ, group:'all', view:'fights', sort:'hot' };
+  const state = { q:initialQ, group:'all', view:'fights', sort:'hot', peopleShown:100 };
   if(initialQ){ qEl.value = initialQ; qClear.hidden = false; }
 
   // strip diacritics so "Pele" finds "Pelé" and "mbappe" finds "Mbappé"
@@ -111,17 +111,16 @@
   // ---------- load ----------
   let cats = [], people = [];
   try {
-    const PAGE = 1000, pages = 6;
-    const reqs = [ sb.from('categories').select('*').order('sort_order') ];
-    for(let i=0;i<pages;i++){
-      reqs.push(sb.from('people')
+    // fetchAll keeps paging until the server runs out; the old fixed six pages
+    // capped the site at 6000 people and dropped anything past that.
+    const [catsRes, allPeople] = await Promise.all([
+      sb.from('categories').select('*').order('sort_order'),
+      window.GOAT.fetchAll(() => sb.from('people')
         .select('id,slug,name,photo_path,total_cents,category_id,first_backed_at')
-        .order('total_cents',{ascending:false})
-        .range(i*PAGE, i*PAGE + PAGE - 1));
-    }
-    const [catsRes, ...pageRes] = await Promise.all(reqs);
+        .order('total_cents',{ascending:false}))
+    ]);
     cats   = catsRes?.data || [];
-    people = pageRes.flatMap(r => r?.data || []);
+    people = allPeople;
   } catch(e){ console.warn('DB fetch error:', e); }
 
   // fallback when the DB is empty
@@ -207,6 +206,10 @@
     if(!sum){
       verdict = `Nobody has voted yet &mdash; <b>1 vote takes #1</b>`;
       vclass = 'is-open';
+    } else if(!f.b){
+      // a board can have exactly one contender — there is no opponent to name
+      verdict = `<b>${esc(f.a.name)}</b> is unopposed &mdash; <b>1 vote starts a fight</b>`;
+      vclass = 'lead-a';
     } else if(at === bt){
       verdict = `Dead heat &mdash; <b>${votes(at)} each</b>`;
       vclass = 'is-tied';
@@ -336,19 +339,27 @@
         norm(f.cat.name).includes(q) ||
         norm(f.a?.name).includes(q) ||
         norm(f.b?.name).includes(q))));
-      const mPeople = mPeopleAll
+      const mPeopleSorted = mPeopleAll
         .slice()
         .sort((a,b)=>{
           const ap = norm(a.name).startsWith(q), bp = norm(b.name).startsWith(q);
           if(ap!==bp) return ap ? -1 : 1;              // prefix matches first
           return (b.total_cents||0)-(a.total_cents||0);
-        })
-        .slice(0,60);
+        });
+      // render a first page, then let the reader ask for the rest rather than
+      // cutting the list off at an arbitrary number with no way to see it
+      const mPeople = mPeopleSorted.slice(0, state.peopleShown);
+      const moreP = mPeopleSorted.length - mPeople.length;
 
       let html = '';
       if(mFights.length) html += section('Fights', `${mFights.length}`, `<div class="fight-grid">${mFights.map(fightCard).join('')}</div>`);
       if(mBoards.length) html += section('Boards', `${mBoards.length}`, `<div class="board-grid">${mBoards.map(boardCard).join('')}</div>`);
-      if(mPeople.length) html += section('People', `${mPeople.length}${mPeople.length===60?'+':''}`, `<div class="presult-list">${mPeople.map(personRow).join('')}</div>`);
+      if(mPeople.length){
+        const more = moreP > 0
+          ? `<button class="btn-ghost show-more" data-more="people">Show all ${mPeopleSorted.length.toLocaleString()} people</button>` : '';
+        html += section('People', `${mPeopleSorted.length.toLocaleString()}`,
+          `<div class="presult-list">${mPeople.map(personRow).join('')}</div>${more}`);
+      }
       resultsEl.innerHTML = html || `<div class="empty">Nothing matches “${esc(state.q)}”. Try a name, a sport, or a category.</div>`;
       return;
     }
@@ -392,6 +403,7 @@
   let t;
   qEl.addEventListener('input', e => {
     state.q = e.target.value;
+    state.peopleShown = 100;
     qClear.hidden = !state.q;
     clearTimeout(t); t = setTimeout(render, 120);
   });
@@ -410,6 +422,13 @@
     document.querySelectorAll('.seg-btn').forEach(x => x.classList.toggle('active', x===b));
     render();
   }));
+
+  resultsEl.addEventListener('click', e => {
+    const m = e.target.closest('[data-more]');
+    if(!m) return;
+    state.peopleShown = Infinity;
+    render();
+  });
 
   // "see all boards" link inside the empty state
   resultsEl.addEventListener('click', e => {

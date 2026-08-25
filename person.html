@@ -33,7 +33,7 @@
   </div>
 
   <h2 class="display" style="font-size:20px;margin:28px 0 4px">Fan leaderboard</h2>
-  <p class="mono" style="font-size:12px;color:var(--muted);margin:0 0 12px">Every backer, ranked by votes. The one on top owns the card.</p>
+  <p class="mono" style="font-size:12px;color:var(--muted);margin:0 0 12px">Every backer, ranked by votes. The one on top owns the card. <span id="fan-count"></span></p>
   <div id="fans" class="fanboard" aria-live="polite"></div>
 </div>
 
@@ -91,10 +91,9 @@
 
   // ---- fan leaderboard ----
   async function loadFans(){
-    const {data}=await sb.from('fan_totals')
+    const rows=await window.GOAT.fetchAll(()=>sb.from('fan_totals')
       .select('user_id,total_cents').eq('person_id',person.id)
-      .order('total_cents',{ascending:false}).limit(200);
-    const rows=data||[];
+      .order('total_cents',{ascending:false}));
     if(!rows.length){
       document.getElementById('fans').innerHTML=
         `<div class="empty"><b>No GOAT fan yet.</b><br>1 vote claims the top of this board.</div>`;
@@ -105,6 +104,8 @@
     // unnamed backers rather than failing the whole leaderboard
     const pr=await sb.from('public_profiles').select('*').in('id',ids);
     const by=pr.error?{}:Object.fromEntries((pr.data||[]).map(p=>[p.id,p]));
+    const fc=document.getElementById('fan-count');
+    if(fc) fc.textContent=`· ${rows.length.toLocaleString()} in total`;
     document.getElementById('fans').innerHTML=rows.map((r,i)=>{
       const u=by[r.user_id]||{};
       const anon=u.is_anonymous||!u.display_name;

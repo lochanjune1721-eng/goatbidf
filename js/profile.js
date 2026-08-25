@@ -25,9 +25,16 @@
       <h3 style="margin:0 0 4px;font-size:16px">${hasVotes ? 'Claim your spot' : 'Save your votes'}</h3>
       <p style="font-size:13px;color:var(--muted);margin:0 0 12px">
         ${hasVotes
-          ? 'Your votes are already counted. Add an email so your name and face show up on the cards you back.'
-          : 'A magic link keeps your balance and your place on the fan boards.'}
+          ? 'Your votes are already counted. Sign in so your name and face show up on the cards you back.'
+          : 'Signing in keeps your balance and your place on the fan boards.'}
       </p>
+
+      <button id="pf-google" class="btn-google">
+        <svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#4285F4" d="M45 24.5c0-1.6-.1-2.8-.4-4H24v7.6h12c-.2 2-1.5 5-4.4 7l6.8 5.3c4-3.7 6.6-9.2 6.6-15.9Z"/><path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.5-5.3l-6.8-5.3c-1.9 1.3-4.4 2.2-7.7 2.2-5.9 0-10.9-3.9-12.7-9.2l-7 5.4C7.9 41 15.4 46 24 46Z"/><path fill="#FBBC05" d="M11.3 28.4c-.5-1.4-.8-2.9-.8-4.4s.3-3 .7-4.4l-7-5.4C2.8 17.1 2 20.4 2 24s.8 6.9 2.2 9.8l7.1-5.4Z"/><path fill="#EA4335" d="M24 10.2c3.3 0 5.6 1.4 6.9 2.6l5.9-5.8C33.2 3.7 28.2 2 24 2 15.4 2 7.9 7 4.2 14.2l7 5.4C13 14.2 18.1 10.2 24 10.2Z"/></svg>
+        Continue with Google
+      </button>
+      <div class="or-line"><span>or</span></div>
+
       <div class="field"><label for="pf-email">Email</label>
         <input id="pf-email" type="email" autocomplete="email" placeholder="you@example.com"></div>
       <button id="pf-send" class="btn-primary">Send magic link →</button>
@@ -68,8 +75,38 @@
       </div>`;
   }
 
+  // Supabase's built-in email sender is rate limited hard (a couple of messages
+  // an hour on the default setup). Say what happened and what to do about it,
+  // rather than showing the raw error.
+  function explainSignIn(e){
+    const m = (e && e.message) || '';
+    if(/rate limit|too many requests|over_email_send_rate_limit/i.test(m)){
+      return 'Email limit reached — that is the built-in Supabase sender, not you. '
+           + 'Use <b>Continue with Google</b> above, or wait an hour. '
+           + '<span class="mono" style="font-size:11px">To lift it for good, set up SMTP in Supabase → Project Settings → Authentication → SMTP.</span>';
+    }
+    if(/provider is not enabled|Unsupported provider/i.test(m)){
+      return 'That sign-in method is switched off for this project. Enable it in Supabase → Authentication → Sign In / Providers.';
+    }
+    if(/redirect|not allowed/i.test(m)){
+      return 'This site is not on the allowed redirect list. Add it in Supabase → Authentication → URL Configuration.';
+    }
+    return esc(m || 'Could not sign you in');
+  }
+
   function wireSignIn(el){
     const msg = el.querySelector('#pf-msg');
+    const g = el.querySelector('#pf-google');
+    if(g) g.addEventListener('click', async ()=>{
+      show(msg,'Opening Google…');
+      try{
+        const { error } = await sb.auth.signInWithOAuth({
+          provider:'google',
+          options:{ redirectTo: new URL('account.html', location.href).href }
+        });
+        if(error) throw error;
+      }catch(e){ show(msg, explainSignIn(e), 'error'); }
+    });
     el.querySelector('#pf-send').addEventListener('click', async ()=>{
       const email = el.querySelector('#pf-email').value.trim();
       if(!/^\S+@\S+\.\S+$/.test(email)){ show(msg,'Enter a valid email.','error'); return; }
@@ -89,7 +126,7 @@
           + (/^https?:\/\/(localhost|127\.)/.test(redirect)
              ? ''
              : `<br><span class="mono" style="font-size:11px;color:var(--muted)">The link returns to ${esc(location.host)}.</span>`), 'ok');
-      }catch(e){ show(msg, esc(e.message), 'error'); }
+      }catch(e){ show(msg, explainSignIn(e), 'error'); }
     });
   }
 

@@ -35,6 +35,24 @@ window.GOAT = {
     const d=Math.floor(h/24); return `${d}d ago`;
   },
   qs: (k)=> new URLSearchParams(location.search).get(k),
+
+  // PostgREST caps a response at max-rows (1000 by default), so .limit(4000)
+  // silently returns 1000 and the rest of the list just disappears. fetchAll
+  // pages with .range() until the server stops giving rows.
+  // `make` must return a FRESH query builder each call — .range() mutates it.
+  fetchAll: async (make, opts) => {
+    const page = (opts && opts.page) || 1000;
+    const cap  = (opts && opts.cap)  || 50000;
+    const out = [];
+    for(let from = 0; from < cap; from += page){
+      const { data, error } = await make().range(from, from + page - 1);
+      if(error) throw error;
+      if(!data || !data.length) break;
+      out.push(...data);
+      if(data.length < page) break;       // short page means we reached the end
+    }
+    return out;
+  },
   initials: (name)=> {
     if(!name) return '?';
     const parts = name.trim().split(/\s+/);
