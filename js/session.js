@@ -67,6 +67,23 @@
     if(pill) pill.innerHTML = `<b>${n} votes</b> <a href="wallet.html">Get votes</a>`;
   }
 
+  // The Sign in link is always in the header. Once there is a real account it
+  // becomes the account link instead, labelled with the display name.
+  async function paintAccount(){
+    const el = document.getElementById('account-link');
+    if(!el) return;
+    const user = await currentUser();
+    if(!user || !user.email){ el.textContent = 'Sign in'; el.classList.remove('is-in'); return; }
+    const me = await profile();
+    el.textContent = (me && me.display_name) ? me.display_name : 'Account';
+    el.classList.add('is-in');
+  }
+
+  async function hasAccount(){
+    const user = await currentUser();
+    return !!(user && user.email);
+  }
+
   // Has this anonymous voter been asked to claim their spot yet?
   async function isAnonymousVoter(){
     const user = await currentUser();
@@ -96,12 +113,12 @@
     return m || 'Could not start a session';
   }
 
-  async function refresh(){ paintBalance(await balance(true)); }
+  async function refresh(){ paintBalance(await balance(true)); await paintAccount(); }
 
   document.addEventListener('DOMContentLoaded', () => { refresh().catch(()=>paintBalance(0)); });
   sb.auth.onAuthStateChange(() => { cachedProfile = null; refresh().catch(()=>{}); });
 
   window.GOATSession = { currentUser, ensureVoter, ensureRow, profile, balance,
-                         setLocalBalance, paintBalance, isAnonymousVoter, claimState,
+                         setLocalBalance, paintBalance, paintAccount, hasAccount, isAnonymousVoter, claimState,
                          explainAuth, refresh };
 })();

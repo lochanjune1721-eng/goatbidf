@@ -121,32 +121,35 @@
 
   function show(el,t,k){ el.innerHTML=t; el.className='notice '+(k||''); el.style.display='block'; }
 
-  // ---- the post-vote nudge ----
-  // Called after a successful vote by an anonymous voter. Never blocks anything.
+  // ---- the nudge, after money changes hands ----
+  // Not after voting: anyone can vote anonymously and that stays true. But once
+  // someone has actually paid, they have a balance worth protecting and a face
+  // worth putting on the cards they back — so that is where we ask.
   let shown = false;
-  async function claimPrompt(personName, rank){
+  async function facePrompt(){
     if(shown) return;
     const st = await S.claimState();
-    if(!st.needs) return;                       // their card is already set up
+    if(!st.needs) return;                       // already signed in with a card
     shown = true;
-    const ask = st.reason === 'signin' ? 'Claim your spot on the card.'
-              : st.reason === 'name'   ? 'Add a name so it is you on the card, not "Anonymous".'
-                                       : 'Add a photo — your face goes on the card.';
-    const cta = st.reason === 'signin' ? 'Claim it' : 'Set it up';
+    const signin = st.reason === 'signin';
     const t = document.createElement('div');
     t.className = 'claim-toast';
     t.innerHTML = `
       <div>
-        <b>You're now ${esc(personName)}'s #${rank} fan.</b>
-        <span>${ask}</span>
+        <b>${signin ? 'Want your face on the card?' : 'Finish your card'}</b>
+        <span>${signin
+          ? 'Sign in and your name and photo go on every board you back.'
+          : st.reason === 'name'
+            ? 'Add a name, or you show up as “Anonymous”.'
+            : 'Add a photo — that is what appears next to the person you back.'}</span>
       </div>
-      <a href="wallet.html#who" class="btn-primary">${cta}</a>
+      <a href="account.html" class="btn-primary">${signin ? 'Sign in' : 'Set it up'}</a>
       <button class="claim-x" aria-label="Dismiss">×</button>`;
     document.body.appendChild(t);
     t.querySelector('.claim-x').addEventListener('click', ()=>t.remove());
     setTimeout(()=>t.classList.add('in'), 20);
-    setTimeout(()=>t.remove(), 15000);
+    setTimeout(()=>t.remove(), 20000);
   }
 
-  window.GOATProfile = { mount, claimPrompt };
+  window.GOATProfile = { mount, facePrompt };
 })();

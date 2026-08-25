@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sign in — GOAT.lol</title>
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<header class="topbar"><div class="topbar-inner">
+  <div class="brand"><a href="index.html">GOAT<span>.lol</span></a></div>
+  <nav class="topnav">
+    <a href="index.html">Boards</a><a href="fans.html">Fans</a>
+    <a href="account.html" id="account-link" class="nav-account">Sign in</a>
+    <span id="balance-pill" class="balance-pill"></span>
+  </nav>
+</div></header>
+
+<div class="container" style="max-width:560px;padding:20px 20px 40px">
+  <h1 class="display" style="font-size:clamp(26px,6vw,34px);margin:8px 0 6px">Your account</h1>
+  <p style="color:var(--muted);font-size:14px;margin:0 0 16px">
+    You can vote without an account. Signing in is what keeps your balance safe
+    and puts your name and face on the cards you back.
+  </p>
+
+  <div id="who" class="job-card"></div>
+
+  <div class="job-card" style="margin-top:14px">
+    <h3 style="margin:0 0 8px;font-size:15px">Why bother</h3>
+    <ul style="color:var(--muted);font-size:13px;line-height:1.6;margin:0;padding-left:18px">
+      <li>Your votes and balance survive clearing your browser.</li>
+      <li>You show up as you on every card you back, not “Anonymous”.</li>
+      <li>You can be the GOAT fan — top of someone's fan board, with your face on it.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="stickybar">
+  <span class="bal"><span data-balance>0</span><small>your votes</small></span>
+  <a href="wallet.html">Get votes</a>
+</div>
+
+<footer class="footer">GOAT.lol · <a href="rules.html">Rules</a> · <a href="wallet.html">Wallet</a></footer>
+
+<script src="js/supabase.js"></script>
+<script src="js/optimized-image.js"></script>
+<script src="js/session.js"></script>
+<script src="js/vote.js"></script>
+<script src="js/profile.js"></script>
+<script>
+(async function(){
+  await window.GOATSession.refresh().catch(()=>{});
+  await window.GOATProfile.mount(document.getElementById('who'));
+})();
+</script>
+</body>
+</html>

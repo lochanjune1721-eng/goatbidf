@@ -10,6 +10,7 @@
 <header class="topbar"><div class="topbar-inner">
   <div class="brand"><a href="index.html">GOAT<span>.lol</span></a></div>
   <nav class="topnav"><a href="index.html">Boards</a><a href="fans.html">Fans</a>
+    <a href="account.html" id="account-link" class="nav-account">Sign in</a>
     <span id="balance-pill" class="balance-pill"><a href="wallet.html">Get votes</a></span></nav>
 </div></header>
 
@@ -80,8 +81,14 @@
       const j=await r.json();
       if(!r.ok) throw new Error(j.error||('HTTP '+r.status));
       S.setLocalBalance(j.newBalance);
-      say(`<b>${votes} votes added.</b> No real money was charged. <a href="index.html" style="color:var(--gold)">Go vote →</a>`,'ok');
+      const signedIn = await S.hasAccount();
+      say(`<b>${votes} votes added.</b> No real money was charged. `
+        + (signedIn ? '' : 'Sign in below to put your face on the cards you back. ')
+        + `<a href="index.html" style="color:var(--gold)">Go vote →</a>`,'ok');
       loadHistory();
+      // money has changed hands — this is where we ask who they are
+      if(window.GOATProfile) window.GOATProfile.facePrompt().catch(()=>{});
+      document.getElementById('who').scrollIntoView({behavior:'smooth',block:'center'});
     }catch(e){ say(V.esc(e.message),'error'); }
   }
 

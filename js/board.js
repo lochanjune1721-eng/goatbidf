@@ -166,12 +166,8 @@
       const rank = this.people.findIndex(x=>x.id===p.id)+1;
       half.outerHTML = V.fanHalf(p, rank);
     }
-    // the nudge, only for voters with no email yet, and never before the vote
-    if(window.GOATProfile){
-      const rank = this.people.findIndex(x=>x.id===p.id)+1;
-      const fanRank = await this.myFanRank(p, me.id);
-      window.GOATProfile.claimPrompt(p.name, fanRank || rank).catch(()=>{});
-    }
+    // No sign-in nag here. Voting stays anonymous-friendly; the ask happens
+    // after someone pays (see wallet.html).
     if(this.opts.onVoted) this.opts.onVoted(p, data);
   };
 

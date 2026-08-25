@@ -585,3 +585,6 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[t
   .verdict b.by{font-size:1.2em}
   .fight-foot{padding:10px 14px 12px;font-size:11px}
 }
+.nav-account{color:var(--ink);font-weight:600}
+.nav-account.is-in{color:var(--gold);max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block;vertical-align:bottom}
+@media (max-width:860px){ .nav-account.is-in{max-width:72px} }

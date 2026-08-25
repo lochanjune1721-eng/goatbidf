@@ -57,15 +57,6 @@ async function ensureUserRow(){
 }
 window.ensureUserRow=ensureUserRow;
 
-async function refreshBalance(){
-  const pill=document.getElementById('balance-pill');
-  if(!pill) return;
-  const {data:{user}}=await window.supabaseClient.auth.getUser();
-  if(!user){ pill.innerHTML=`<a href="wallet.html">Sign in</a>`; return; }
-  const {data}=await window.supabaseClient.from('users').select('balance_cents').eq('id', user.id).maybeSingle();
-  const bal=data? data.balance_cents:0;
-  pill.innerHTML=`<b>${window.GOAT.voteNum(bal)} votes</b> <a href="wallet.html">Add</a>`;
-}
-window.refreshBalance=refreshBalance;
-document.addEventListener('DOMContentLoaded', refreshBalance);
-window.supabaseClient.auth.onAuthStateChange(()=> refreshBalance());
+// Balance and account state are painted by js/session.js, which owns
+// #balance-pill and #account-link. Two painters on one element fought.
+

@@ -12,6 +12,7 @@
   <div class="brand"><a href="index.html">GOAT<span>.lol</span></a></div>
   <div class="search"><i>⌕</i><input id="search" placeholder="Search boards and people"></div>
   <nav class="topnav"><a href="index.html">Boards</a><a href="fans.html">Fans</a>
+    <a href="account.html" id="account-link" class="nav-account">Sign in</a>
     <span id="balance-pill" class="balance-pill"><a href="wallet.html">Get votes</a></span></nav>
 </div></header>
 
@@ -169,7 +170,6 @@
       S.setLocalBalance(data.balance);
       await loadFans();
       paint();
-      if(window.GOATProfile) window.GOATProfile.claimPrompt(person.name, 1).catch(()=>{});
     }catch(e){
       person.total_cents=before;
       document.getElementById('total').textContent=V.voteNum(before);
