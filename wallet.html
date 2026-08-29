@@ -1,93 +1,57 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Wallet — GOAT.lol</title>
-<link rel="stylesheet" href="css/style.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<meta name="theme-color" content="#0F0E0C">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="/css/style.css">
 </head>
-<body>
-<header class="topbar"><div class="topbar-inner">
-  <div class="brand"><a href="index.html">GOAT<span>.lol</span></a></div>
-  <nav class="topnav"><a href="index.html">Categories</a><a href="fans.html">Fans</a><span id="balance-pill" class="balance-pill"></span></nav>
-</div></header>
-<div class="container" style="max-width:640px;padding:20px">
-  <div id="auth-card" class="job-card">
-    <h2 class="display" style="font-size:22px">Sign in to hold a balance</h2>
-    <p class="mono" style="font-size:12px;color:var(--muted);margin:6px 0">Email magic-link via Supabase Auth. Display name or X handle — that's what appears on fan leaderboards.</p>
-    <div class="field"><label>Email</label><input id="email" type="email" placeholder="you@example.com"></div>
-    <div class="field"><label>Display name or @handle</label><input id="display-name" placeholder="e.g. Alex or @alex"></div>
-    <label style="display:flex;gap:8px;align-items:center;font-size:13px;margin:8px 0"><input type="checkbox" id="anon"> Stay anonymous</label>
-    <button id="send-link" class="btn-primary">Send magic link →</button>
-    <div id="auth-msg" class="notice" style="display:none"></div>
-  </div>
+<body data-nav="">
+<a class="skip" href="#main">Skip to content</a>
+<header data-header></header>
 
-  <div id="wallet-card" style="display:none">
-    <div class="job-card" style="text-align:center">
-      <div class="mono" style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Balance</div>
-      <div id="balance-big" class="display" style="font-size:48px;color:var(--gold)">$0</div>
-      <div class="mono" style="font-size:12px;color:var(--muted)">Credit never expires and is non-refundable.</div>
-      <div style="display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap">
-        <button class="btn-primary" style="width:auto" data-topup="500">+$5</button>
-        <button class="btn-primary" style="width:auto" data-topup="1000">+$10</button>
-        <button class="btn-primary" style="width:auto" data-topup="2500">+$25</button>
-        <button class="btn-primary" style="width:auto" data-topup="5000">+$50</button>
-        <button class="btn-primary" style="width:auto" data-topup="10000">+$100</button>
-      </div>
-      <div class="mono" style="font-size:11px;color:var(--muted);margin-top:8px">Dodo charges 4% + $0.40 once per top-up — not per $1 bid. Top up $25 to make $1 bids cost 5.6% in fees, not 44%.</div>
-      <button id="logout" class="btn-ghost" style="margin-top:12px">Sign out</button>
+<main id="main"><div class="wrap-narrow page">
+  <div id="signed-out">
+    <h1>Sign in</h1>
+    <p class="lede">An email link, no password. You need an account to hold credit and to appear on fan leaderboards.</p>
+    <div class="panel" style="margin-top:24px">
+      <form id="login-form">
+        <div class="field" style="margin-top:0"><label for="email">Email</label><input id="email" type="email" autocomplete="email" required></div>
+        <div id="login-error" class="notice notice-bad hide"></div>
+        <div style="margin-top:16px"><button class="btn btn-gold" type="submit" id="send">Send the link</button></div>
+      </form>
     </div>
-    <h3 style="margin:16px 0 8px;font-size:16px">History — every bid with person, amount, date</h3>
-    <div id="history" class="list"></div>
   </div>
-</div>
-<script src="js/supabase.js"></script>
-<script>
-(async function(){
-  const sb=window.supabaseClient;
-  const authCard=document.getElementById('auth-card'), walletCard=document.getElementById('wallet-card');
-  const emailInput=document.getElementById('email'), nameInput=document.getElementById('display-name'), anonInput=document.getElementById('anon');
-  const msg=document.getElementById('auth-msg');
 
-  function show(el,t,k){ el.textContent=t; el.className='notice '+(k||''); el.style.display='block'; }
+  <div id="signed-in" class="hide">
+    <h1>Wallet</h1>
+    <div class="panel" style="margin-top:22px">
+      <p class="muted" style="font-size:13px">Balance</p>
+      <p class="bigtotal" id="bal">$0</p>
+      <p class="muted" style="font-size:13px;margin-top:8px">Credit never expires and is <b>non-refundable</b>. Once loaded, $1 minimum per bid, whole dollars only.</p>
+      <div class="amounts" id="amounts"></div>
+      <div id="pay-error" class="notice notice-bad hide"></div>
+      <div style="margin-top:16px"><button class="btn btn-gold btn-lg" type="button" id="topup">Add credit</button></div>
+    </div>
 
-  async function check(){
-    const {data:{user}}=await sb.auth.getUser();
-    if(user){
-      authCard.style.display='none'; walletCard.style.display='block';
-      const {data: u}=await sb.from('users').select('*').eq('id', user.id).maybeSingle();
-      const bal=u? u.balance_cents:0;
-      document.getElementById('balance-big').textContent='$'+(bal/100).toFixed(0);
-      loadHistory(user.id);
-    }
-  }
-  await check();
-  sb.auth.onAuthStateChange(check);
+    <div class="panel">
+      <h2>Your name on fan boards</h2>
+      <div class="field" style="margin-top:0"><label for="dname">Display name or X handle</label><input id="dname" type="text" maxlength="40" placeholder="@handle"></div>
+      <label class="check" style="margin-top:12px"><input id="anon" type="checkbox"> Stay anonymous</label>
+      <div style="margin-top:14px"><button class="btn" type="button" id="save-profile">Save</button> <span class="muted" id="profile-note" style="font-size:13px"></span></div>
+    </div>
 
-  document.getElementById('send-link').addEventListener('click', async()=>{
-    const email=emailInput.value.trim(), name=nameInput.value.trim();
-    if(!email) return show(msg,'Enter email','error');
-    const {error}=await sb.auth.signInWithOtp({email, options:{data:{display_name: name||email.split('@')[0], is_anonymous: anonInput.checked}, emailRedirectTo: location.origin+'/wallet.html'}});
-    if(error) show(msg, error.message,'error'); else show(msg,'Magic link sent — check email.','ok');
-  });
-  document.getElementById('logout').addEventListener('click', async()=>{ await sb.auth.signOut(); location.reload(); });
+    <div class="panel">
+      <h2>History</h2>
+      <div class="tablewrap"><table class="list"><thead><tr><th>What</th><th>Amount</th><th>When</th></tr></thead><tbody id="history"><tr><td colspan="3" class="muted">Loading.</td></tr></tbody></table></div>
+    </div>
 
-  document.querySelectorAll('[data-topup]').forEach(b=> b.addEventListener('click', async()=>{
-    const cents=Number(b.dataset.topup);
-    const {data:{user}}=await sb.auth.getUser();
-    if(!user) return alert('Sign in first');
-    const r=await fetch('/api/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount_cents: cents})});
-    const j=await r.json(); if(!r.ok) return alert(j.error||'Checkout failed');
-    if(j.url) location.href=j.url; else alert('Top-up created');
-  }));
-
-  async function loadHistory(uid){
-    const {data}=await sb.from('bids').select('amount_cents,created_at,people(name,slug)').eq('user_id', uid).order('created_at',{ascending:false}).limit(100);
-    const el=document.getElementById('history');
-    if(!data||!data.length){ el.innerHTML='<div class="empty">No bids yet. Back someone from a category.</div>'; return; }
-    el.innerHTML=data.map(b=>`<div class="job-card" style="display:flex;justify-content:space-between;gap:10px"><span><a href="person.html?slug=${b.people.slug}" style="color:var(--gold)">${b.people.name}</a> <span class="mono" style="font-size:12px;color:var(--muted)">${window.GOAT.fmtAgo(b.created_at)}</span></span><b class="display">${window.GOAT.cents(b.amount_cents)}</b></div>`).join('');
-  }
-})();
-</script>
+    <div style="margin-top:20px"><button class="btn" type="button" id="signout">Sign out</button></div>
+  </div>
+</div></main>
+<footer data-footer></footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="/js/config.js"></script><script src="/js/img.js"></script><script src="/js/supabase.js"></script>
+<script src="/js/wallet.js"></script>
 </body>
 </html>

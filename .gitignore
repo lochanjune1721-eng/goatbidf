@@ -1,7 +1,8 @@
 node_modules/
+.vercel/
 .env
 .env.local
 .DS_Store
-.cache/
-.gemini/
-photos/
+.fontcache/
+photo-misses.json
+package-lock.json

@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Image performance — GOAT.lol</title>
+<link rel="stylesheet" href="/css/style.css">
+<style>
+  /* Deliberately plain. This page is an instrument, not a design. */
+  .it-wrap { max-width: 1100px; margin: 0 auto; padding: 24px 16px 80px; }
+  .it-bar { position: sticky; top: 0; z-index: 5; background: var(--bg);
+            border-bottom: 1px solid var(--line); padding: 12px 0; margin-bottom: 18px; }
+  .it-stats { display: flex; flex-wrap: wrap; gap: 18px; font: 13px/1.5 var(--mono, monospace); }
+  .it-stats b { color: var(--gold); font-weight: 600; }
+  .it-item { display: grid; grid-template-columns: 120px 1fr; gap: 16px;
+             padding: 14px 0; border-bottom: 1px solid var(--line); align-items: start; }
+  .it-meta { font: 12px/1.6 var(--mono, monospace); color: var(--muted); word-break: break-all; }
+  .it-meta b { color: var(--ink); font-weight: 600; }
+  .it-tag { display: inline-block; padding: 1px 7px; border-radius: 3px; margin-right: 6px;
+            font-size: 11px; letter-spacing: .04em; text-transform: uppercase; }
+  .it-eager { background: rgba(212,162,76,.18); color: var(--gold); }
+  .it-lazy  { background: rgba(255,255,255,.07); color: var(--muted); }
+  .it-high  { background: rgba(220,90,60,.2); color: #e8836a; }
+  .it-cache { background: rgba(90,180,120,.18); color: #7fc79b; }
+  .it-slow  { color: #e8836a; }
+  .it-spacer { height: 120vh; display: grid; place-items: center; color: var(--muted);
+               border: 1px dashed var(--line); margin: 24px 0; font: 13px var(--mono, monospace); }
+</style>
+</head>
+<body>
+<div class="it-wrap">
+  <h1 style="font-size:28px;margin-bottom:6px">Image performance</h1>
+  <p class="tile-meta" style="margin-bottom:18px">
+    Twenty contenders, rendered exactly as a board renders them. Reload with
+    DevTools → Network → throttling set to <b>Fast 3G</b> or <b>Slow 4G</b>,
+    and with <b>Disable cache</b> off and on. What should happen: text is
+    readable at once, the top rows fill in first, and the rows past the spacer
+    do not fetch until you scroll near them.
+  </p>
+
+  <div class="it-bar">
+    <div class="it-stats" id="stats">Loading…</div>
+  </div>
+
+  <div id="list"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/config.js"></script>
+<script src="/js/img.js"></script>
+<script src="/js/supabase.js"></script>
+<script src="/js/image-test.js"></script>
+</body>
+</html>

@@ -2,391 +2,42 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="referrer" content="no-referrer">
-<title>GOAT.lol — Who's the greatest?</title>
-<meta name="description" content="Fans buy credit, then spend it backing whoever they believe in. The money is the ranking.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="css/style.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GOAT.lol — who's the greatest?</title>
+<meta name="theme-color" content="#0F0E0C">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="/css/style.css">
 </head>
-<body>
-<header class="topbar">
-  <div class="topbar-inner">
-    <div class="brand"><a href="index.html">GOAT<span>.lol</span></a></div>
-    <div class="search"><i>⌕</i><input id="search" placeholder="Search people, categories"></div>
-    <nav class="topnav">
-      <a href="index.html" class="active">Categories</a>
-      <a href="fans.html">Fans</a>
-      <a href="about.html" class="hide-xs">About</a>
-      <span id="balance-pill" class="balance-pill"><a href="wallet.html">Sign in</a></span>
-    </nav>
-  </div>
-</header>
+<body data-nav="categories">
+<a class="skip" href="#main">Skip to content</a>
+<header data-header></header>
 
-<div class="container">
-
-  <!-- Tabs + sort -->
-  <div class="tabrow">
-    <div class="tabs" role="tablist">
-      <button class="tab is-active" role="tab" data-view="fights" aria-selected="true">Top fights</button>
-      <button class="tab" role="tab" data-view="boards" aria-selected="false">All boards <span id="boards-count">(—)</span></button>
-    </div>
-    <label class="sortbox">
-      <span>Sort</span>
-      <select id="sort">
-        <option value="closest">Closest race</option>
-        <option value="hottest">Most backed</option>
-        <option value="open">Still open</option>
-        <option value="az">A–Z</option>
-      </select>
-    </label>
-  </div>
-
-  <!-- Group chips: every group, with how many boards it holds -->
-  <nav id="chips" class="chiprow" aria-label="Filter by group"></nav>
-
-  <!-- Section heading + counter -->
-  <div class="sechead">
-    <h2 id="sec-title" class="display">Top fights right now</h2>
-    <span id="sec-count" class="muted"></span>
-  </div>
-
-  <div id="fights" class="fights"></div>
-  <div id="boards" class="boardgrid" hidden></div>
-  <p id="empty-state" class="empty" hidden></p>
-
-  <div id="more-wrap" class="morewrap" hidden>
-    <button id="more" class="btn-ghost">Show more boards</button>
-  </div>
-
-  <section style="margin:28px 0 20px">
-    <h2 class="display" style="font-size:18px">Live activity</h2>
-    <div id="activity" class="activity"></div>
-  </section>
-</div>
-
-<footer class="footer">GOAT.lol — pay to rank. <a href="rules.html">Rules</a> · <a href="wallet.html">Wallet</a> · <a href="fans.html">Fans</a></footer>
-
-<script src="js/supabase.js"></script>
-<script src="js/optimized-image.js"></script>
-<script src="js/boards-fallback.js"></script>
-<script>
-(async function () {
-  const sb = window.supabaseClient;
-  const G = window.GOAT;
-  const $ = (id) => document.getElementById(id);
-
-  function singular(n) {
-    if (/[—–]/.test(n)) return n;                         // "Tennis — Men" stays intact
-    if (/men$/i.test(n)) return n.replace(/men$/i, 'man');
-    if (/ies$/i.test(n)) return n.replace(/ies$/i, 'y');
-    if (/(ss|ch|sh|x)es$/i.test(n)) return n.replace(/es$/i, '');
-    if (/ss$/i.test(n)) return n;
-    if (/s$/i.test(n)) return n.replace(/s$/i, '');
-    return n;
-  }
-  function boardTitle(name) {
-    const n = String(name || '').trim();
-    if (!n) return 'Greatest';
-    return /^greatest\b/i.test(n) ? n : 'Greatest ' + singular(n);
-  }
-
-  const esc = (v) => String(v === null || v === undefined ? '' : v)
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-
-  const PAGE = 30;
-  let cats = [];
-  let peopleByCat = {};
-  let view = 'fights';
-  let group = 'all';
-  let sort = 'closest';
-  let shown = PAGE;
-
-  $('search').addEventListener('keydown', (e) => {
-    if (e.key !== 'Enter') return;
-    const q = e.target.value.trim();
-    if (q) location.href = 'category.html?slug=' + encodeURIComponent(q);
-  });
-
-  // ------------------------------------------------------------------ data
-
-  try {
-    localStorage.removeItem('goat_home_cache');
-    localStorage.removeItem('goat_home_cache_v2');
-  } catch (e) { /* private mode */ }
-
-  let people = [];
-  try {
-    const cols = 'id,slug,name,photo_path,total_cents,category_id,first_backed_at';
-    const pages = [0, 1, 2, 3, 4, 5].map((n) =>
-      sb.from('people').select(cols).order('total_cents', { ascending: false })
-        .range(n * 1000, n * 1000 + 999));
-    const [catsRes, ...peopleRes] = await Promise.all([
-      sb.from('categories').select('*').order('sort_order'),
-      ...pages,
-    ]);
-    cats = catsRes?.data || [];
-    people = peopleRes.flatMap((r) => r?.data || []);
-  } catch (e) {
-    console.warn('DB fetch error:', e);
-  }
-
-  if (!cats.length || !people.length) {
-    const fb = await window.BOARDS_FALLBACK?.() || await window.WIKI_FALLBACK?.();
-    if (fb) {
-      if (!cats.length) {
-        cats = fb.categories.map((c, i) => ({
-          id: c.id || 'fallback-' + c.slug, slug: c.slug,
-          name: c.name || c.title, group_name: c.group_name || c.group,
-          sort_order: c.sort_order ?? i,
-        }));
-      }
-      if (!people.length) {
-        const idBySlug = {};
-        cats.forEach((c) => { idBySlug[c.slug] = c.id; });
-        people = fb.people.map((p) => ({
-          id: p.id, slug: p.slug, name: p.name, photo_path: p.photo_path,
-          total_cents: p.total_cents || 0,
-          category_id: p.category_id || idBySlug[p.category_slug] || cats[0].id,
-          first_backed_at: null,
-        }));
-      }
-    }
-  }
-
-  // Index people under their board, highest backed first.
-  peopleByCat = {};
-  for (const p of people) {
-    (peopleByCat[p.category_id] ||= []).push(p);
-  }
-  for (const id of Object.keys(peopleByCat)) {
-    peopleByCat[id].sort((a, b) => (b.total_cents || 0) - (a.total_cents || 0));
-  }
-
-  $('boards-count').textContent = `(${cats.length})`;
-
-  // ----------------------------------------------------------------- chips
-
-  function renderChips() {
-    const counts = {};
-    for (const c of cats) {
-      const g = c.group_name || 'Other';
-      counts[g] = (counts[g] || 0) + 1;
-    }
-    const groups = Object.keys(counts).sort((a, b) => counts[b] - counts[a] || a.localeCompare(b));
-
-    $('chips').innerHTML =
-      `<button class="chip${group === 'all' ? ' is-active' : ''}" data-group="all">
-         All <span class="chip-n">${cats.length}</span></button>` +
-      groups.map((g) => `
-        <button class="chip${group === g ? ' is-active' : ''}" data-group="${esc(g)}">
-          ${esc(g)} <span class="chip-n">${counts[g]}</span></button>`).join('');
-  }
-
-  $('chips').addEventListener('click', (e) => {
-    const chip = e.target.closest('.chip');
-    if (!chip) return;
-    group = chip.dataset.group;
-    shown = PAGE;
-    renderChips();
-    render();
-  });
-
-  document.querySelectorAll('.tab').forEach((tab) => {
-    tab.addEventListener('click', () => {
-      view = tab.dataset.view;
-      shown = PAGE;
-      document.querySelectorAll('.tab').forEach((t) => {
-        const on = t === tab;
-        t.classList.toggle('is-active', on);
-        t.setAttribute('aria-selected', String(on));
-      });
-      render();
-    });
-  });
-
-  $('sort').addEventListener('change', (e) => { sort = e.target.value; shown = PAGE; render(); });
-  $('more').addEventListener('click', () => { shown += PAGE; render(); });
-
-  // ---------------------------------------------------------------- render
-
-  /** Boards in the current group, ordered by the chosen sort. */
-  function visibleCats() {
-    const list = cats.filter((c) => group === 'all' || (c.group_name || 'Other') === group);
-    const top = (c, i) => (peopleByCat[c.id] || [])[i];
-    const gapOf = (c) => {
-      const a = top(c, 0), b = top(c, 1);
-      if (!a || !b) return Number.MAX_SAFE_INTEGER;
-      return (a.total_cents || 0) - (b.total_cents || 0);
-    };
-    const potOf = (c) => (peopleByCat[c.id] || []).reduce((s, p) => s + (p.total_cents || 0), 0);
-
-    return list.sort((a, b) => {
-      switch (sort) {
-        case 'hottest': return potOf(b) - potOf(a);
-        case 'open':    return potOf(a) - potOf(b);
-        case 'az':      return String(a.name).localeCompare(String(b.name));
-        default:        return gapOf(a) - gapOf(b);
-      }
-    });
-  }
-
-  function fighter(person, cat, side) {
-    if (!person) {
-      return `<div class="fighter is-empty">
-        <span class="fighter-photo"><span class="fallback">?</span></span>
-        <span class="fighter-name">Open</span>
-        <span class="fighter-score">$0</span>
-        <span class="fighter-label">backed</span>
-      </div>`;
-    }
-    const photo = window.OptimizedImage.render({
-      photoPath: person.photo_path, name: person.name, size: 400,
-      priority: side === 'a' ? 'eager' : 'lazy',
-    });
-    return `<a class="fighter" href="person.html?slug=${encodeURIComponent(person.slug || '')}">
-      <span class="fighter-photo">${photo}</span>
-      <span class="fighter-name">${esc(person.name)}</span>
-      <span class="fighter-score">${esc(G.cents(person.total_cents || 0))}</span>
-      <span class="fighter-label">backed</span>
-    </a>`;
-  }
-
-  function fightCard(cat) {
-    const list = peopleByCat[cat.id] || [];
-    const a = list[0], b = list[1];
-    const aTotal = a?.total_cents || 0;
-    const bTotal = b?.total_cents || 0;
-    const sum = aTotal + bTotal;
-    const pct = sum > 0 ? Math.round((aTotal / sum) * 100) : 50;
-
-    let foot;
-    if (!list.length) {
-      foot = 'Nobody has backed yet — <b>$1 takes #1</b>';
-    } else if (!b) {
-      foot = `<b>${esc(a.name)}</b> is unopposed — <b>$1</b> puts someone next to them`;
-    } else if (aTotal === bTotal) {
-      foot = `Dead level — <b>$1</b> breaks the tie`;
-    } else {
-      foot = `<b>${esc(a.name)}</b> leads by <b>${esc(G.cents(aTotal - bTotal))}</b>`;
-    }
-
-    return `<article class="fight">
-      <header class="fight-head">
-        <h3 class="display"><a href="category.html?slug=${encodeURIComponent(cat.slug)}">${esc(boardTitle(cat.name))}</a></h3>
-        <span class="fight-tag">${esc(cat.group_name || '')}</span>
-      </header>
-      <div class="fight-body">
-        ${fighter(a, cat, 'a')}
-        <span class="vs" aria-hidden="true">VS</span>
-        ${fighter(b, cat, 'b')}
-      </div>
-      <div class="fight-bar" role="img" aria-label="${pct}% to ${esc(a?.name || 'nobody')}">
-        <span style="width:${pct}%"></span>
-      </div>
-      <p class="fight-foot">${foot}</p>
-    </article>`;
-  }
-
-  function boardCard(cat) {
-    const list = peopleByCat[cat.id] || [];
-    const leader = list[0];
-    const pot = list.reduce((s, p) => s + (p.total_cents || 0), 0);
-    const photo = leader
-      ? window.OptimizedImage.render({ photoPath: leader.photo_path, name: leader.name, size: 96 })
-      : '<span class="fallback">?</span>';
-
-    return `<a class="board" href="category.html?slug=${encodeURIComponent(cat.slug)}">
-      <span class="board-photo">${photo}</span>
-      <span class="board-meta">
-        <span class="board-name">${esc(boardTitle(cat.name))}</span>
-        <span class="board-sub">${esc(cat.group_name || '')} · ${list.length} ${list.length === 1 ? 'name' : 'names'}</span>
-        <span class="board-lead">${leader ? esc(leader.name) : 'Unclaimed — $1 takes #1'}</span>
+<main id="main">
+  <div class="wrap">
+    <div class="livebar">
+      <span class="livepill">
+        <span class="dot dot-pulse" aria-hidden="true"></span>
+        <b id="stat-online">—</b> online
+        <span aria-hidden="true">·</span>
+        <b id="stat-today">$0</b> backed today
       </span>
-      <span class="board-pot">${esc(G.cents(pot))}</span>
-    </a>`;
-  }
-
-  function render() {
-    const list = visibleCats();
-    const slice = list.slice(0, shown);
-
-    $('sec-title').textContent = view === 'fights' ? 'Top fights right now' : 'All boards';
-    $('sec-count').textContent = list.length ? `${slice.length} of ${list.length}` : '';
-
-    $('fights').hidden = view !== 'fights';
-    $('boards').hidden = view !== 'boards';
-
-    if (!list.length) {
-      $('fights').innerHTML = '';
-      $('boards').innerHTML = '';
-      $('empty-state').hidden = false;
-      $('empty-state').textContent = 'No boards in this group yet.';
-      $('more-wrap').hidden = true;
-      return;
-    }
-    $('empty-state').hidden = true;
-
-    if (view === 'fights') {
-      $('fights').innerHTML = slice.map(fightCard).join('');
-    } else {
-      $('boards').innerHTML = slice.map(boardCard).join('');
-    }
-
-    $('more-wrap').hidden = slice.length >= list.length;
-  }
-
-  renderChips();
-  render();
-
-  // -------------------------------------------------------------- activity
-
-  try {
-    const { data: bids } = await sb.from('bids')
-      .select('amount_cents,created_at,people(name,slug),users(display_name,is_anonymous)')
-      .order('created_at', { ascending: false }).limit(10);
-
-    const el = $('activity');
-    if (bids && bids.length) {
-      el.innerHTML = bids.map((b) => {
-        const who = b.users?.is_anonymous ? 'Anonymous' : (b.users?.display_name || 'Someone');
-        return `<div><b>${esc(who)}</b> put ${esc(G.cents(b.amount_cents))} on
-          <a href="person.html?slug=${encodeURIComponent(b.people?.slug || '')}" style="color:var(--gold)">${esc(b.people?.name)}</a>
-          · ${esc(G.fmtAgo(b.created_at))}</div>`;
-      }).join('');
-    } else {
-      el.innerHTML = '<div class="muted">No activity yet. Be the first.</div>';
-    }
-  } catch (e) {
-    $('activity').innerHTML = '<div class="muted">No activity yet. Be the first.</div>';
-  }
-
-  // Refresh the boards in place when someone backs a name.
-  let timer = null;
-  try {
-    sb.channel('bids-index').on('postgres_changes',
-      { event: 'INSERT', schema: 'public', table: 'bids' }, () => {
-        clearTimeout(timer);
-        timer = setTimeout(async () => {
-          try {
-            const { data } = await sb.from('people')
-              .select('id,slug,name,photo_path,total_cents,category_id,first_backed_at')
-              .order('total_cents', { ascending: false }).range(0, 5999);
-            if (!data || !data.length) return;
-            peopleByCat = {};
-            for (const p of data) (peopleByCat[p.category_id] ||= []).push(p);
-            for (const id of Object.keys(peopleByCat)) {
-              peopleByCat[id].sort((x, y) => (y.total_cents || 0) - (x.total_cents || 0));
-            }
-            render();
-          } catch (err) { /* the next event retries */ }
-        }, 1200);
-      }).subscribe();
-  } catch (e) { /* realtime is optional */ }
-})();
-</script>
+    </div>
+    <div class="hero">
+      <h1>Who&#8217;s the greatest?</h1>
+      <p>Every argument is free. This one isn&#8217;t. <b>Load $5, back who you believe in</b> — the board is the money, nothing else.</p>
+    </div>
+    <div id="groups"><p class="empty">Loading the boards.</p></div>
+    <div id="unclaimed"></div>
+    <section class="group" id="activity">
+      <div class="group-head">
+        <h2><span class="dot dot-gold dot-pulse" aria-hidden="true" style="display:inline-block;margin-right:8px"></span>Live</h2>
+        <a class="muted" href="/fans.html" style="font-size:13px">All backers</a>
+      </div>
+      <ul class="feed panel" id="feed"><li>Nothing backed yet.</li></ul>
+    </section>
+  </div>
+</main>
+<footer data-footer></footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="/js/config.js"></script><script src="/js/img.js"></script><script src="/js/supabase.js"></script>
+<script src="/js/seed-order.js"></script><script src="/js/board.js"></script><script src="/js/index.js"></script>
 </body>
 </html>
