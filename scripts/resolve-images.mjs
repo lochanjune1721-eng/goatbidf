@@ -17,7 +17,7 @@
  */
 
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
-import { resolveImage, imageRow, WikiError, UA } from '../api/_wikimedia.js';
+import { resolveImage, imageRow, WikiError, UA, contextFor } from '../api/_wikimedia.js';
 
 /* ------------------------------- options -------------------------------- */
 
@@ -131,17 +131,25 @@ async function main() {
 
   /* Duplicate detection. The same person appears on more than one board —
      Johan Cruyff is a great footballer and a great manager — and each is its
-     own row with its own slug. Resolving the name once and copying the result
-     saves the second lookup and guarantees the two rows agree. */
+     own row with its own slug. Resolving once and copying the result saves a
+     lookup and guarantees the rows agree.
+
+     The key must be the context the lookup runs under, not the name. Keying on
+     the name alone resolved "Leonardo da Vinci" under whichever of Mind,
+     Culture, Tech or History happened to sort first and wrote that one picture
+     to all four rows — and the group context is the only thing separating the
+     basketball Michael Jordan from the others. Rows share a lookup only when
+     contextFor() gives them the same query and the same expectations. */
   const byName = new Map();
   for (const p of people) {
-    const k = p.name.toLowerCase();
+    const ctx = contextFor(p.categories?.group_name, p.categories?.name);
+    const k = [p.name.toLowerCase(), ctx.q, (ctx.expect || []).join(',')].join(String.fromCharCode(0));
     if (!byName.has(k)) byName.set(k, []);
     byName.get(k).push(p);
   }
   const dupes = [...byName.values()].filter((g) => g.length > 1);
-  console.log(`${people.length} rows, ${byName.size} distinct names` +
-              (dupes.length ? ` (${dupes.length} appear on more than one board)` : '') + '.\n');
+  console.log(`${people.length} rows, ${byName.size} distinct lookups` +
+              (dupes.length ? ` (${dupes.length} name+context pairs shared across boards)` : '') + '.\n');
 
   const jobs = [...byName.values()];
   const tally = { verified: 0, needs_review: 0, missing: 0, failed: 0 };

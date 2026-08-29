@@ -123,7 +123,9 @@ function boardHint(board) {
   return '';
 }
 
-function contextFor(group, board) {
+/* Exported so scripts/resolve-images.mjs can group rows by the context they
+   actually resolve under, rather than by name alone. */
+export function contextFor(group, board) {
   const c = CONTEXT[group] || { q: '', expect: [] };
   const hint = boardHint(board);
   return { q: [hint, c.q].filter(Boolean).join(' '), expect: c.expect };
