@@ -16,8 +16,18 @@
       return `/img?name=${encodeURIComponent(name || '')}&url=${encodeURIComponent(clean || '')}`;
     }
 
-    if (clean.startsWith('http://') || clean.startsWith('https://')) {
+    // Already https — use it directly. Fastest path, no change.
+    if (clean.startsWith('https://')) {
       return clean;
+    }
+
+    // Two cases that produce no picture in production:
+    //   http:// — blocked by the browser as mixed content on an https page
+    //   empty   — the person was seeded with photo_path = null
+    // Both go through the healer, which upgrades the protocol or looks the
+    // person up by name. This is what localhost has always done via server.mjs.
+    if (!clean || clean.startsWith('http://')) {
+      return `/api/img?name=${encodeURIComponent(name || '')}&url=${encodeURIComponent(clean || '')}`;
     }
 
     const baseUrl = window.GOAT?.SUPABASE_URL || 'https://iuvmzlrnbwptgrbkdbbn.supabase.co';
