@@ -1,7 +1,6 @@
-import { supabaseUrl, serviceKey, anonKey } from './scripts/env.mjs';
 import { createClient } from '@supabase/supabase-js'
 import sharp from 'sharp'
-const supa=createClient(supabaseUrl(),serviceKey())
+const supa=createClient('https://iuvmzlrnbwptgrbkdbbn.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml1dm16bHJuYndwdGdyYmtkYmJuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NzU5NzcyOSwiZXhwIjoyMTAzMTczNzI5fQ.XX378u9ceV2zf8urOZoHN4wwRwlsEgkb1nJF9TG1DQU')
 function ini(n){return (n||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}
 async function loop(){
   let total=0

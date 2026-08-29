@@ -5,6 +5,7 @@
 <meta name="referrer" content="no-referrer">
 <title>GOAT.lol — Who's the greatest?</title>
 <meta name="description" content="Fans buy credit, then spend it backing whoever they believe in. The money is the ranking.">
+<link rel="preconnect" href="https://iuvmzlrnbwptgrbkdbbn.supabase.co" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="css/style.css">
@@ -49,8 +50,6 @@
 <script src="js/wiki-fallback.js"></script>
 <script>
 (async function(){
-  const G=window.GOAT;
-  try{ await G.ready; }catch(e){ return; }
   const sb=window.supabaseClient;
   const groupsEl=document.getElementById('groups'), unclaimedEl=document.getElementById('unclaimed'), activityEl=document.getElementById('activity');
   const search=document.getElementById('search');
@@ -102,15 +101,11 @@
     }
   }
 
-  // Indexed once at this scope: renderHomepage and the unclaimed banner below
-  // both read it. It used to be local to renderHomepage, which made every
-  // later line throw ReferenceError.
-  let peopleByCat = {};
-
   function renderHomepage(cats, people) {
     if(!cats || !cats.length) return;
-
-    peopleByCat = {};
+    
+    // Pre-index people by category_id for instant lookups
+    const peopleByCat = {};
     for(const p of (people || [])){
       if(!peopleByCat[p.category_id]) peopleByCat[p.category_id] = [];
       peopleByCat[p.category_id].push(p);
@@ -142,14 +137,14 @@
       const groupCats = groupMap[g];
       const section = document.createElement('div');
       section.className = 'group';
-      section.innerHTML = `<div class="group-head"><h2>${G.esc(g)}</h2><span class="mono" style="font-size:11px;color:var(--muted)">${groupCats.length} boards</span></div><div class="cat-grid"></div>`;
+      section.innerHTML = `<div class="group-head"><h2>${g}</h2><span class="mono" style="font-size:11px;color:var(--muted)">${groupCats.length} boards</span></div><div class="cat-grid"></div>`;
       const grid = section.querySelector('.cat-grid');
 
       for(const cat of groupCats){
         const catPeople = peopleByCat[cat.id] || [];
         const p1 = catPeople[0], p2 = catPeople[1];
         const tile = document.createElement('a');
-        tile.href = `category.html?slug=${encodeURIComponent(cat.slug)}`;
+        tile.href = `category.html?slug=${cat.slug}`;
         tile.className = 'cat-tile';
 
         const priority = tileIndex < 6 ? 'eager' : 'lazy';
@@ -160,12 +155,12 @@
         const gap = p1 && p2 ? `$${(((p1.total_cents||0) - (p2.total_cents||0))/100).toFixed(0)} ahead` : p1 ? '—' : '$1 takes it';
 
         tile.innerHTML = `
-          <div class="cat-tile-head"><strong>${G.esc(cat.name)}</strong><span>${catPeople.length} people</span></div>
+          <div class="cat-tile-head"><strong>${cat.name}</strong><span>${catPeople.length} people</span></div>
           <div class="cat-tile-body">
             <div class="p1">
               <div class="photo">${p1Photo}</div>
               <div class="meta">
-                <div class="name display">${p1 ? G.esc(p1.name) : 'Empty'}</div>
+                <div class="name display">${p1 ? p1.name : 'Empty'}</div>
                 <div class="total display">${p1 ? window.GOAT.cents(p1.total_cents||0) : '$0'}</div>
                 <div class="gap">${gap}</div>
               </div>
@@ -173,7 +168,7 @@
             <div class="p2">
               <div class="photo" style="border-radius:12px">${p2Photo}</div>
               <div class="meta">
-                <div class="name" style="font-size:12px;font-weight:600">${p2 ? G.esc(p2.name) : '—'}</div>
+                <div class="name" style="font-size:12px;font-weight:600">${p2 ? p2.name : '—'}</div>
                 <div class="total" style="font-size:13px">${p2 ? window.GOAT.cents(p2.total_cents||0) : ''}</div>
               </div>
             </div>
@@ -201,7 +196,7 @@
     const today = new Date(); today.setHours(0,0,0,0);
     const [todayBidsRes, activityBidsRes] = await Promise.all([
       sb.from('bids').select('amount_cents').gte('created_at', today.toISOString()),
-      sb.from('bids').select('amount_cents,created_at,people(name,slug),public_profiles(display_name,is_anonymous)').order('created_at',{ascending:false}).limit(10)
+      sb.from('bids').select('amount_cents,created_at,people(name,slug),users(display_name,is_anonymous)').order('created_at',{ascending:false}).limit(10)
     ]);
     const backedToday = (todayBidsRes.data || []).reduce((s,r) => s + (r.amount_cents || 0), 0);
     const backedEl = document.getElementById('backed-today');
@@ -211,9 +206,8 @@
     if(activityEl){
       if(bids && bids.length){
         activityEl.innerHTML = bids.map(b => {
-          const handle = b.public_profiles?.display_name || 'Someone';
-          const slug = encodeURIComponent(b.people?.slug || '');
-          return `<div><b>${G.esc(handle)}</b> put ${G.cents(b.amount_cents)} on <a href="person.html?slug=${slug}" style="color:var(--gold)">${G.esc(b.people?.name)}</a> · ${G.fmtAgo(b.created_at)}</div>`;
+          const handle = b.users?.is_anonymous ? 'Anonymous' : (b.users?.display_name || 'Someone');
+          return `<div><b>${handle}</b> put ${window.GOAT.cents(b.amount_cents)} on <a href="person.html?slug=${b.people?.slug}" style="color:var(--gold)">${b.people?.name}</a> · ${window.GOAT.fmtAgo(b.created_at)}</div>`;
         }).join('');
       } else {
         activityEl.innerHTML = '<div class="mono" style="color:var(--muted)">No activity yet. Be the first.</div>';
@@ -223,20 +217,10 @@
     if(activityEl) activityEl.innerHTML = '<div class="mono" style="color:var(--muted)">No activity yet. Be the first.</div>';
   }
 
-  // Realtime: re-read the boards in place. A location.reload() per insert
-  // turns any busy moment into a reload storm.
-  let refreshTimer = null;
+  // Realtime subscription
   try {
-    sb.channel('bids-index').on('postgres_changes', {event:'INSERT', schema:'public', table:'bids'}, () => {
-      clearTimeout(refreshTimer);
-      refreshTimer = setTimeout(async () => {
-        try {
-          const { data } = await sb.from('people')
-            .select('id,slug,name,photo_path,total_cents,category_id,first_backed_at')
-            .order('total_cents',{ascending:false}).range(0, 5999);
-          if (data && data.length) renderHomepage(cats, data);
-        } catch (err) { /* the next event will try again */ }
-      }, 1200);
+    sb.channel('bids-index').on('postgres_changes', {event:'INSERT', schema:'public', table:'bids'}, async () => {
+      location.reload();
     }).subscribe();
   } catch(e) {}
 })();

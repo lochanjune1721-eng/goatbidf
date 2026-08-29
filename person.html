@@ -4,6 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="referrer" content="no-referrer">
 <title>Person — GOAT.lol</title>
+<link rel="preconnect" href="https://iuvmzlrnbwptgrbkdbbn.supabase.co" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
@@ -41,9 +42,7 @@
 <script src="js/optimized-image.js"></script>
 <script>
 (async function(){
-  const G=window.GOAT;
-  try{ await G.ready; }catch(e){ return; }
-  const slug=G.qs('slug');
+  const slug=window.GOAT.qs('slug');
   if(!slug){ document.getElementById('name').textContent='Missing ?slug='; return; }
   const sb=window.supabaseClient;
   const {data: person}=await sb.from('people').select('*, categories(name,slug,group_name)').eq('slug',slug).maybeSingle();
@@ -51,9 +50,9 @@
   document.title=person.name+' — GOAT.lol';
   document.getElementById('name').textContent=person.name;
   document.getElementById('blurb').textContent=person.blurb||'';
-  document.getElementById('total').textContent=G.cents(person.total_cents||0);
+  document.getElementById('total').textContent=window.GOAT.cents(person.total_cents||0);
   if(person.categories){
-    document.getElementById('crumb').innerHTML=`<a href="category.html?slug=${encodeURIComponent(person.categories.slug)}" style="color:var(--gold)">${G.esc(person.categories.name)}</a> · ${G.esc(person.categories.group_name)}`;
+    document.getElementById('crumb').innerHTML=`<a href="category.html?slug=${person.categories.slug}" style="color:var(--gold)">${person.categories.name}</a> · ${person.categories.group_name}`;
   }
 
   // Load hero photo with eager high priority & 640px source
@@ -69,34 +68,19 @@
   try {
     const [catPeopleRes, fansRes] = await Promise.all([
       person.category_id ? sb.from('people').select('id,total_cents,first_backed_at').eq('category_id', person.category_id).order('total_cents',{ascending:false}).order('first_backed_at',{ascending:true}) : Promise.resolve({data:[]}),
-      sb.from('fan_totals').select('total_cents,public_profiles(display_name,photo_url,social_platform,social_handle,is_anonymous)').eq('person_id', person.id).order('total_cents',{ascending:false}).limit(50)
+      sb.from('fan_totals').select('total_cents,users(display_name,is_anonymous)').eq('person_id', person.id).order('total_cents',{ascending:false}).limit(50)
     ]);
 
     const catPeople = catPeopleRes?.data || [];
     const rank = catPeople.findIndex(p => p.id === person.id) + 1 || '—';
     document.getElementById('rank').textContent = `#${rank} in ${person.categories?.name || 'Category'}`;
-    const wikiUrl=/^https:\/\//.test(person.wikipedia_url||'') ? person.wikipedia_url : null;
-    document.getElementById('wiki').innerHTML = (wikiUrl? `<a href="${G.esc(wikiUrl)}" target="_blank" rel="noopener noreferrer" style="text-decoration:underline">${G.esc(wikiUrl)}</a>` : '') + `${person.photo_credit? ' · '+G.esc(person.photo_credit):''} ${person.photo_license? '('+G.esc(person.photo_license)+')':''}`;
+    document.getElementById('wiki').innerHTML = `<a href="${person.wikipedia_url}" target="_blank" rel="noopener" style="text-decoration:underline">${person.wikipedia_url}</a> ${person.photo_credit? '· '+person.photo_credit:''} ${person.photo_license? '('+person.photo_license+')':''}`;
 
     // fans
     const fans = fansRes?.data;
     const el=document.getElementById('fans');
     if(!fans||!fans.length) el.innerHTML='<div class="empty">No fans yet. Be the first for $1.</div>';
-    else el.innerHTML=fans.map((f,i)=>{
-      const profile=f.public_profiles||{};
-      const name=profile.display_name||'Someone';
-      const photo=profile.photo_url||null;
-      const avatar=photo
-        ? `<img src="${G.esc(photo)}" alt="${G.esc(name)}" width="40" height="40" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="window.onGoatImgError(this)">`
-        : `<span class="fallback" role="img" aria-label="${G.esc(name)}" style="background:${window.OptimizedImage.gradientFor(name)};font-size:14px">${G.esc(G.initials(name))}</span>`;
-      const handleUrl=G.socialUrl(profile.social_platform, profile.social_handle);
-      const handle=profile.social_handle
-        ? (handleUrl
-            ? `<a class="handle" href="${G.esc(handleUrl)}" target="_blank" rel="noopener noreferrer nofollow ugc">@${G.esc(String(profile.social_handle).replace(/^@+/,''))}</a>`
-            : `<span class="handle">@${G.esc(String(profile.social_handle).replace(/^@+/,''))}</span>`)
-        : '';
-      return `<div class="fan-row"><span class="rank-num">${i+1}</span><span class="avatar-sm">${avatar}</span><span class="fan-meta"><span class="fname">${G.esc(name)}</span>${handle}</span><span class="ftotal">${G.cents(f.total_cents)}</span></div>`;
-    }).join('');
+    else el.innerHTML=fans.map((f,i)=> `<div class="job-card" style="display:flex;justify-content:space-between;align-items:center"><span>#${i+1} <b>${f.users?.is_anonymous?'Anonymous':f.users?.display_name||'Unknown'}</b></span><b class="display" style="color:var(--gold)">${window.GOAT.cents(f.total_cents)}</b></div>`).join('');
   } catch(e) {
     console.warn('Fans load error:', e);
   }
@@ -115,16 +99,11 @@
     try{
       const {error}=await sb.rpc('place_bid',{p_person_id: person.id, p_amount_cents: amt});
       if(error) throw error;
-      person.total_cents=(person.total_cents||0)+amt;
-      document.getElementById('total').textContent=G.cents(person.total_cents);
-      upd();
-      await window.refreshBalance();
+      location.reload();
     }catch(e){
       alert(e.message.includes('insufficient')?'Insufficient credit — top up.':e.message);
       btn.disabled=false; btn.textContent='Back';
-      return;
     }
-    btn.disabled=false; btn.textContent='Back';
   });
 })();
 </script>

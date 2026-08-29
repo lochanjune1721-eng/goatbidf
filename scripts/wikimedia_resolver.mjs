@@ -5,7 +5,6 @@ import { createClient } from '@supabase/supabase-js';
 import fs from 'fs';
 import path from 'path';
 
-import { supabaseUrl, serviceKey, anonKey } from './env.mjs';
 // Read .env without external dependencies
 try {
   const envPath = path.resolve(process.cwd(), '.env');
@@ -25,8 +24,8 @@ try {
   }
 } catch (e) {}
 
-const SUPABASE_URL = supabaseUrl();
-const SUPABASE_SERVICE_ROLE_KEY = serviceKey();
+const SUPABASE_URL = process.env.SUPABASE_URL || "https://iuvmzlrnbwptgrbkdbbn.supabase.co";
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml1dm16bHJuYndwdGdyYmtkYmJuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NzU5NzcyOSwiZXhwIjoyMTAzMTczNzI5fQ.XX378u9ceV2zf8urOZoHN4wwRwlsEgkb1nJF9TG1DQU";
 
 const USER_AGENT = "GOATlolImageBot/1.0 (https://goat.lol; contact@goat.lol) NodeFetch/2.0";
 

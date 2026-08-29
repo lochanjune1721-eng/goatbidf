@@ -4,7 +4,6 @@ import { createClient } from '@supabase/supabase-js';
 import fs from 'fs';
 import path from 'path';
 
-import { supabaseUrl, serviceKey, anonKey } from './env.mjs';
 try {
   const envPath = path.resolve(process.cwd(), '.env');
   if (fs.existsSync(envPath)) {
@@ -20,8 +19,8 @@ try {
   }
 } catch (e) {}
 
-const SUPABASE_URL = supabaseUrl();
-const SERVICE_KEY = serviceKey();
+const SUPABASE_URL = process.env.SUPABASE_URL || "https://iuvmzlrnbwptgrbkdbbn.supabase.co";
+const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml1dm16bHJuYndwdGdyYmtkYmJuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NzU5NzcyOSwiZXhwIjoyMTAzMTczNzI5fQ.XX378u9ceV2zf8urOZoHN4wwRwlsEgkb1nJF9TG1DQU";
 
 const supa = createClient(SUPABASE_URL, SERVICE_KEY);
 const USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";

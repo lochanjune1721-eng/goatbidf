@@ -2,23 +2,11 @@
 import http from 'http';
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath, pathToFileURL } from 'url';
-import * as url from 'url';
+import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const PORT = Number(process.env.PORT) || 3000;
-
-// Local dev reads .env so /api/config behaves the same as it does on Vercel.
-for (const name of ['.env', '.env.local']) {
-  const envFile = path.join(__dirname, name);
-  if (!fs.existsSync(envFile)) continue;
-  for (const line of fs.readFileSync(envFile, 'utf8').split('\n')) {
-    const match = line.match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/);
-    if (!match || process.env[match[1]] !== undefined) continue;
-    process.env[match[1]] = (match[2] || '').trim().replace(/^["']|["']$/g, '');
-  }
-}
+const PORT = 3000;
 const CACHE_DIR = path.join(__dirname, '.cache', 'images');
 
 if (!fs.existsSync(CACHE_DIR)) {
@@ -175,52 +163,7 @@ const server = http.createServer(async (req, res) => {
     return res.end(svg);
   }
 
-  // 2. Serverless functions — the same files Vercel runs, so `npm run dev`
-  //    exercises /api/config, PayPal and admin exactly as production does.
-  if (pathname.startsWith('/api/')) {
-    const routes = {
-      '/api/config': 'api/config.js',
-      '/api/paypal/create-order': 'api/paypal-create-order.js',
-      '/api/paypal/capture-order': 'api/paypal-capture-order.js',
-      '/api/admin': 'api/admin.js',
-      '/api/resolve_image': 'api/resolve_image.js'
-    };
-    const file = routes[pathname] || (pathname.slice(1).endsWith('.js') ? pathname.slice(1) : null);
-    const full = file ? path.join(__dirname, file) : null;
-
-    if (!full || !fs.existsSync(full)) {
-      res.writeHead(404, { 'Content-Type': 'application/json' });
-      return res.end(JSON.stringify({ error: 'Not found' }));
-    }
-
-    // Collect the body, then adapt node's req/res to the Vercel handler shape.
-    const chunks = [];
-    for await (const chunk of req) chunks.push(chunk);
-    const raw = Buffer.concat(chunks).toString('utf8');
-    try { req.body = raw ? JSON.parse(raw) : {}; } catch { req.body = raw; }
-
-    res.status = (code) => { res.statusCode = code; return res; };
-    res.json = (payload) => {
-      if (!res.headersSent) res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify(payload));
-      return res;
-    };
-    res.setHeader = res.setHeader.bind(res);
-
-    try {
-      const mod = await import(url.pathToFileURL ? url.pathToFileURL(full).href : full);
-      await mod.default(req, res);
-    } catch (err) {
-      console.error('[dev] api error', pathname, err);
-      if (!res.writableEnded) {
-        res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: err.message }));
-      }
-    }
-    return;
-  }
-
-  // 3. Static File Serving
+  // 2. Static File Serving
   let filePath = path.join(__dirname, pathname === '/' ? 'index.html' : pathname);
   
   if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
