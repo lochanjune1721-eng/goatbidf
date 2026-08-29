@@ -71,12 +71,27 @@
 
 <script src="js/supabase.js"></script>
 <script src="js/optimized-image.js"></script>
-<script src="js/wiki-fallback.js"></script>
+<script src="js/boards-fallback.js"></script>
 <script>
 (async function () {
   const sb = window.supabaseClient;
   const G = window.GOAT;
   const $ = (id) => document.getElementById(id);
+
+  function singular(n) {
+    if (/[—–]/.test(n)) return n;                         // "Tennis — Men" stays intact
+    if (/men$/i.test(n)) return n.replace(/men$/i, 'man');
+    if (/ies$/i.test(n)) return n.replace(/ies$/i, 'y');
+    if (/(ss|ch|sh|x)es$/i.test(n)) return n.replace(/es$/i, '');
+    if (/ss$/i.test(n)) return n;
+    if (/s$/i.test(n)) return n.replace(/s$/i, '');
+    return n;
+  }
+  function boardTitle(name) {
+    const n = String(name || '').trim();
+    if (!n) return 'Greatest';
+    return /^greatest\b/i.test(n) ? n : 'Greatest ' + singular(n);
+  }
 
   const esc = (v) => String(v === null || v === undefined ? '' : v)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -120,12 +135,13 @@
   }
 
   if (!cats.length || !people.length) {
-    const fb = await window.WIKI_FALLBACK?.();
+    const fb = await window.BOARDS_FALLBACK?.() || await window.WIKI_FALLBACK?.();
     if (fb) {
       if (!cats.length) {
         cats = fb.categories.map((c, i) => ({
-          id: 'fallback-' + c.slug, slug: c.slug, name: c.name,
-          group_name: c.group, sort_order: i,
+          id: c.id || 'fallback-' + c.slug, slug: c.slug,
+          name: c.name || c.title, group_name: c.group_name || c.group,
+          sort_order: c.sort_order ?? i,
         }));
       }
       if (!people.length) {
@@ -133,7 +149,8 @@
         cats.forEach((c) => { idBySlug[c.slug] = c.id; });
         people = fb.people.map((p) => ({
           id: p.id, slug: p.slug, name: p.name, photo_path: p.photo_path,
-          total_cents: 0, category_id: idBySlug[p.category_slug] || cats[0].id,
+          total_cents: p.total_cents || 0,
+          category_id: p.category_id || idBySlug[p.category_slug] || cats[0].id,
           first_backed_at: null,
         }));
       }
@@ -259,7 +276,7 @@
 
     return `<article class="fight">
       <header class="fight-head">
-        <h3 class="display"><a href="category.html?slug=${encodeURIComponent(cat.slug)}">${esc(cat.name)}</a></h3>
+        <h3 class="display"><a href="category.html?slug=${encodeURIComponent(cat.slug)}">${esc(boardTitle(cat.name))}</a></h3>
         <span class="fight-tag">${esc(cat.group_name || '')}</span>
       </header>
       <div class="fight-body">
@@ -285,7 +302,7 @@
     return `<a class="board" href="category.html?slug=${encodeURIComponent(cat.slug)}">
       <span class="board-photo">${photo}</span>
       <span class="board-meta">
-        <span class="board-name">${esc(cat.name)}</span>
+        <span class="board-name">${esc(boardTitle(cat.name))}</span>
         <span class="board-sub">${esc(cat.group_name || '')} · ${list.length} ${list.length === 1 ? 'name' : 'names'}</span>
         <span class="board-lead">${leader ? esc(leader.name) : 'Unclaimed — $1 takes #1'}</span>
       </span>
