@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
-const supa=createClient('https://iuvmzlrnbwptgrbkdbbn.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml1dm16bHJuYndwdGdyYmtkYmJuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NzU5NzcyOSwiZXhwIjoyMTAzMTczNzI5fQ.XX378u9ceV2zf8urOZoHN4wwRwlsEgkb1nJF9TG1DQU');
+import { supabaseUrl, serviceKey, anonKey } from './scripts/env.mjs';
+const supa=createClient(supabaseUrl(),serviceKey());
 const {data: people, error}=await supa.from('people').select('id,name,photo_path').is('photo_path',null).limit(1660);
 console.log('to fetch',people.length);
 let done=0, noimg=0, failed=0;

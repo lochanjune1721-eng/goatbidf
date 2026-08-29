@@ -4,7 +4,6 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="referrer" content="no-referrer">
 <title>Category — GOAT.lol</title>
-<link rel="preconnect" href="https://iuvmzlrnbwptgrbkdbbn.supabase.co" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="css/style.css">
@@ -39,16 +38,20 @@
 <script src="js/wiki-fallback.js"></script>
 <script>
 (async function(){
-  const slug=window.GOAT.qs('slug')||'footballers';
+  const G=window.GOAT;
+  try{ await G.ready; }catch(e){ return; }
+  const slug=G.qs('slug')||'footballers';
   const sb=window.supabaseClient;
   const {data: cat}=await sb.from('categories').select('*').eq('slug',slug).maybeSingle();
   if(!cat){ document.getElementById('cat-title').textContent='Category not found'; return; }
-  document.getElementById('cat-title').textContent=cat.name;
+  document.getElementById('cat-title').textContent=cat.name;  // textContent is already safe
   document.title=cat.name+' — GOAT.lol';
   let people=[];
+  let page=0;
+  const PAGE_SIZE=25;
 
   async function fetchPeople(){
-    const {data}=await sb.from('people').select('*').eq('category_id', cat.id).order('total_cents',{ascending:false}).order('first_backed_at',{ascending:true}).limit(200);
+    const {data}=await sb.from('people').select('*').eq('category_id', cat.id).order('total_cents',{ascending:false}).order('first_backed_at',{ascending:true}).limit(1000);
     people=data||[];
     if(!people.length){
       const fb=await window.WIKI_FALLBACK?.();
@@ -62,7 +65,7 @@
 
   async function fetchFans(personIds){
     if(!personIds.length) return {};
-    const {data}=await sb.from('fan_totals').select('person_id,total_cents,users(display_name,is_anonymous)').in('person_id', personIds).order('total_cents',{ascending:false});
+    const {data}=await sb.from('fan_totals').select('person_id,total_cents,public_profiles(display_name,is_anonymous)').in('person_id', personIds).order('total_cents',{ascending:false});
     const map={};
     (data||[]).forEach(r=>{
       if(!map[r.person_id]) map[r.person_id]=[];
@@ -85,15 +88,21 @@
       board.innerHTML='<div class="empty">No one on this board yet. $1 takes #1.</div>';
       return;
     }
-    const fanMap=await fetchFans(people.map(p=>p.id));
+    const pageCount=Math.max(1, Math.ceil(people.length/PAGE_SIZE));
+    if(page>=pageCount) page=pageCount-1;
+    const start=page*PAGE_SIZE;
+    const slice=people.slice(start, start+PAGE_SIZE);
+
+    const fanMap=await fetchFans(slice.map(p=>p.id));
     board.innerHTML='';
 
-    people.forEach((p,i)=>{
+    slice.forEach((p,idx)=>{
+      const i=start+idx;
       const rank=i+1, cls=rankClass(rank);
-      const priority = i < 3 ? 'eager' : 'lazy';
+      const priority = idx < 3 ? 'eager' : 'lazy';
       const size = rank === 1 ? 280 : (rank === 2 ? 200 : (rank === 3 ? 160 : (rank <= 10 ? 100 : 64)));
       const fans=fanMap[p.id]||[];
-      const fanStr=fans.length? fans.map(f=> f.users?.is_anonymous? 'Anonymous': (f.users?.display_name||'Unknown')).join(' · ') : '—';
+      const fanStr=fans.length? fans.map(f=> G.esc(f.public_profiles?.display_name||'Someone')).join(' · ') : '—';
       const gap = rank>1 && people[0] ? ` · $${(((people[0].total_cents||0) - (p.total_cents||0))/100).toFixed(0)} behind #1` : '';
       const card=document.createElement('div'); card.className=`person-card ${cls}`;
 
@@ -109,9 +118,9 @@
         <div class="rank-badge">#${rank}</div>
         <div class="photo">${photoHtml}</div>
         <div class="body">
-          <div class="name display">${p.name}</div>
-          <div class="blurb">${p.blurb||''}</div>
-          <div class="total display">${window.GOAT.cents(p.total_cents||0)}</div>
+          <div class="name display">${G.esc(p.name)}</div>
+          <div class="blurb">${G.esc(p.blurb||'')}</div>
+          <div class="total display">${G.cents(p.total_cents||0)}</div>
           <div class="fans">Top fans: <b>${fanStr}</b>${gap}</div>
           <div class="back-row">
             <span class="stepper"><button data-dec>-</button><span data-amt>$1</span><button data-inc>+</button></span>
@@ -152,9 +161,42 @@
         }
       });
 
-      card.addEventListener('click', ev=>{ if(ev.target.closest('button') || ev.target.closest('.stepper')) return; location.href=`person.html?slug=${p.slug}`; });
+      card.addEventListener('click', ev=>{ if(ev.target.closest('button') || ev.target.closest('.stepper')) return; location.href=`person.html?slug=${encodeURIComponent(p.slug)}`; });
       board.appendChild(card);
     });
+
+    renderPagination(pageCount);
+  }
+
+  function renderPagination(pageCount){
+    const el=document.getElementById('pagination');
+    if(pageCount<=1){ el.innerHTML=''; return; }
+
+    const buttons=[];
+    const push=(label, target, active)=> buttons.push(
+      `<button type="button" data-page="${target}" ${active?'class="active" aria-current="page"':''} aria-label="Page ${target+1}">${label}</button>`
+    );
+
+    push('‹', Math.max(0, page-1), false);
+    // First, last, and a window around the current page.
+    const shown=new Set([0, pageCount-1, page-1, page, page+1]);
+    let lastDrawn=-1;
+    for(let i=0;i<pageCount;i++){
+      if(!shown.has(i) || i<0) continue;
+      if(lastDrawn>=0 && i-lastDrawn>1) buttons.push('<span class="hint" style="align-self:center">…</span>');
+      push(String(i+1), i, i===page);
+      lastDrawn=i;
+    }
+    push('›', Math.min(pageCount-1, page+1), false);
+
+    el.innerHTML=buttons.join('');
+    el.querySelectorAll('[data-page]').forEach(b=> b.addEventListener('click', async()=>{
+      const target=Number(b.dataset.page);
+      if(target===page) return;
+      page=target;
+      await render();
+      document.getElementById('cat-head').scrollIntoView({behavior:'smooth', block:'start'});
+    }));
   }
 
   document.getElementById('add-btn').addEventListener('click', async()=>{

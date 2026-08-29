@@ -1,53 +1,174 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
 <title>Admin — GOAT.lol</title>
 <link rel="stylesheet" href="css/style.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-<header class="topbar"><div class="topbar-inner"><div class="brand"><a href="index.html">GOAT<span>.lol</span></a><small style="color:var(--muted);font-size:11px">admin</small></div></div></header>
-<div class="container" style="max-width:900px;padding:20px">
+<header class="topbar"><div class="topbar-inner">
+  <div class="brand"><a href="index.html">GOAT<span>.lol</span></a>
+    <small style="color:var(--muted);font-size:11px">admin</small></div>
+</div></header>
+
+<div class="container" style="max-width:900px;padding:20px 20px 40px">
   <h1 class="display" style="font-size:28px">Admin</h1>
-  <p class="mono" style="font-size:12px;color:var(--muted)">Manage categories and people, swap photos, moderate — budget an evening, ~3 min/board.</p>
-  <div id="login-card" class="job-card" style="margin-top:12px">
-    <div class="field"><label>Password</label><input id="admin-pass" type="password" placeholder="ADMIN_PASSWORD"></div>
-    <button id="login-btn" class="btn-primary">Unlock</button>
-    <div id="login-msg" class="notice" style="display:none"></div>
+  <p class="hint">Manage people and photos. Every change is made on the server behind the password.</p>
+
+  <div id="login-card" class="job-card" style="margin-top:14px">
+    <div class="field">
+      <label for="admin-pass">Password</label>
+      <input id="admin-pass" type="password" placeholder="ADMIN_PASSWORD" autocomplete="current-password">
+    </div>
+    <p id="login-msg" class="notice" hidden></p>
+    <button id="login-btn" class="btn-primary" style="width:100%;margin-top:12px">Unlock</button>
   </div>
-  <div id="panel" style="display:none">
-    <div class="job-card" style="margin-top:12px"><h3 class="mono" style="font-size:11px;letter-spacing:.08em;text-transform:uppercase">Categories</h3><div id="cats"></div></div>
-    <div class="job-card" style="margin-top:12px"><h3 class="mono" style="font-size:11px;letter-spacing:.08em;text-transform:uppercase">People in category</h3><select id="cat-select"></select><div id="people" style="margin-top:10px"></div></div>
+
+  <div id="panel" hidden>
+    <div class="job-card" style="margin-top:14px">
+      <h3 class="hint" style="letter-spacing:.08em;text-transform:uppercase">At a glance</h3>
+      <div id="stats" class="fans-stats" style="margin-top:10px"></div>
+    </div>
+
+    <div class="job-card" style="margin-top:14px">
+      <h3 class="hint" style="letter-spacing:.08em;text-transform:uppercase">Categories</h3>
+      <div id="cats" style="margin-top:8px"></div>
+    </div>
+
+    <div class="job-card" style="margin-top:14px">
+      <h3 class="hint" style="letter-spacing:.08em;text-transform:uppercase">People in category</h3>
+      <div class="field" style="margin-top:8px">
+        <label for="cat-select">Category</label>
+        <select id="cat-select"></select>
+      </div>
+      <p id="people-msg" class="notice" hidden></p>
+      <div id="people" style="margin-top:12px"></div>
+    </div>
   </div>
 </div>
+
 <script src="js/supabase.js"></script>
+<script src="js/optimized-image.js"></script>
 <script>
-(async function(){
-  const sb=window.supabaseClient;
-  let pw='';
-  document.getElementById('login-btn').addEventListener('click', async()=>{
-    pw=document.getElementById('admin-pass').value;
-    const r=await fetch('/api/admin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:pw})});
-    const j=await r.json(); if(r.ok&&j.ok){ document.getElementById('login-card').style.display='none'; document.getElementById('panel').style.display='block'; load(); } else { const m=document.getElementById('login-msg'); m.textContent=j.error||'Unauthorized'; m.className='notice error'; m.style.display='block'; }
-  });
-  async function load(){
-    const {data: cats}=await sb.from('categories').select('*').order('sort_order');
-    document.getElementById('cats').innerHTML=cats.map(c=> `<span class="mono" style="font-size:11px;border:1px solid var(--border);padding:4px 8px;border-radius:999px;margin:2px;display:inline-block">${c.name} (${c.group_name})</span>`).join('');
-    const sel=document.getElementById('cat-select'); sel.innerHTML=cats.map(c=> `<option value="${c.id}">${c.group_name} — ${c.name}</option>`).join('');
-    async function loadPeople(){
-      const cid=sel.value;
-      const {data}=await sb.from('people').select('*').eq('category_id', cid).order('total_cents',{ascending:false});
-      const el=document.getElementById('people');
-      if(!data||!data.length) el.innerHTML='<div class="mono" style="color:var(--muted)">Empty — $1 will take #1.</div>';
-      else el.innerHTML=data.map(p=> {
-        const photoUrl = window.GOAT.getPhotoUrl(p.photo_path);
-        const imgHtml = photoUrl ? `<img src="${photoUrl}" style="width:48px;height:48px;border-radius:12px;object-fit:cover;filter:saturate(.85) contrast(1.05)" onerror="this.outerHTML='<div style=\'width:48px;height:48px;border-radius:12px;background:var(--surface-2);color:var(--gold);display:grid;place-items:center;font-weight:bold\'>${window.GOAT.initials(p.name)}</div>'">` : `<div style="width:48px;height:48px;border-radius:12px;background:var(--surface-2);color:var(--gold);display:grid;place-items:center;font-weight:bold">${window.GOAT.initials(p.name)}</div>`;
-        return `<div style="display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)">${imgHtml}<div style="flex:1"><b>${p.name}</b> <span class="mono" style="font-size:11px;color:var(--muted)">${p.blurb||''}</span><div class="mono" style="font-size:11px;color:var(--muted)">${window.GOAT.cents(p.total_cents)} · ${p.photo_license||''}</div></div><button class="btn-ghost" data-del="${p.id}" style="font-size:12px">Delete</button></div>`;
-      }).join('') + `<div style="margin-top:10px"><input id="swap-slug" placeholder="slug to delete/swap" style="height:36px;border-radius:999px;border:1px solid var(--border);background:var(--bg);color:var(--ink);padding:0 12px;font-size:12px"></div>`;
-      el.querySelectorAll('[data-del]').forEach(b=> b.addEventListener('click', async()=>{ if(!confirm('Delete?')) return; await sb.from('people').delete().eq('id', b.dataset.del); loadPeople(); }));
+(async function () {
+  const G = window.GOAT;
+  try { await G.ready; } catch (e) { return; }
+  const sb = window.supabaseClient;
+  const $ = (id) => document.getElementById(id);
+
+  let password = '';
+
+  function msg(el, text, kind) {
+    el.textContent = text;
+    el.className = 'notice ' + (kind || '');
+    el.hidden = !text;
+  }
+
+  async function api(payload) {
+    const response = await fetch('/api/admin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password, ...payload }),
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || 'That action failed.');
+    return data;
+  }
+
+  $('login-btn').addEventListener('click', async () => {
+    password = $('admin-pass').value;
+    const button = $('login-btn');
+    button.disabled = true; button.textContent = 'Checking…';
+    try {
+      await api({});
+      $('login-card').hidden = true;
+      $('panel').hidden = false;
+      await load();
+    } catch (err) {
+      msg($('login-msg'), err.message, 'error');
+    } finally {
+      button.disabled = false; button.textContent = 'Unlock';
     }
-    sel.addEventListener('change', loadPeople); loadPeople();
+  });
+
+  $('admin-pass').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') $('login-btn').click();
+  });
+
+  async function load() {
+    try {
+      const stats = await api({ action: 'stats' });
+      $('stats').innerHTML = `
+        <div><dt>Categories</dt><dd>${G.esc(stats.categories)}</dd></div>
+        <div><dt>People</dt><dd>${G.esc(stats.people)}</dd></div>
+        <div><dt>Missing photos</dt><dd>${G.esc(stats.missingPhotos)}</dd></div>`;
+    } catch (err) { /* stats are nice to have, not essential */ }
+
+    // Categories are public, so they can be read with the anon key.
+    const { data: cats } = await sb.from('categories').select('*').order('sort_order');
+    if (!cats || !cats.length) return;
+
+    $('cats').innerHTML = cats.map((c) =>
+      `<span class="rank-chip" style="margin:2px;display:inline-block">${G.esc(c.name)}
+        <span class="muted">${G.esc(c.group_name)}</span></span>`).join('');
+
+    const select = $('cat-select');
+    select.innerHTML = cats.map((c) =>
+      `<option value="${G.escAttr(c.id)}">${G.esc(c.group_name)} — ${G.esc(c.name)}</option>`).join('');
+
+    select.addEventListener('change', loadPeople);
+    await loadPeople();
+  }
+
+  async function loadPeople() {
+    const el = $('people');
+    el.innerHTML = '<p class="hint">Loading…</p>';
+    msg($('people-msg'), '', '');
+
+    let people;
+    try {
+      ({ people } = await api({ action: 'list_people', category_id: $('cat-select').value }));
+    } catch (err) {
+      el.innerHTML = '';
+      return msg($('people-msg'), err.message, 'error');
+    }
+
+    if (!people.length) {
+      el.innerHTML = '<div class="empty">Empty — $1 will take #1.</div>';
+      return;
+    }
+
+    el.innerHTML = people.map((p) => `
+      <div class="fan-row" data-row="${G.escAttr(p.id)}">
+        <span class="avatar-sm">${window.OptimizedImage.render({
+          photoPath: p.photo_path, name: p.name, size: 44,
+        })}</span>
+        <span class="fan-meta">
+          <span class="fname">${G.esc(p.name)}</span>
+          <span class="ftag">${G.esc(p.blurb || '')}</span>
+          <span class="hint">${G.esc(G.cents(p.total_cents))}${p.photo_license ? ' · ' + G.esc(p.photo_license) : ''}${p.photo_path ? '' : ' · no photo'}</span>
+        </span>
+        <button class="btn-ghost" data-del="${G.escAttr(p.id)}" style="font-size:12px">Delete</button>
+      </div>`).join('');
+
+    el.querySelectorAll('[data-del]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        const row = button.closest('[data-row]');
+        const name = row?.querySelector('.fname')?.textContent?.trim() || 'this person';
+        if (!confirm(`Delete ${name}? This also removes their bids and fan totals.`)) return;
+        button.disabled = true; button.textContent = '…';
+        try {
+          await api({ action: 'delete_person', id: button.dataset.del });
+          row.remove();
+        } catch (err) {
+          msg($('people-msg'), err.message, 'error');
+          button.disabled = false; button.textContent = 'Delete';
+        }
+      });
+    });
   }
 })();
 </script>

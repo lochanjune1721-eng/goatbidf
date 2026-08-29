@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import fs from 'fs';
-const supa=createClient('https://iuvmzlrnbwptgrbkdbbn.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml1dm16bHJuYndwdGdyYmtkYmJuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NzU5NzcyOSwiZXhwIjoyMTAzMTczNzI5fQ.XX378u9ceV2zf8urOZoHN4wwRwlsEgkb1nJF9TG1DQU');
+import { supabaseUrl, serviceKey, anonKey } from './scripts/env.mjs';
+const supa=createClient(supabaseUrl(),serviceKey());
 const curated=JSON.parse(fs.readFileSync('data/curated.json','utf8'));
 const {data: cats}=await supa.from('categories').select('id,slug');
 const idBySlug=Object.fromEntries(cats.map(c=>[c.slug,c.id]));

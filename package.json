@@ -1,10 +1,19 @@
 {
-  "name": "outcharity",
+  "name": "goat-lol",
   "private": true,
   "type": "module",
+  "description": "GOAT.lol — pay-to-rank leaderboards for the greatest of all time.",
+  "scripts": {
+    "dev": "node server.mjs",
+    "check": "node scripts/check.mjs"
+  },
   "dependencies": {
-    "@supabase/supabase-js": "^2.39.0",
-    "sharp": "^0.35.3",
-    "stripe": "^14.0.0"
+    "@supabase/supabase-js": "^2.39.0"
+  },
+  "devDependencies": {
+    "sharp": "^0.34.4"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }

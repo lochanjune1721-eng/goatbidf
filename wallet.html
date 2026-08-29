@@ -1,7 +1,8 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Wallet — GOAT.lol</title>
 <link rel="stylesheet" href="css/style.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -9,84 +10,290 @@
 <body>
 <header class="topbar"><div class="topbar-inner">
   <div class="brand"><a href="index.html">GOAT<span>.lol</span></a></div>
-  <nav class="topnav"><a href="index.html">Categories</a><a href="fans.html">Fans</a><span id="balance-pill" class="balance-pill"></span></nav>
+  <nav class="topnav">
+    <a href="index.html">Categories</a>
+    <a href="fans.html">Fans</a>
+    <span id="balance-pill" class="balance-pill"></span>
+  </nav>
 </div></header>
-<div class="container" style="max-width:640px;padding:20px">
-  <div id="auth-card" class="job-card">
+
+<div class="container" style="max-width:640px;padding:20px 20px 40px">
+
+  <div id="auth-card" class="job-card" hidden>
     <h2 class="display" style="font-size:22px">Sign in to hold a balance</h2>
-    <p class="mono" style="font-size:12px;color:var(--muted);margin:6px 0">Email magic-link via Supabase Auth. Display name or X handle — that's what appears on fan leaderboards.</p>
-    <div class="field"><label>Email</label><input id="email" type="email" placeholder="you@example.com"></div>
-    <div class="field"><label>Display name or @handle</label><input id="display-name" placeholder="e.g. Alex or @alex"></div>
-    <label style="display:flex;gap:8px;align-items:center;font-size:13px;margin:8px 0"><input type="checkbox" id="anon"> Stay anonymous</label>
-    <button id="send-link" class="btn-primary">Send magic link →</button>
-    <div id="auth-msg" class="notice" style="display:none"></div>
+    <p class="hint">
+      Email magic link. Your display name is what appears on the Greatest Fan board — you can
+      change it, add a photo and a social handle any time on the
+      <a href="fans.html" style="color:var(--gold)">Fans page</a>.
+    </p>
+    <div class="field" style="margin-top:14px">
+      <label for="email">Email</label>
+      <input id="email" type="email" placeholder="you@example.com" autocomplete="email">
+    </div>
+    <div class="field" style="margin-top:12px">
+      <label for="display-name">Display name</label>
+      <input id="display-name" placeholder="e.g. Alex" autocomplete="nickname" maxlength="60">
+    </div>
+    <label class="check"><input type="checkbox" id="anon"><span>Stay anonymous on public boards</span></label>
+    <p id="auth-msg" class="notice" hidden></p>
+    <button id="send-link" class="btn-primary" style="width:100%;margin-top:14px">Send magic link →</button>
   </div>
 
-  <div id="wallet-card" style="display:none">
+  <div id="wallet-card" hidden>
     <div class="job-card" style="text-align:center">
-      <div class="mono" style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Balance</div>
-      <div id="balance-big" class="display" style="font-size:48px;color:var(--gold)">$0</div>
-      <div class="mono" style="font-size:12px;color:var(--muted)">Credit never expires and is non-refundable.</div>
-      <div style="display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap">
-        <button class="btn-primary" style="width:auto" data-topup="500">+$5</button>
-        <button class="btn-primary" style="width:auto" data-topup="1000">+$10</button>
-        <button class="btn-primary" style="width:auto" data-topup="2500">+$25</button>
-        <button class="btn-primary" style="width:auto" data-topup="5000">+$50</button>
-        <button class="btn-primary" style="width:auto" data-topup="10000">+$100</button>
+      <div class="hint" style="letter-spacing:.08em;text-transform:uppercase">Balance</div>
+      <div id="balance-big" class="display" style="font-size:48px;color:var(--gold);line-height:1.1">$0</div>
+      <p class="hint">Credit never expires and is non-refundable.</p>
+
+      <div id="topup-block" style="margin-top:18px">
+        <div class="topup-choices" role="group" aria-label="Choose a top-up amount">
+          <button type="button" class="topup-chip" data-topup="500">$5</button>
+          <button type="button" class="topup-chip is-active" data-topup="1000">$10</button>
+          <button type="button" class="topup-chip" data-topup="2500">$25</button>
+          <button type="button" class="topup-chip" data-topup="5000">$50</button>
+          <button type="button" class="topup-chip" data-topup="10000">$100</button>
+        </div>
+
+        <p id="topup-msg" class="notice" hidden></p>
+        <div id="paypal-buttons" style="margin-top:14px;min-height:52px"></div>
+        <p id="payments-off" class="notice" hidden></p>
+        <p class="hint">Pay by PayPal or card. Credit lands the moment the payment clears.</p>
       </div>
-      <div class="mono" style="font-size:11px;color:var(--muted);margin-top:8px">Dodo charges 4% + $0.40 once per top-up — not per $1 bid. Top up $25 to make $1 bids cost 5.6% in fees, not 44%.</div>
-      <button id="logout" class="btn-ghost" style="margin-top:12px">Sign out</button>
+
+      <button id="logout" class="btn-ghost" style="margin-top:16px">Sign out</button>
     </div>
-    <h3 style="margin:16px 0 8px;font-size:16px">History — every bid with person, amount, date</h3>
+
+    <h3 style="margin:20px 0 10px;font-size:16px">History</h3>
     <div id="history" class="list"></div>
   </div>
 </div>
+
+<footer class="footer">GOAT.lol — pay to rank. <a href="rules.html">Rules</a> · <a href="fans.html">Fans</a></footer>
+
 <script src="js/supabase.js"></script>
 <script>
-(async function(){
-  const sb=window.supabaseClient;
-  const authCard=document.getElementById('auth-card'), walletCard=document.getElementById('wallet-card');
-  const emailInput=document.getElementById('email'), nameInput=document.getElementById('display-name'), anonInput=document.getElementById('anon');
-  const msg=document.getElementById('auth-msg');
+(async function () {
+  const G = window.GOAT;
+  try { await G.ready; } catch (e) { return; }
+  const sb = window.supabaseClient;
+  const $ = (id) => document.getElementById(id);
 
-  function show(el,t,k){ el.textContent=t; el.className='notice '+(k||''); el.style.display='block'; }
+  const authCard = $('auth-card'), walletCard = $('wallet-card');
+  let selectedCents = 1000;
+  let paypalRendered = false;
 
-  async function check(){
-    const {data:{user}}=await sb.auth.getUser();
-    if(user){
-      authCard.style.display='none'; walletCard.style.display='block';
-      const {data: u}=await sb.from('users').select('*').eq('id', user.id).maybeSingle();
-      const bal=u? u.balance_cents:0;
-      document.getElementById('balance-big').textContent='$'+(bal/100).toFixed(0);
-      loadHistory(user.id);
+  function msg(el, text, kind) {
+    el.textContent = text;
+    el.className = 'notice ' + (kind || '');
+    el.hidden = !text;
+  }
+
+  // ---------------------------------------------------------------- session
+
+  async function check() {
+    const { data: { user } } = await sb.auth.getUser();
+    const signedIn = Boolean(user);
+    authCard.hidden = signedIn;
+    walletCard.hidden = !signedIn;
+    if (!signedIn) return;
+
+    const row = await window.ensureUserRow();
+    $('balance-big').textContent = G.cents(row ? row.balance_cents : 0);
+    await loadHistory(user.id);
+    await mountPayPal();
+  }
+
+  $('send-link').addEventListener('click', async () => {
+    const email = $('email').value.trim();
+    const name = $('display-name').value.trim();
+    if (!email) return msg($('auth-msg'), 'Enter your email address.', 'error');
+
+    const button = $('send-link');
+    button.disabled = true; button.textContent = 'Sending…';
+    try {
+      const { error } = await sb.auth.signInWithOtp({
+        email,
+        options: {
+          data: { display_name: name || email.split('@')[0], is_anonymous: $('anon').checked },
+          emailRedirectTo: location.origin + '/wallet.html',
+        },
+      });
+      if (error) throw error;
+      msg($('auth-msg'), 'Magic link sent — check your email.', 'ok');
+    } catch (err) {
+      msg($('auth-msg'), err.message || 'That link could not be sent.', 'error');
+    } finally {
+      button.disabled = false; button.textContent = 'Send magic link →';
+    }
+  });
+
+  $('logout').addEventListener('click', async () => {
+    await sb.auth.signOut();
+    location.reload();
+  });
+
+  // ------------------------------------------------------------- amount
+
+  document.querySelectorAll('.topup-chip').forEach((chip) => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.topup-chip').forEach((c) => c.classList.remove('is-active'));
+      chip.classList.add('is-active');
+      selectedCents = Number(chip.dataset.topup);
+      msg($('topup-msg'), '', '');
+    });
+  });
+
+  // ------------------------------------------------------------- PayPal
+
+  function loadPayPalSdk(clientId, currency) {
+    return new Promise((resolve, reject) => {
+      if (window.paypal) return resolve();
+      const script = document.createElement('script');
+      const params = new URLSearchParams({
+        'client-id': clientId,
+        currency,
+        intent: 'capture',
+        components: 'buttons',
+      });
+      script.src = `https://www.paypal.com/sdk/js?${params.toString()}`;
+      script.async = true;
+      script.onload = resolve;
+      script.onerror = () => reject(new Error('PayPal could not be reached.'));
+      document.head.appendChild(script);
+    });
+  }
+
+  /** The access token proves who is topping up; the server never trusts a user id in the body. */
+  async function authHeader() {
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) throw new Error('Your session expired. Sign in again.');
+    return { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` };
+  }
+
+  async function mountPayPal() {
+    if (paypalRendered) return;
+
+    if (!G.PAYMENTS_ENABLED || !G.PAYPAL_CLIENT_ID) {
+      $('paypal-buttons').hidden = true;
+      msg($('payments-off'),
+        'Payments are not switched on yet. Add PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET in your '
+        + 'Vercel project settings, then redeploy.', 'error');
+      return;
+    }
+
+    try {
+      await loadPayPalSdk(G.PAYPAL_CLIENT_ID, G.CURRENCY);
+    } catch (err) {
+      msg($('payments-off'), 'PayPal could not be loaded. Check your connection and refresh.', 'error');
+      return;
+    }
+
+    let topupId = null;
+
+    window.paypal.Buttons({
+      style: { layout: 'vertical', color: 'gold', shape: 'pill', label: 'pay', height: 48 },
+
+      createOrder: async () => {
+        msg($('topup-msg'), '', '');
+        const response = await fetch('/api/paypal/create-order', {
+          method: 'POST',
+          headers: await authHeader(),
+          body: JSON.stringify({ amount_cents: selectedCents }),
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Could not start that payment.');
+        topupId = data.topupId;
+        return data.orderId;
+      },
+
+      onApprove: async (data) => {
+        msg($('topup-msg'), 'Confirming your payment…', '');
+        const response = await fetch('/api/paypal/capture-order', {
+          method: 'POST',
+          headers: await authHeader(),
+          body: JSON.stringify({ orderId: data.orderID, topupId }),
+        });
+        const result = await response.json();
+        if (!response.ok) {
+          msg($('topup-msg'), result.error || 'That payment could not be confirmed.', 'error');
+          return;
+        }
+        msg($('topup-msg'),
+          `Added ${G.cents(selectedCents)} of credit. Go and back someone.`, 'ok');
+        $('balance-big').textContent = G.cents(result.balance_cents ?? 0);
+        await window.refreshBalance();
+        const { data: { user } } = await sb.auth.getUser();
+        if (user) await loadHistory(user.id);
+      },
+
+      onCancel: () => msg($('topup-msg'), 'Payment cancelled — nothing was charged.', ''),
+
+      onError: (err) => {
+        console.error('[goat] paypal error', err);
+        msg($('topup-msg'), 'PayPal could not complete that payment. Please try again.', 'error');
+      },
+    }).render('#paypal-buttons');
+
+    paypalRendered = true;
+
+    if (G.PAYPAL_ENV === 'sandbox') {
+      const note = document.createElement('p');
+      note.className = 'hint';
+      note.textContent = 'PayPal is in sandbox mode — test payments only. Set PAYPAL_ENV=live to take real money.';
+      $('topup-block').appendChild(note);
     }
   }
+
+  // ------------------------------------------------------------ history
+
+  async function loadHistory(userId) {
+    const el = $('history');
+    const [bidsRes, topupsRes] = await Promise.all([
+      sb.from('bids').select('amount_cents,created_at,people(name,slug)')
+        .eq('user_id', userId).order('created_at', { ascending: false }).limit(60),
+      sb.from('topups').select('amount_cents,created_at,status')
+        .eq('user_id', userId).eq('status', 'confirmed')
+        .order('created_at', { ascending: false }).limit(30),
+    ]);
+
+    const entries = [
+      ...(bidsRes.data || []).map((b) => ({
+        kind: 'bid', when: b.created_at, cents: b.amount_cents,
+        name: b.people?.name || 'Someone', slug: b.people?.slug || '',
+      })),
+      ...(topupsRes.data || []).map((t) => ({
+        kind: 'topup', when: t.created_at, cents: t.amount_cents,
+      })),
+    ].sort((a, b) => String(b.when).localeCompare(String(a.when)));
+
+    if (!entries.length) {
+      el.innerHTML = '<div class="empty">Nothing yet. Add credit, then back someone.</div>';
+      return;
+    }
+
+    el.innerHTML = entries.map((entry) => {
+      if (entry.kind === 'topup') {
+        return `<div class="job-card" style="display:flex;justify-content:space-between;gap:10px;align-items:center">
+          <span>Credit added <span class="hint" style="display:inline">${G.esc(G.fmtAgo(entry.when))}</span></span>
+          <b class="display" style="color:var(--live)">+${G.esc(G.cents(entry.cents))}</b>
+        </div>`;
+      }
+      const link = entry.slug
+        ? `<a href="person.html?slug=${encodeURIComponent(entry.slug)}" style="color:var(--gold)">${G.esc(entry.name)}</a>`
+        : G.esc(entry.name);
+      return `<div class="job-card" style="display:flex;justify-content:space-between;gap:10px;align-items:center">
+        <span>${link} <span class="hint" style="display:inline">${G.esc(G.fmtAgo(entry.when))}</span></span>
+        <b class="display">−${G.esc(G.cents(entry.cents))}</b>
+      </div>`;
+    }).join('');
+  }
+
+  // Returning from a PayPal redirect flow.
+  if (G.qs('topup') === 'success') msg($('topup-msg'), 'Payment received — your credit is below.', 'ok');
+  if (G.qs('topup') === 'cancel') msg($('topup-msg'), 'Payment cancelled — nothing was charged.', '');
+
   await check();
   sb.auth.onAuthStateChange(check);
-
-  document.getElementById('send-link').addEventListener('click', async()=>{
-    const email=emailInput.value.trim(), name=nameInput.value.trim();
-    if(!email) return show(msg,'Enter email','error');
-    const {error}=await sb.auth.signInWithOtp({email, options:{data:{display_name: name||email.split('@')[0], is_anonymous: anonInput.checked}, emailRedirectTo: location.origin+'/wallet.html'}});
-    if(error) show(msg, error.message,'error'); else show(msg,'Magic link sent — check email.','ok');
-  });
-  document.getElementById('logout').addEventListener('click', async()=>{ await sb.auth.signOut(); location.reload(); });
-
-  document.querySelectorAll('[data-topup]').forEach(b=> b.addEventListener('click', async()=>{
-    const cents=Number(b.dataset.topup);
-    const {data:{user}}=await sb.auth.getUser();
-    if(!user) return alert('Sign in first');
-    const r=await fetch('/api/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount_cents: cents})});
-    const j=await r.json(); if(!r.ok) return alert(j.error||'Checkout failed');
-    if(j.url) location.href=j.url; else alert('Top-up created');
-  }));
-
-  async function loadHistory(uid){
-    const {data}=await sb.from('bids').select('amount_cents,created_at,people(name,slug)').eq('user_id', uid).order('created_at',{ascending:false}).limit(100);
-    const el=document.getElementById('history');
-    if(!data||!data.length){ el.innerHTML='<div class="empty">No bids yet. Back someone from a category.</div>'; return; }
-    el.innerHTML=data.map(b=>`<div class="job-card" style="display:flex;justify-content:space-between;gap:10px"><span><a href="person.html?slug=${b.people.slug}" style="color:var(--gold)">${b.people.name}</a> <span class="mono" style="font-size:12px;color:var(--muted)">${window.GOAT.fmtAgo(b.created_at)}</span></span><b class="display">${window.GOAT.cents(b.amount_cents)}</b></div>`).join('');
-  }
 })();
 </script>
 </body>

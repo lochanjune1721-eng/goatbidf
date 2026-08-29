@@ -1,12 +1,26 @@
 {
   "functions": {
-    "api/checkout.js": { "includeFiles": "api/**" },
-    "api/payment-done.js": { "includeFiles": "api/**" },
-    "api/admin.js": { "includeFiles": "api/**" }
+    "api/config.js": { "includeFiles": "lib/**" },
+    "api/paypal-create-order.js": { "includeFiles": "lib/**" },
+    "api/paypal-capture-order.js": { "includeFiles": "lib/**" },
+    "api/admin.js": { "includeFiles": "lib/**" },
+    "api/resolve_image.js": { "includeFiles": "{lib,scripts}/**" }
   },
   "rewrites": [
-    { "source": "/api/checkout", "destination": "/api/checkout.js" },
-    { "source": "/api/payment-done", "destination": "/api/payment-done.js" },
-    { "source": "/api/admin", "destination": "/api/admin.js" }
+    { "source": "/api/config", "destination": "/api/config.js" },
+    { "source": "/api/paypal/create-order", "destination": "/api/paypal-create-order.js" },
+    { "source": "/api/paypal/capture-order", "destination": "/api/paypal-capture-order.js" },
+    { "source": "/api/admin", "destination": "/api/admin.js" },
+    { "source": "/api/resolve_image", "destination": "/api/resolve_image.js" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "no-referrer" },
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" }
+      ]
+    }
   ]
 }

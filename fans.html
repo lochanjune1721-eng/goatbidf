@@ -1,26 +1,535 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Fans — GOAT.lol</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="referrer" content="no-referrer">
+<title>Greatest Fan of All Time — GOAT.lol</title>
+<meta name="description" content="The board that ranks the backers. Put up your picture, your name and your social handle, back who you believe in, and climb.">
 <link rel="stylesheet" href="css/style.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-<header class="topbar"><div class="topbar-inner"><div class="brand"><a href="index.html">GOAT<span>.lol</span></a></div><nav class="topnav"><a href="index.html">Categories</a><a href="fans.html" class="active">Fans</a><span id="balance-pill" class="balance-pill"></span></nav></div></header>
-<div class="container" style="padding:20px">
-  <h1 class="display" style="font-size:32px">Top backers</h1>
-  <p class="mono" style="font-size:12px;color:var(--muted)">Global leaderboard of the biggest backers — handles and totals. Status people will chase.</p>
-  <div id="fans" class="list" style="margin-top:12px"></div>
+<header class="topbar"><div class="topbar-inner">
+  <div class="brand"><a href="index.html">GOAT<span>.lol</span></a></div>
+  <nav class="topnav">
+    <a href="index.html">Categories</a>
+    <a href="fans.html" class="active">Fans</a>
+    <a href="about.html" class="hide-xs">About</a>
+    <span id="balance-pill" class="balance-pill"></span>
+  </nav>
+</div></header>
+
+<div class="container fans-page">
+
+  <!-- ------------------------------------------------------------- hero -->
+  <section class="fans-hero">
+    <span class="eyebrow">The board that ranks the backers</span>
+    <h1 class="display">Greatest Fan<span>of All Time</span></h1>
+    <p class="lede">
+      Anyone can have an opinion. Put your picture, your name and your handle on the board,
+      back who you believe in, and let the money do the arguing.
+    </p>
+    <dl class="fans-stats">
+      <div><dt>Top backer</dt><dd id="stat-top">—</dd></div>
+      <div><dt>Backers</dt><dd id="stat-count">—</dd></div>
+      <div><dt>Total backed</dt><dd id="stat-total">—</dd></div>
+    </dl>
+  </section>
+
+  <div class="fans-layout">
+
+    <!-- ------------------------------------------------------- your card -->
+    <aside class="fans-side">
+
+      <div class="panel" id="profile-panel">
+        <h2 class="panel-title">Your place on the board</h2>
+
+        <div id="signed-out" class="signed-out" hidden>
+          <p>Sign in to put your picture and name on the board.</p>
+          <a href="wallet.html" class="btn-primary">Sign in</a>
+        </div>
+
+        <form id="profile-form" hidden novalidate>
+          <div class="avatar-row">
+            <span id="avatar-preview" class="avatar-lg"></span>
+            <div class="avatar-actions">
+              <input id="photo-input" type="file" accept="image/*" class="visually-hidden">
+              <button type="button" id="photo-btn" class="btn-ghost">Choose photo</button>
+              <button type="button" id="photo-clear" class="btn-ghost" hidden>Remove</button>
+              <p class="hint">Optional. We show your initials if you skip it.</p>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="p-name">Your name</label>
+            <input id="p-name" maxlength="60" placeholder="Alex Moreno" autocomplete="name">
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="p-platform">Platform</label>
+              <select id="p-platform">
+                <option value="instagram">Instagram</option>
+                <option value="x">X</option>
+                <option value="tiktok">TikTok</option>
+                <option value="youtube">YouTube</option>
+                <option value="facebook">Facebook</option>
+                <option value="snapchat">Snapchat</option>
+                <option value="twitch">Twitch</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="p-handle">Your username</label>
+              <div class="handle-input">
+                <span aria-hidden="true">@</span>
+                <input id="p-handle" maxlength="60" placeholder="yourname"
+                       autocapitalize="none" spellcheck="false" autocomplete="username">
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="p-tagline">Why you back who you back <span class="muted">(optional)</span></label>
+            <textarea id="p-tagline" rows="2" maxlength="180"
+                      placeholder="Season ticket since 1998. Never missed a home game."></textarea>
+            <p class="hint"><span id="tagline-count">0</span>/180</p>
+          </div>
+
+          <label class="check">
+            <input type="checkbox" id="p-anon">
+            <span>Stay anonymous — hides my name, photo and handle from the board</span>
+          </label>
+
+          <p id="profile-msg" class="notice" hidden></p>
+          <button type="submit" id="profile-save" class="btn-primary">Save my profile</button>
+        </form>
+      </div>
+
+      <!-- ------------------------------------------------------ place a bid -->
+      <div class="panel" id="bid-panel" hidden>
+        <h2 class="panel-title">Back someone — climb the board</h2>
+        <p class="panel-sub">
+          Your rank here is the total you have backed. Every dollar you put on someone moves you up.
+        </p>
+
+        <div class="field">
+          <label for="bid-search">Who are you backing?</label>
+          <input id="bid-search" placeholder="Search a name…" autocomplete="off"
+                 role="combobox" aria-expanded="false" aria-controls="bid-results">
+          <div id="bid-results" class="search-results" role="listbox" hidden></div>
+        </div>
+
+        <div id="bid-target" class="bid-target" hidden></div>
+
+        <div class="field">
+          <label for="bid-amount">Amount</label>
+          <div class="amount-row">
+            <button type="button" id="amt-dec" aria-label="Decrease amount">−</button>
+            <input id="bid-amount" type="number" min="1" step="1" value="1" inputmode="numeric">
+            <button type="button" id="amt-inc" aria-label="Increase amount">+</button>
+          </div>
+          <p class="hint">Whole dollars, $1 minimum. Taking #1 costs at least $5 more than the leader.</p>
+        </div>
+
+        <p id="bid-msg" class="notice" hidden></p>
+        <button type="button" id="bid-go" class="btn-primary" disabled>Back them</button>
+        <p class="hint" id="bid-balance"></p>
+      </div>
+
+    </aside>
+
+    <!-- ---------------------------------------------------------- board -->
+    <section class="fans-board">
+      <div class="board-head">
+        <h2 class="display">The board</h2>
+        <span id="board-note" class="muted"></span>
+      </div>
+
+      <div id="podium" class="podium"></div>
+      <ol id="fans-list" class="fans-list"></ol>
+      <p id="board-empty" class="empty" hidden>No backers yet. The first dollar takes the crown.</p>
+
+      <p class="fineprint">
+        Ranked by total backed. Names, photos and handles here are put up by the people they
+        belong to and are public — tick &ldquo;stay anonymous&rdquo; to be listed without them.
+      </p>
+    </section>
+  </div>
 </div>
+
+<footer class="footer">GOAT.lol — pay to rank. <a href="rules.html">Rules</a> · <a href="wallet.html">Wallet</a></footer>
+
 <script src="js/supabase.js"></script>
+<script src="js/optimized-image.js"></script>
 <script>
-(async function(){
-  const sb=window.supabaseClient;
-  const {data: users}=await sb.from('users').select('display_name,is_anonymous,total_spent_cents').order('total_spent_cents',{ascending:false}).limit(100);
-  const el=document.getElementById('fans');
-  if(!users||!users.length){ el.innerHTML='<div class="empty">No backers yet.</div>'; return; }
-  el.innerHTML=users.map((u,i)=> `<div class="job-card" style="display:flex;justify-content:space-between;align-items:center"><span>#${i+1} <b>${u.is_anonymous?'Anonymous':u.display_name||'Unknown'}</b></span><b class="display" style="color:var(--gold)">${window.GOAT.cents(u.total_spent_cents||0)}</b></div>`).join('');
+(async function () {
+  const G = window.GOAT;
+  try { await G.ready; } catch (e) { return; }
+  const sb = window.supabaseClient;
+
+  const $ = (id) => document.getElementById(id);
+  let me = null;          // row from users, for the signed-in person
+  let myAuthId = null;
+  let photoUrl = null;    // pending photo for the profile form
+
+  // ------------------------------------------------------------ avatars
+
+  function avatar(name, url, size) {
+    if (url) {
+      return `<img src="${G.esc(url)}" alt="${G.esc(name)}" width="${size}" height="${size}"
+               loading="lazy" decoding="async" referrerpolicy="no-referrer"
+               onerror="window.onGoatImgError(this)">`;
+    }
+    const grad = window.OptimizedImage.gradientFor(name || '?');
+    return `<span class="fallback" role="img" aria-label="${G.esc(name)}"
+              style="background:${grad};font-size:${Math.max(11, Math.round(size * 0.36))}px"
+            >${G.esc(G.initials(name))}</span>`;
+  }
+
+  function socialLink(row) {
+    if (!row.social_handle) return '';
+    const url = G.socialUrl(row.social_platform, row.social_handle);
+    const text = '@' + G.esc(String(row.social_handle).replace(/^@+/, ''));
+    if (!url) return `<span class="handle">${text}</span>`;
+    return `<a class="handle" href="${G.esc(url)}" target="_blank"
+              rel="noopener noreferrer nofollow ugc"
+              title="${text} on ${G.esc(G.platformLabel(row.social_platform))}">${text}</a>`;
+  }
+
+  // ------------------------------------------------------------- board
+
+  async function loadBoard() {
+    // public_profiles is a view over users that exposes only the public
+    // columns and blanks out anyone who chose to stay anonymous.
+    const { data, error } = await sb
+      .from('public_profiles')
+      .select('id,display_name,photo_url,social_platform,social_handle,tagline,is_anonymous,total_spent_cents')
+      .gt('total_spent_cents', 0)
+      .order('total_spent_cents', { ascending: false })
+      .limit(100);
+
+    const podium = $('podium'), list = $('fans-list'), empty = $('board-empty');
+
+    if (error) {
+      podium.innerHTML = '';
+      list.innerHTML = '';
+      empty.hidden = false;
+      empty.textContent =
+        'The board could not be loaded. If you are the owner, run supabase-migration.sql — '
+        + 'the public_profiles view is what makes this page work.';
+      console.warn('[fans] board query failed:', error.message);
+      return;
+    }
+
+    const rows = data || [];
+    $('stat-count').textContent = rows.length ? rows.length.toLocaleString() : '0';
+    $('stat-top').textContent = rows.length ? G.cents(rows[0].total_spent_cents) : '—';
+    $('stat-total').textContent = rows.length
+      ? G.cents(rows.reduce((sum, r) => sum + (r.total_spent_cents || 0), 0)) : '—';
+    $('board-note').textContent = rows.length
+      ? `${rows.length} ${rows.length === 1 ? 'backer' : 'backers'}` : '';
+
+    if (!rows.length) {
+      podium.innerHTML = '';
+      list.innerHTML = '';
+      empty.hidden = false;
+      return;
+    }
+    empty.hidden = true;
+
+    // Top three get the room; the rest are a compact ranked list.
+    podium.innerHTML = rows.slice(0, 3).map((row, i) => {
+      const rank = i + 1;
+      const isMe = myAuthId && row.id === myAuthId;
+      return `
+        <article class="podium-card rank-${rank}${isMe ? ' is-me' : ''}">
+          ${rank === 1
+            ? '<span class="crown">Greatest Fan</span>'
+            : `<span class="rank-chip">#${rank}</span>`}
+          <span class="avatar-xl">${avatar(row.display_name, row.photo_url, rank === 1 ? 112 : 84)}</span>
+          <p class="pname">${G.esc(row.display_name)}</p>
+          ${socialLink(row)}
+          <p class="ptotal">${G.cents(row.total_spent_cents)}</p>
+          ${row.tagline ? `<p class="ptag">&ldquo;${G.esc(row.tagline)}&rdquo;</p>` : ''}
+          ${isMe ? '<span class="you-chip">You</span>' : ''}
+        </article>`;
+    }).join('');
+
+    list.innerHTML = rows.slice(3).map((row, i) => {
+      const rank = i + 4;
+      const isMe = myAuthId && row.id === myAuthId;
+      return `
+        <li class="fan-row${isMe ? ' is-me' : ''}">
+          <span class="rank-num">${rank}</span>
+          <span class="avatar-sm">${avatar(row.display_name, row.photo_url, 44)}</span>
+          <span class="fan-meta">
+            <span class="fname">${G.esc(row.display_name)}${isMe ? ' <b class="you-chip">You</b>' : ''}</span>
+            ${socialLink(row)}
+            ${row.tagline ? `<span class="ftag">${G.esc(row.tagline)}</span>` : ''}
+          </span>
+          <span class="ftotal">${G.cents(row.total_spent_cents)}</span>
+        </li>`;
+    }).join('');
+  }
+
+  // ----------------------------------------------------------- profile
+
+  function setAvatarPreview() {
+    const name = $('p-name').value || (me && me.display_name) || 'You';
+    $('avatar-preview').innerHTML = avatar(name, photoUrl, 84);
+  }
+
+  function msg(el, text, kind) {
+    el.textContent = text;
+    el.className = 'notice ' + (kind || '');
+    el.hidden = !text;
+  }
+
+  /** Shrinks a phone photo in the browser before it is uploaded. */
+  async function shrink(file) {
+    const objectUrl = URL.createObjectURL(file);
+    try {
+      const img = await new Promise((resolve, reject) => {
+        const image = new Image();
+        image.onload = () => resolve(image);
+        image.onerror = () => reject(new Error('That file could not be read as an image.'));
+        image.src = objectUrl;
+      });
+
+      // Square crop from the centre, 512px — plenty for a 112px avatar at 2x.
+      const side = Math.min(img.width, img.height);
+      const out = 512;
+      const canvas = document.createElement('canvas');
+      canvas.width = out; canvas.height = out;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) throw new Error('Your browser could not process that image.');
+      ctx.drawImage(img, (img.width - side) / 2, (img.height - side) / 2, side, side, 0, 0, out, out);
+
+      for (const quality of [0.85, 0.72, 0.6, 0.45]) {
+        const blob = await new Promise((r) => canvas.toBlob(r, 'image/jpeg', quality));
+        if (blob && blob.size <= 300 * 1024) return blob;
+      }
+      throw new Error('That image is too large. Please try a smaller one.');
+    } finally {
+      URL.revokeObjectURL(objectUrl);
+    }
+  }
+
+  $('photo-btn').addEventListener('click', () => $('photo-input').click());
+  $('photo-clear').addEventListener('click', () => {
+    photoUrl = null;
+    $('photo-clear').hidden = true;
+    $('photo-btn').textContent = 'Choose photo';
+    setAvatarPreview();
+  });
+
+  $('photo-input').addEventListener('change', async (event) => {
+    const file = event.target.files && event.target.files[0];
+    event.target.value = '';
+    if (!file) return;
+    if (!file.type.startsWith('image/')) return msg($('profile-msg'), 'Please choose an image file.', 'error');
+    if (!myAuthId) return msg($('profile-msg'), 'Sign in first.', 'error');
+
+    const button = $('photo-btn');
+    button.disabled = true; button.textContent = 'Uploading…';
+    msg($('profile-msg'), '', '');
+
+    try {
+      const blob = await shrink(file);
+      // Storage policy only allows writing inside a folder named after your id.
+      const path = `${myAuthId}/avatar-${Date.now()}.jpg`;
+      const { error } = await sb.storage.from('avatars')
+        .upload(path, blob, { contentType: 'image/jpeg', upsert: true });
+      if (error) throw error;
+
+      const { data } = sb.storage.from('avatars').getPublicUrl(path);
+      photoUrl = data.publicUrl;
+      $('photo-clear').hidden = false;
+      setAvatarPreview();
+    } catch (err) {
+      msg($('profile-msg'), err.message || 'That photo could not be uploaded.', 'error');
+    } finally {
+      button.disabled = false;
+      button.textContent = photoUrl ? 'Change photo' : 'Choose photo';
+    }
+  });
+
+  $('p-name').addEventListener('input', setAvatarPreview);
+  $('p-tagline').addEventListener('input', (e) => {
+    $('tagline-count').textContent = e.target.value.length;
+  });
+
+  $('profile-form').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const button = $('profile-save');
+    const handle = $('p-handle').value.replace(/^@+/, '').trim();
+
+    if ($('p-name').value.trim().length < 2) {
+      return msg($('profile-msg'), 'Please enter your name.', 'error');
+    }
+    if (handle && !/^[\p{L}\p{N}._-]+$/u.test(handle)) {
+      return msg($('profile-msg'),
+        'Usernames can only use letters, numbers, dots, dashes and underscores.', 'error');
+    }
+
+    button.disabled = true; button.textContent = 'Saving…';
+    try {
+      const { error } = await sb.rpc('update_my_profile', {
+        p_display_name: $('p-name').value.trim(),
+        p_photo_url: photoUrl,
+        p_social_platform: $('p-platform').value,
+        p_social_handle: handle,
+        p_tagline: $('p-tagline').value.trim(),
+        p_is_anonymous: $('p-anon').checked,
+      });
+      if (error) throw error;
+      msg($('profile-msg'), 'Saved. Your card on the board is updated.', 'ok');
+      await loadBoard();
+    } catch (err) {
+      msg($('profile-msg'), err.message || 'That could not be saved.', 'error');
+    } finally {
+      button.disabled = false; button.textContent = 'Save my profile';
+    }
+  });
+
+  // --------------------------------------------------------- place a bid
+
+  let target = null;
+  let searchTimer = null;
+
+  function renderResults(people) {
+    const box = $('bid-results');
+    if (!people.length) {
+      box.innerHTML = '<div class="search-empty">No one found with that name.</div>';
+      box.hidden = false;
+      return;
+    }
+    box.innerHTML = people.map((p) => `
+      <button type="button" class="search-hit" role="option" data-id="${G.escAttr(p.id)}"
+              data-name="${G.escAttr(p.name)}" data-total="${Number(p.total_cents) || 0}">
+        <span class="hit-photo">${avatar(p.name, G.getPhotoUrl(p.photo_path), 36)}</span>
+        <span class="hit-name">${G.esc(p.name)}</span>
+        <span class="hit-total">${G.cents(p.total_cents || 0)}</span>
+      </button>`).join('');
+    box.hidden = false;
+    $('bid-search').setAttribute('aria-expanded', 'true');
+  }
+
+  $('bid-search').addEventListener('input', (event) => {
+    const term = event.target.value.trim();
+    clearTimeout(searchTimer);
+    if (term.length < 2) {
+      $('bid-results').hidden = true;
+      $('bid-search').setAttribute('aria-expanded', 'false');
+      return;
+    }
+    searchTimer = setTimeout(async () => {
+      // % and _ are PostgREST ilike wildcards; escape them so a literal search works.
+      const safe = term.replace(/[%_\\]/g, '\\$&');
+      const { data } = await sb.from('people')
+        .select('id,name,slug,photo_path,total_cents')
+        .ilike('name', `%${safe}%`)
+        .order('total_cents', { ascending: false })
+        .limit(8);
+      renderResults(data || []);
+    }, 220);
+  });
+
+  $('bid-results').addEventListener('click', (event) => {
+    const hit = event.target.closest('.search-hit');
+    if (!hit) return;
+    target = { id: hit.dataset.id, name: hit.dataset.name, total: Number(hit.dataset.total) };
+    $('bid-results').hidden = true;
+    $('bid-search').value = target.name;
+    $('bid-search').setAttribute('aria-expanded', 'false');
+    $('bid-target').hidden = false;
+    $('bid-target').innerHTML =
+      `Backing <b>${G.esc(target.name)}</b> — currently on ${G.cents(target.total)}`;
+    $('bid-go').disabled = false;
+  });
+
+  const amountInput = $('bid-amount');
+  $('amt-dec').addEventListener('click', () => {
+    amountInput.value = Math.max(1, (Number(amountInput.value) || 1) - 1);
+  });
+  $('amt-inc').addEventListener('click', () => {
+    amountInput.value = Math.min(1000, (Number(amountInput.value) || 1) + 1);
+  });
+
+  $('bid-go').addEventListener('click', async () => {
+    if (!target) return msg($('bid-msg'), 'Pick who you are backing first.', 'error');
+
+    const dollars = Math.floor(Number(amountInput.value));
+    if (!Number.isFinite(dollars) || dollars < 1) {
+      return msg($('bid-msg'), 'Enter a whole dollar amount, $1 minimum.', 'error');
+    }
+
+    const button = $('bid-go');
+    button.disabled = true; button.textContent = 'Backing…';
+    msg($('bid-msg'), '', '');
+
+    try {
+      const { error } = await sb.rpc('place_bid', {
+        p_person_id: target.id,
+        p_amount_cents: dollars * 100,
+      });
+      if (error) throw error;
+
+      msg($('bid-msg'), `Done — $${dollars} on ${target.name}. You have moved up the board.`, 'ok');
+      await Promise.all([refreshMe(), loadBoard(), window.refreshBalance()]);
+    } catch (err) {
+      const text = String(err.message || '');
+      msg($('bid-msg'),
+        /insufficient/i.test(text)
+          ? 'Not enough credit. Add credit in your wallet, then back them.'
+          : text || 'That bid could not be placed.',
+        'error');
+    } finally {
+      button.disabled = false; button.textContent = 'Back them';
+    }
+  });
+
+  // ------------------------------------------------------------- session
+
+  async function refreshMe() {
+    const { data: { user } } = await sb.auth.getUser();
+    myAuthId = user ? user.id : null;
+
+    $('signed-out').hidden = Boolean(user);
+    $('profile-form').hidden = !user;
+    $('bid-panel').hidden = !user;
+    if (!user) return;
+
+    me = await window.ensureUserRow();
+    if (!me) {
+      // The profile row could not be read or created. Still show a usable form
+      // and an avatar tile rather than an empty panel.
+      me = null;
+      setAvatarPreview();
+      return;
+    }
+
+    $('p-name').value = me.display_name || '';
+    $('p-platform').value = me.social_platform || 'instagram';
+    $('p-handle').value = me.social_handle || '';
+    $('p-tagline').value = me.tagline || '';
+    $('tagline-count').textContent = (me.tagline || '').length;
+    $('p-anon').checked = Boolean(me.is_anonymous);
+    photoUrl = me.photo_url || null;
+    $('photo-clear').hidden = !photoUrl;
+    $('photo-btn').textContent = photoUrl ? 'Change photo' : 'Choose photo';
+    setAvatarPreview();
+
+    $('bid-balance').textContent =
+      `You have ${G.cents(me.balance_cents || 0)} credit. `
+      + `Backed so far: ${G.cents(me.total_spent_cents || 0)}.`;
+  }
+
+  await refreshMe();
+  await loadBoard();
+  sb.auth.onAuthStateChange(async () => { await refreshMe(); await loadBoard(); });
 })();
 </script>
 </body>
