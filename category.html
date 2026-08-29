@@ -1,32 +1,183 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Board — GOAT.lol</title>
-<meta name="theme-color" content="#0F0E0C">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="/css/style.css">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>Category — GOAT.lol</title>
+<link rel="preconnect" href="https://iuvmzlrnbwptgrbkdbbn.supabase.co" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body data-nav="categories">
-<a class="skip" href="#main">Skip to content</a>
-<header data-header></header>
+<body>
+<header class="topbar"><div class="topbar-inner">
+  <div class="brand"><a href="index.html">GOAT<span>.lol</span></a></div>
+  <div class="search"><i>⌕</i><input id="search" placeholder="Search people, categories"></div>
+  <nav class="topnav"><a href="index.html">Categories</a><a href="fans.html">Fans</a><a href="about.html">About</a><span id="balance-pill" class="balance-pill"><a href="wallet.html">Sign in</a></span></nav>
+</div></header>
 
-<main id="main"><div class="wrap">
-  <div id="cat-head" class="page" style="padding-bottom:14px"><p class="empty">Loading.</p></div>
-  <div class="board" id="board" data-start="1"></div>
-  <div id="pager" style="display:flex;justify-content:center;gap:8px;padding:26px 0"></div>
-  <section class="panel" style="margin-top:20px" id="add-panel" hidden>
-    <h2>Missing someone?</h2>
-    <p class="muted" style="font-size:14px">Adding a name costs <b class="gold">$1</b> from your balance, and that dollar is their first backing. Real public figures only — a Wikipedia link is required.</p>
-    <div class="field"><label for="add-name">Name</label><input id="add-name" type="text" maxlength="80"></div>
-    <div class="field"><label for="add-wiki">Wikipedia URL</label><input id="add-wiki" type="url" placeholder="https://en.wikipedia.org/wiki/..."></div>
-    <div class="field"><label for="add-blurb">One line <span class="muted">— optional</span></label><input id="add-blurb" type="text" maxlength="120"></div>
-    <div id="add-error" class="notice notice-bad hide"></div>
-    <div style="margin-top:16px"><button class="btn btn-gold" type="button" id="add-go">Add for $1</button></div>
-  </section>
-</div></main>
-<footer data-footer></footer>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="/js/config.js"></script><script src="/js/img.js"></script><script src="/js/supabase.js"></script>
-<script src="/js/seed-order.js"></script><script src="/js/board.js"></script><script src="/js/category.js"></script>
+<div class="container" style="padding:16px 20px">
+  <div id="cat-head" style="margin:12px 0">
+    <h1 id="cat-title" class="display" style="font-size:36px;letter-spacing:.02em">—</h1>
+    <div class="mono" style="font-size:12px;color:var(--muted)">Rank is the money. Nothing else. <a href="rules.html" style="color:var(--gold);text-decoration:underline">Rules →</a></div>
+  </div>
+
+  <div style="display:flex;gap:8px;margin:10px 0">
+    <input id="add-name" placeholder="Add a person — real public figure with Wikipedia" style="flex:1;height:42px;border-radius:999px;border:1px solid var(--border);background:var(--bg);color:var(--ink);padding:0 14px">
+    <button id="add-btn" class="btn-primary" style="width:auto">Add for $1 →</button>
+  </div>
+
+  <div id="board" class="list"></div>
+  <div id="pagination" class="pagination"></div>
+</div>
+
+<footer class="footer">GOAT.lol — pay to rank. <a href="rules.html">Rules</a></footer>
+
+<script src="js/supabase.js"></script>
+<script src="js/optimized-image.js"></script>
+<script src="js/wiki-fallback.js"></script>
+<script>
+(async function(){
+  const slug=window.GOAT.qs('slug')||'footballers';
+  const sb=window.supabaseClient;
+  const {data: cat}=await sb.from('categories').select('*').eq('slug',slug).maybeSingle();
+  if(!cat){ document.getElementById('cat-title').textContent='Category not found'; return; }
+  document.getElementById('cat-title').textContent=cat.name;
+  document.title=cat.name+' — GOAT.lol';
+  let people=[];
+
+  async function fetchPeople(){
+    const {data}=await sb.from('people').select('*').eq('category_id', cat.id).order('total_cents',{ascending:false}).order('first_backed_at',{ascending:true}).limit(200);
+    people=data||[];
+    if(!people.length){
+      const fb=await window.WIKI_FALLBACK?.();
+      if(fb){
+        const slug=cat.slug;
+        const raw=fb.people.filter(p=> p.category_slug===slug);
+        people=raw.map(p=>({id:p.id, slug:p.slug, name:p.name, blurb:p.blurb, wikipedia_url:p.wikipedia_url, photo_path:p.photo_path, total_cents:0, first_backed_at:null, category_id:cat.id}));
+      }
+    }
+  }
+
+  async function fetchFans(personIds){
+    if(!personIds.length) return {};
+    const {data}=await sb.from('fan_totals').select('person_id,total_cents,users(display_name,is_anonymous)').in('person_id', personIds).order('total_cents',{ascending:false});
+    const map={};
+    (data||[]).forEach(r=>{
+      if(!map[r.person_id]) map[r.person_id]=[];
+      if(map[r.person_id].length<3) map[r.person_id].push(r);
+    });
+    return map;
+  }
+
+  function rankClass(r){
+    if(r===1) return 'rank-1';
+    if(r===2) return 'rank-2';
+    if(r===3) return 'rank-3';
+    if(r<=10) return 'rank-4-10';
+    return 'rank-11-plus';
+  }
+
+  async function render(){
+    const board=document.getElementById('board');
+    if(!people.length){
+      board.innerHTML='<div class="empty">No one on this board yet. $1 takes #1.</div>';
+      return;
+    }
+    const fanMap=await fetchFans(people.map(p=>p.id));
+    board.innerHTML='';
+
+    people.forEach((p,i)=>{
+      const rank=i+1, cls=rankClass(rank);
+      const priority = i < 3 ? 'eager' : 'lazy';
+      const size = rank === 1 ? 280 : (rank === 2 ? 200 : (rank === 3 ? 160 : (rank <= 10 ? 100 : 64)));
+      const fans=fanMap[p.id]||[];
+      const fanStr=fans.length? fans.map(f=> f.users?.is_anonymous? 'Anonymous': (f.users?.display_name||'Unknown')).join(' · ') : '—';
+      const gap = rank>1 && people[0] ? ` · $${(((people[0].total_cents||0) - (p.total_cents||0))/100).toFixed(0)} behind #1` : '';
+      const card=document.createElement('div'); card.className=`person-card ${cls}`;
+
+      const photoHtml = window.OptimizedImage.render({
+        photoPath: p.photo_path,
+        name: p.name,
+        size,
+        priority,
+        slug: p.slug
+      });
+
+      card.innerHTML=`
+        <div class="rank-badge">#${rank}</div>
+        <div class="photo">${photoHtml}</div>
+        <div class="body">
+          <div class="name display">${p.name}</div>
+          <div class="blurb">${p.blurb||''}</div>
+          <div class="total display">${window.GOAT.cents(p.total_cents||0)}</div>
+          <div class="fans">Top fans: <b>${fanStr}</b>${gap}</div>
+          <div class="back-row">
+            <span class="stepper"><button data-dec>-</button><span data-amt>$1</span><button data-inc>+</button></span>
+            <button class="btn-back" data-back>Back</button>
+            <span class="stakes" data-stakes>$1 puts them at #${rank}</span>
+          </div>
+        </div>`;
+
+      // Stepper logic
+      let amt=100;
+      const amtEl=card.querySelector('[data-amt]'), stakesEl=card.querySelector('[data-stakes]');
+      function updateStakes(){
+        amtEl.textContent=`$${(amt/100).toFixed(0)}`;
+        const newTotal=(p.total_cents||0)+amt;
+        let newRank=1;
+        for(let j=0;j<people.length;j++){
+          if(people[j].id===p.id) continue;
+          if((people[j].total_cents||0) > newTotal) newRank++;
+          else if((people[j].total_cents||0)===newTotal && people[j].first_backed_at && p.first_backed_at && new Date(people[j].first_backed_at) < new Date()) newRank++;
+          else break;
+        }
+        stakesEl.textContent=`$${(amt/100).toFixed(0)} puts them at #${newRank}`;
+        if(rank===1) stakesEl.textContent=`$${(amt/100).toFixed(0)} → $${(newTotal/100).toFixed(0)}`;
+      }
+      card.querySelector('[data-dec]').addEventListener('click',()=>{ amt=Math.max(100, amt-100); updateStakes(); });
+      card.querySelector('[data-inc]').addEventListener('click',()=>{ amt=Math.min(100000, amt+100); updateStakes(); });
+      updateStakes();
+
+      card.querySelector('[data-back]').addEventListener('click', async()=>{
+        const btn=card.querySelector('[data-back]'); btn.disabled=true; btn.textContent='…';
+        try{
+          const {error}=await sb.rpc('place_bid', {p_person_id: p.id, p_amount_cents: amt});
+          if(error) throw error;
+          await fetchPeople(); await render(); await window.refreshBalance();
+        }catch(e){
+          alert(e.message.includes('insufficient')? 'Insufficient credit — top up in wallet.': e.message);
+          btn.disabled=false; btn.textContent='Back';
+        }
+      });
+
+      card.addEventListener('click', ev=>{ if(ev.target.closest('button') || ev.target.closest('.stepper')) return; location.href=`person.html?slug=${p.slug}`; });
+      board.appendChild(card);
+    });
+  }
+
+  document.getElementById('add-btn').addEventListener('click', async()=>{
+    const name=document.getElementById('add-name').value.trim();
+    if(!name) return alert('Enter a name — must have a Wikipedia entry.');
+    const {data:{user}}=await sb.auth.getUser();
+    if(!user) return location.href='wallet.html';
+    try{
+      const {data: person, error: addErr}=await sb.rpc('add_person', {p_category_id: cat.id, p_name: name, p_blurb:'', p_wikipedia_url:`https://en.wikipedia.org/wiki/${encodeURIComponent(name.replace(/ /g,'_'))}`, p_photo_path: null});
+      if(addErr) throw addErr;
+      const pid=person;
+      const {error}=await sb.rpc('place_bid', {p_person_id: pid, p_amount_cents: 100});
+      if(error) throw error;
+      location.reload();
+    }catch(e){ alert(e.message); }
+  });
+
+  document.getElementById('search').addEventListener('keydown', e=>{ if(e.key==='Enter'){ location.href='index.html?q='+encodeURIComponent(e.target.value); }});
+  await fetchPeople();
+  await render();
+
+  try{ sb.channel('people-'+slug).on('postgres_changes',{event:'INSERT',schema:'public',table:'bids'}, async()=>{ await fetchPeople(); await render(); }).subscribe(); }catch{}
+})();
+</script>
 </body>
 </html>

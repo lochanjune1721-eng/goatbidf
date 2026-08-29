@@ -1,14 +1,10 @@
 {
-  "name": "goat-lol",
+  "name": "outcharity",
   "private": true,
   "type": "module",
-  "description": "Pay-to-rank leaderboards for the greatest of all time. Static front end, no build step; Wikimedia images are resolved ahead of time into Supabase and served from Wikimedia's CDN. Vercel functions use fetch and node:crypto only.",
-  "scripts": {
-    "seed:sql": "node scripts/make-seed-sql.mjs",
-    "images": "node scripts/resolve-images.mjs",
-    "images:dry": "node scripts/resolve-images.mjs --dry-run --limit=20 --verbose",
-    "images:review": "node scripts/resolve-images.mjs --status=needs_review --recheck",
-    "photos:selfhost": "node scripts/fetch-photos.js --tmdb",
-    "images:webp": "node scripts/download-images.mjs"
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0",
+    "sharp": "^0.35.3",
+    "stripe": "^14.0.0"
   }
 }

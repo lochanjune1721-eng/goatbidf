@@ -1,23 +1,27 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Fans — GOAT.lol</title>
-<meta name="theme-color" content="#0F0E0C">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body data-nav="fans">
-<a class="skip" href="#main">Skip to content</a>
-<header data-header></header>
-
-<main id="main"><div class="wrap page">
-  <h1>The biggest backers</h1>
-  <p class="lede">Everyone who has put money on the board, by total spent. Names come from what people chose at signup; anyone can stay anonymous.</p>
-  <div class="panel" style="margin-top:26px"><ul class="fanlist" id="fans"><li>Loading.</li></ul></div>
-</div></main>
-<footer data-footer></footer>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="/js/config.js"></script><script src="/js/img.js"></script><script src="/js/supabase.js"></script>
-<script src="/js/fans.js"></script>
+<body>
+<header class="topbar"><div class="topbar-inner"><div class="brand"><a href="index.html">GOAT<span>.lol</span></a></div><nav class="topnav"><a href="index.html">Categories</a><a href="fans.html" class="active">Fans</a><span id="balance-pill" class="balance-pill"></span></nav></div></header>
+<div class="container" style="padding:20px">
+  <h1 class="display" style="font-size:32px">Top backers</h1>
+  <p class="mono" style="font-size:12px;color:var(--muted)">Global leaderboard of the biggest backers — handles and totals. Status people will chase.</p>
+  <div id="fans" class="list" style="margin-top:12px"></div>
+</div>
+<script src="js/supabase.js"></script>
+<script>
+(async function(){
+  const sb=window.supabaseClient;
+  const {data: users}=await sb.from('users').select('display_name,is_anonymous,total_spent_cents').order('total_spent_cents',{ascending:false}).limit(100);
+  const el=document.getElementById('fans');
+  if(!users||!users.length){ el.innerHTML='<div class="empty">No backers yet.</div>'; return; }
+  el.innerHTML=users.map((u,i)=> `<div class="job-card" style="display:flex;justify-content:space-between;align-items:center"><span>#${i+1} <b>${u.is_anonymous?'Anonymous':u.display_name||'Unknown'}</b></span><b class="display" style="color:var(--gold)">${window.GOAT.cents(u.total_spent_cents||0)}</b></div>`).join('');
+})();
+</script>
 </body>
 </html>

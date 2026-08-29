@@ -1,41 +1,29 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Rules — GOAT.lol</title>
-<meta name="theme-color" content="#0F0E0C">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="css/style.css">
 </head>
-<body data-nav="">
-<a class="skip" href="#main">Skip to content</a>
-<header data-header></header>
-<main id="main"><div class="wrap-narrow page">
-  <h1>Rules</h1>
-  <p class="lede">All of them. There is nothing else running underneath.</p>
-  <h2>Credit</h2>
-  <ul class="prose">
-    <li>Minimum top-up is $5. After that, $1 minimum per bid, whole dollars only.</li>
-    <li>Credit never expires and is <b>non-refundable</b>.</li>
-    <li>Adding a new person to a board costs $1 from your balance, the same as any bid, and that dollar is their first backing.</li>
-  </ul>
-  <h2>Ranking</h2>
-  <ul class="prose">
-    <li>Rank is the money. No algorithm, no free votes, no weighting.</li>
-    <li>Money is cumulative. $10 on someone at $40 makes them $50.</li>
-    <li>Taking #1 in a category costs at least $5 more than the current leader.</li>
-    <li>Equal totals stay in the order reached — the earlier one keeps the higher rank.</li>
-    <li>Nothing expires, decays, or is refunded.</li>
-    <li>Anyone can back anyone. Nobody owns a person&#8217;s board.</li>
-    <li>Every contribution is public and permanent.</li>
-    <li>Each person has a board of their backers by total spent. The top three are named on their card.</li>
-  </ul>
-  <h2>Who can be listed</h2>
-  <ul class="prose">
-    <li>Real public figures with a Wikipedia entry.</li>
-    <li>No private individuals. No listing yourself.</li>
-  </ul></div></main>
-<footer data-footer></footer>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="/js/config.js"></script><script src="/js/img.js"></script><script src="/js/supabase.js"></script>
+<body>
+<header class="topbar"><div class="topbar-inner"><div class="brand"><a href="index.html">GOAT<span>.lol</span></a></div><nav class="topnav"><a href="index.html">Categories</a><a href="rules.html" class="active">Rules</a></nav></div></header>
+<div class="container" style="max-width:640px;padding:20px">
+  <h1 class="display" style="font-size:32px">Rules</h1>
+  <div class="job-card" style="line-height:1.7;font-size:14px;margin-top:12px">
+    <p><b>Credits</b> — Minimum top-up <b>$5</b>. Suggested $5, $10, $25, $50, $100. Credit never expires and is <b>non-refundable</b> — you see this plainly at checkout. Once loaded, <b>$1 minimum per bid</b>, whole dollars only. Balance shown in the header at all times. Adding a new person to a board costs <b>$1</b> from balance, same as any bid.</p>
+    <ul style="padding-left:18px;display:grid;gap:8px;margin-top:12px">
+      <li>Rank is the money — nothing else. No algorithm, no free votes.</li>
+      <li>Money is cumulative. $10 on someone at $40 makes them $50.</li>
+      <li><b>Taking #1 in a category costs at least $5 more than the current leader.</b></li>
+      <li>Equal totals stay in the order reached — earlier one keeps the higher rank.</li>
+      <li>Nothing expires, decays, or is refunded.</li>
+      <li>Anyone can back anyone. Nobody owns a person's board.</li>
+      <li>Every contribution is public and permanent.</li>
+      <li><b>Fan leaderboard:</b> each person has a board of backers by total spent. Top 3 shown on their card.</li>
+      <li>Names must be real public figures with a Wikipedia entry. No private individuals, no self-listing.</li>
+      <li>Accounts: email magic-link via Supabase Auth. Needed to hold a balance.</li>
+    </ul>
+  </div>
+</div>
 </body>
 </html>

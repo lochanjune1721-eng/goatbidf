@@ -1,19 +1,111 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer">
 <title>Person — GOAT.lol</title>
-<meta name="theme-color" content="#0F0E0C">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="/css/style.css">
+<link rel="preconnect" href="https://iuvmzlrnbwptgrbkdbbn.supabase.co" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body data-nav="">
-<a class="skip" href="#main">Skip to content</a>
-<header data-header></header>
+<body>
+<header class="topbar"><div class="topbar-inner">
+  <div class="brand"><a href="index.html">GOAT<span>.lol</span></a></div>
+  <div class="search"><i>⌕</i><input id="search" placeholder="Search"></div>
+  <nav class="topnav"><a href="fans.html">Fans</a><span id="balance-pill" class="balance-pill"></span></nav>
+</div></header>
 
-<main id="main"><div class="wrap"><div id="person"><p class="empty">Loading.</p></div></div></main>
-<footer data-footer></footer>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="/js/config.js"></script><script src="/js/img.js"></script><script src="/js/supabase.js"></script>
-<script src="/js/board.js"></script><script src="/js/person.js"></script>
+<div class="container" style="padding:16px 20px">
+  <div id="person-head" class="job-card" style="display:grid;grid-template-columns:minmax(260px,360px) 1fr;gap:20px;align-items:start">
+    <div id="photo-wrap" class="photo" style="width:100%;max-width:360px;aspect-ratio:1/1;border-radius:20px">
+      <div class="fallback skeleton" style="width:100%;height:100%"></div>
+    </div>
+    <div>
+      <div id="crumb" class="mono" style="font-size:12px;color:var(--muted)"></div>
+      <h1 id="name" class="display" style="font-size:42px;line-height:1">—</h1>
+      <div id="blurb" style="color:var(--muted);margin-top:6px"></div>
+      <div style="margin-top:12px;display:flex;gap:12px;align-items:baseline"><span id="total" class="display" style="font-size:36px;color:var(--gold)">$0</span><span id="rank" class="mono" style="font-size:13px;color:var(--muted)"></span></div>
+      <div class="back-row" id="back-row" style="margin-top:12px"></div>
+      <div id="wiki" class="mono" style="font-size:11px;color:var(--muted);margin-top:10px"></div>
+    </div>
+  </div>
+  <h2 class="display" style="font-size:20px;margin:18px 0 10px">Top fans</h2>
+  <div id="fans" class="list"></div>
+</div>
+
+<footer class="footer">GOAT.lol — pay to rank. <a href="rules.html">Rules</a></footer>
+
+<script src="js/supabase.js"></script>
+<script src="js/optimized-image.js"></script>
+<script>
+(async function(){
+  const slug=window.GOAT.qs('slug');
+  if(!slug){ document.getElementById('name').textContent='Missing ?slug='; return; }
+  const sb=window.supabaseClient;
+  const {data: person}=await sb.from('people').select('*, categories(name,slug,group_name)').eq('slug',slug).maybeSingle();
+  if(!person){ document.getElementById('name').textContent='Not found'; return; }
+  document.title=person.name+' — GOAT.lol';
+  document.getElementById('name').textContent=person.name;
+  document.getElementById('blurb').textContent=person.blurb||'';
+  document.getElementById('total').textContent=window.GOAT.cents(person.total_cents||0);
+  if(person.categories){
+    document.getElementById('crumb').innerHTML=`<a href="category.html?slug=${person.categories.slug}" style="color:var(--gold)">${person.categories.name}</a> · ${person.categories.group_name}`;
+  }
+
+  // Load hero photo with eager high priority & 640px source
+  const photoWrap = document.getElementById('photo-wrap');
+  photoWrap.innerHTML = window.OptimizedImage.render({
+    photoPath: person.photo_path,
+    name: person.name,
+    size: 360,
+    priority: 'eager'
+  });
+
+  // Parallel rank and fan query
+  try {
+    const [catPeopleRes, fansRes] = await Promise.all([
+      person.category_id ? sb.from('people').select('id,total_cents,first_backed_at').eq('category_id', person.category_id).order('total_cents',{ascending:false}).order('first_backed_at',{ascending:true}) : Promise.resolve({data:[]}),
+      sb.from('fan_totals').select('total_cents,users(display_name,is_anonymous)').eq('person_id', person.id).order('total_cents',{ascending:false}).limit(50)
+    ]);
+
+    const catPeople = catPeopleRes?.data || [];
+    const rank = catPeople.findIndex(p => p.id === person.id) + 1 || '—';
+    document.getElementById('rank').textContent = `#${rank} in ${person.categories?.name || 'Category'}`;
+    document.getElementById('wiki').innerHTML = `<a href="${person.wikipedia_url}" target="_blank" rel="noopener" style="text-decoration:underline">${person.wikipedia_url}</a> ${person.photo_credit? '· '+person.photo_credit:''} ${person.photo_license? '('+person.photo_license+')':''}`;
+
+    // fans
+    const fans = fansRes?.data;
+    const el=document.getElementById('fans');
+    if(!fans||!fans.length) el.innerHTML='<div class="empty">No fans yet. Be the first for $1.</div>';
+    else el.innerHTML=fans.map((f,i)=> `<div class="job-card" style="display:flex;justify-content:space-between;align-items:center"><span>#${i+1} <b>${f.users?.is_anonymous?'Anonymous':f.users?.display_name||'Unknown'}</b></span><b class="display" style="color:var(--gold)">${window.GOAT.cents(f.total_cents)}</b></div>`).join('');
+  } catch(e) {
+    console.warn('Fans load error:', e);
+  }
+
+  // back stepper
+  const row=document.getElementById('back-row');
+  let amt=100;
+  row.innerHTML=`<span class="stepper"><button id="dec">−</button><span id="amt">$1</span><button id="inc">+</button></span><button id="back" class="btn-back">Back</button><span class="stakes mono" id="stakes"></span>`;
+  function upd(){ document.getElementById('amt').textContent=`$${(amt/100).toFixed(0)}`; document.getElementById('stakes').textContent=`$${(amt/100).toFixed(0)} → $${((person.total_cents+amt)/100).toFixed(0)}`; }
+  document.getElementById('dec').addEventListener('click',()=>{ amt=Math.max(100, amt-100); upd(); });
+  document.getElementById('inc').addEventListener('click',()=>{ amt=Math.min(100000, amt+100); upd(); });
+  upd();
+
+  document.getElementById('back').addEventListener('click', async()=>{
+    const btn=document.getElementById('back'); btn.disabled=true; btn.textContent='…';
+    try{
+      const {error}=await sb.rpc('place_bid',{p_person_id: person.id, p_amount_cents: amt});
+      if(error) throw error;
+      location.reload();
+    }catch(e){
+      alert(e.message.includes('insufficient')?'Insufficient credit — top up.':e.message);
+      btn.disabled=false; btn.textContent='Back';
+    }
+  });
+})();
+</script>
 </body>
 </html>

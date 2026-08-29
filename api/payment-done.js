@@ -1,59 +1,36 @@
-/* POST /api/payment-done — the Dodo webhook. The only place credit is added.
- *
- * Idempotent twice over: dodo_payment_id is unique, and the topup row is only
- * credited when it is still `pending`, so a replayed webhook is a no-op. */
-import { webHandler, json, bad, env, db, sbFetch, verifyDodoWebhook } from './_lib.js';
+import { createClient } from '@supabase/supabase-js';
 
-const SUCCESS = new Set(['payment.succeeded', 'payment.completed', 'payment.paid']);
-
-export default webHandler(async function handler(request) {
-  if (request.method !== 'POST') return bad('Use POST.', 405);
-
-  // Web-standard handler, so the raw body is available for the HMAC.
-  const raw = await request.text();
-  if (!verifyDodoWebhook(raw, request.headers, env('DODO_WEBHOOK_SECRET'))) {
-    return bad('Invalid signature.', 401);
+// Dodo webhook — confirm top-up, add to balance. Idempotent on dodo_payment_id.
+export default async function handler(req,res){
+  if(req.method!=='POST') return res.status(405).json({error:'Method not allowed'});
+  const { SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, DODO_WEBHOOK_SECRET } = process.env;
+  if(!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) return res.status(500).json({error:'Supabase not configured'});
+  let body; try{ body=typeof req.body==='string'? JSON.parse(req.body||'{}'): req.body; }catch{ body={}; }
+  console.log('payment-done', JSON.stringify(body).slice(0,3000));
+  const dodoId=body.paymentId||body.payment_id||body.id||body.dodo_payment_id;
+  const topupId=body.metadata?.topup_id||body.topup_id;
+  const userId=body.metadata?.user_id||body.user_id;
+  const amount=body.amount_cents||body.amount||body.total||0;
+  const supa=createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+  // find topup
+  let topup=null;
+  if(topupId){
+    const {data}=await supa.from('topups').select('*').eq('id', topupId).maybeSingle(); topup=data;
+  } else if(dodoId){
+    const {data}=await supa.from('topups').select('*').eq('dodo_payment_id', dodoId).maybeSingle(); topup=data;
   }
-
-  let event;
-  try { event = JSON.parse(raw); } catch { return bad('Malformed payload.'); }
-
-  const type = event.type || event.event_type;
-  if (!SUCCESS.has(type)) return json({ received: true, ignored: type });
-
-  const data = event.data || event;
-  const paymentId = data.payment_id || data.id;
-  const topupId = data.metadata?.topup_id;
-  if (!topupId && !paymentId) return json({ received: true, skipped: 'nothing to match on' });
-
-  try {
-    const topup = topupId
-      ? await db.one('topups', db.eq('id', topupId))
-      : await db.one('topups', db.eq('dodo_payment_id', paymentId));
-
-    if (!topup) return json({ received: true, skipped: 'no matching topup' });
-    if (topup.status === 'confirmed') return json({ received: true, duplicate: true });
-
-    /* Flip pending -> confirmed with the status in the filter. If two webhooks
-       land at once only one matches, so only one credits the balance. */
-    const claimed = await db.update(
-      'topups',
-      `${db.eq('id', topup.id)}&${db.eq('status', 'pending')}`,
-      { status: 'confirmed', dodo_payment_id: paymentId || topup.dodo_payment_id }
-    );
-    if (!Array.isArray(claimed) || claimed.length === 0) {
-      return json({ received: true, duplicate: true });
-    }
-
-    await sbFetch('/rest/v1/rpc/credit_balance', {
-      method: 'POST',
-      body: JSON.stringify({ p_user: topup.user_id, p_amount: topup.amount_cents })
-    });
-
-    return json({ received: true, credited: topup.amount_cents });
-  } catch (e) {
-    console.error('[payment-done]', e);
-    // 500 so Dodo retries rather than dropping a paid top-up.
-    return bad('Webhook processing failed.', 500);
+  // fallback find pending for user
+  if(!topup && userId){
+    const {data}=await supa.from('topups').select('*').eq('user_id', userId).eq('status','pending').order('created_at',{ascending:false}).limit(1).maybeSingle(); topup=data;
   }
-});
+  if(!topup) return res.status(404).json({error:'Topup not found'});
+  if(topup.status==='confirmed') return res.status(200).json({received:true, duplicate:true});
+  const cents = topup.amount_cents || Math.round(Number(amount));
+  // idempotent
+  const {error: upErr}=await supa.from('topups').update({status:'confirmed', dodo_payment_id: dodoId||`dodo_${Date.now()}`}).eq('id', topup.id);
+  if(upErr && !upErr.message.includes('duplicate')) return res.status(500).json({error:upErr.message});
+  // add balance
+  const {data: u}=await supa.from('users').select('balance_cents').eq('id', topup.user_id).maybeSingle();
+  await supa.from('users').update({balance_cents: (u?.balance_cents||0)+cents}).eq('id', topup.user_id);
+  return res.status(200).json({received:true});
+}

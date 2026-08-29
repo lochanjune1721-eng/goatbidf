@@ -1,0 +1,2941 @@
+category_id,category,rank,contender
+1,Greatest Footballer,1,Lionel Messi
+1,Greatest Footballer,2,Cristiano Ronaldo
+1,Greatest Footballer,3,Pelé
+1,Greatest Footballer,4,Diego Maradona
+1,Greatest Footballer,5,Johan Cruyff
+1,Greatest Footballer,6,Zinedine Zidane
+1,Greatest Footballer,7,Ronaldo Nazário
+1,Greatest Footballer,8,Franz Beckenbauer
+1,Greatest Footballer,9,Ronaldinho
+1,Greatest Footballer,10,Alfredo Di Stéfano
+1,Greatest Footballer,11,Michel Platini
+1,Greatest Footballer,12,George Best
+1,Greatest Footballer,13,Garrincha
+1,Greatest Footballer,14,Xavi
+1,Greatest Footballer,15,Andrés Iniesta
+1,Greatest Footballer,16,Paolo Maldini
+1,Greatest Footballer,17,Eusébio
+1,Greatest Footballer,18,Thierry Henry
+1,Greatest Footballer,19,Luka Modrić
+1,Greatest Footballer,20,Neymar
+2,Greatest Football Manager,1,Sir Alex Ferguson
+2,Greatest Football Manager,2,Pep Guardiola
+2,Greatest Football Manager,3,Carlo Ancelotti
+2,Greatest Football Manager,4,José Mourinho
+2,Greatest Football Manager,5,Jürgen Klopp
+2,Greatest Football Manager,6,Arsène Wenger
+2,Greatest Football Manager,7,Rinus Michels
+2,Greatest Football Manager,8,Arrigo Sacchi
+2,Greatest Football Manager,9,Bill Shankly
+2,Greatest Football Manager,10,Bob Paisley
+2,Greatest Football Manager,11,Brian Clough
+2,Greatest Football Manager,12,Johan Cruyff
+2,Greatest Football Manager,13,Vicente del Bosque
+2,Greatest Football Manager,14,Ottmar Hitzfeld
+2,Greatest Football Manager,15,Fabio Capello
+2,Greatest Football Manager,16,Helenio Herrera
+2,Greatest Football Manager,17,Diego Simeone
+2,Greatest Football Manager,18,Louis van Gaal
+2,Greatest Football Manager,19,José Villalonga
+2,Greatest Football Manager,20,Valeriy Lobanovskyi
+3,Greatest Football Club,1,Real Madrid
+3,Greatest Football Club,2,FC Barcelona
+3,Greatest Football Club,3,Manchester United
+3,Greatest Football Club,4,Bayern Munich
+3,Greatest Football Club,5,Liverpool
+3,Greatest Football Club,6,AC Milan
+3,Greatest Football Club,7,Manchester City
+3,Greatest Football Club,8,Juventus
+3,Greatest Football Club,9,Ajax
+3,Greatest Football Club,10,Inter Milan
+3,Greatest Football Club,11,Arsenal
+3,Greatest Football Club,12,Benfica
+3,Greatest Football Club,13,Chelsea
+3,Greatest Football Club,14,Boca Juniors
+3,Greatest Football Club,15,River Plate
+3,Greatest Football Club,16,Santos
+3,Greatest Football Club,17,Flamengo
+3,Greatest Football Club,18,Borussia Dortmund
+3,Greatest Football Club,19,Atlético Madrid
+3,Greatest Football Club,20,Paris Saint-Germain
+4,Greatest Goalkeeper,1,Lev Yashin
+4,Greatest Goalkeeper,2,Gianluigi Buffon
+4,Greatest Goalkeeper,3,Manuel Neuer
+4,Greatest Goalkeeper,4,Iker Casillas
+4,Greatest Goalkeeper,5,Peter Schmeichel
+4,Greatest Goalkeeper,6,Dino Zoff
+4,Greatest Goalkeeper,7,Gordon Banks
+4,Greatest Goalkeeper,8,Oliver Kahn
+4,Greatest Goalkeeper,9,Edwin van der Sar
+4,Greatest Goalkeeper,10,Petr Čech
+4,Greatest Goalkeeper,11,Alisson Becker
+4,Greatest Goalkeeper,12,Thibaut Courtois
+4,Greatest Goalkeeper,13,Peter Shilton
+4,Greatest Goalkeeper,14,José Luis Chilavert
+4,Greatest Goalkeeper,15,Sepp Maier
+4,Greatest Goalkeeper,16,Walter Zenga
+4,Greatest Goalkeeper,17,René Higuita
+4,Greatest Goalkeeper,18,Claudio Taffarel
+4,Greatest Goalkeeper,19,Dida
+4,Greatest Goalkeeper,20,Emiliano Martínez
+5,Greatest Batsman,1,Don Bradman
+5,Greatest Batsman,2,Sachin Tendulkar
+5,Greatest Batsman,3,Virat Kohli
+5,Greatest Batsman,4,Brian Lara
+5,Greatest Batsman,5,Viv Richards
+5,Greatest Batsman,6,Ricky Ponting
+5,Greatest Batsman,7,Kumar Sangakkara
+5,Greatest Batsman,8,Sunil Gavaskar
+5,Greatest Batsman,9,Steve Smith
+5,Greatest Batsman,10,AB de Villiers
+5,Greatest Batsman,11,Jacques Kallis
+5,Greatest Batsman,12,Rahul Dravid
+5,Greatest Batsman,13,Kane Williamson
+5,Greatest Batsman,14,Joe Root
+5,Greatest Batsman,15,Mahela Jayawardene
+5,Greatest Batsman,16,Inzamam-ul-Haq
+5,Greatest Batsman,17,Rohit Sharma
+5,Greatest Batsman,18,Matthew Hayden
+5,Greatest Batsman,19,Allan Border
+5,Greatest Batsman,20,Graham Gooch
+6,Greatest Bowler,1,Muttiah Muralitharan
+6,Greatest Bowler,2,Shane Warne
+6,Greatest Bowler,3,Wasim Akram
+6,Greatest Bowler,4,Glenn McGrath
+6,Greatest Bowler,5,Malcolm Marshall
+6,Greatest Bowler,6,Dale Steyn
+6,Greatest Bowler,7,Richard Hadlee
+6,Greatest Bowler,8,Curtly Ambrose
+6,Greatest Bowler,9,Waqar Younis
+6,Greatest Bowler,10,Anil Kumble
+6,Greatest Bowler,11,James Anderson
+6,Greatest Bowler,12,Dennis Lillee
+6,Greatest Bowler,13,Imran Khan
+6,Greatest Bowler,14,Shaun Pollock
+6,Greatest Bowler,15,Courtney Walsh
+6,Greatest Bowler,16,Brett Lee
+6,Greatest Bowler,17,Jasprit Bumrah
+6,Greatest Bowler,18,Ravichandran Ashwin
+6,Greatest Bowler,19,Allan Donald
+6,Greatest Bowler,20,Kapil Dev
+7,Greatest All-Rounder,1,Jacques Kallis
+7,Greatest All-Rounder,2,Garry Sobers
+7,Greatest All-Rounder,3,Imran Khan
+7,Greatest All-Rounder,4,Kapil Dev
+7,Greatest All-Rounder,5,Ian Botham
+7,Greatest All-Rounder,6,Richard Hadlee
+7,Greatest All-Rounder,7,Ravindra Jadeja
+7,Greatest All-Rounder,8,Shakib Al Hasan
+7,Greatest All-Rounder,9,Ben Stokes
+7,Greatest All-Rounder,10,Keith Miller
+7,Greatest All-Rounder,11,Shane Watson
+7,Greatest All-Rounder,12,Andrew Flintoff
+7,Greatest All-Rounder,13,Sanath Jayasuriya
+7,Greatest All-Rounder,14,Chris Cairns
+7,Greatest All-Rounder,15,Shaun Pollock
+7,Greatest All-Rounder,16,Lance Klusener
+7,Greatest All-Rounder,17,Vinoo Mankad
+7,Greatest All-Rounder,18,Ravichandran Ashwin
+7,Greatest All-Rounder,19,Moeen Ali
+7,Greatest All-Rounder,20,Abdul Razzaq
+8,Greatest Cricket Captain,1,Ricky Ponting
+8,Greatest Cricket Captain,2,MS Dhoni
+8,Greatest Cricket Captain,3,Steve Waugh
+8,Greatest Cricket Captain,4,Graeme Smith
+8,Greatest Cricket Captain,5,Clive Lloyd
+8,Greatest Cricket Captain,6,Imran Khan
+8,Greatest Cricket Captain,7,Virat Kohli
+8,Greatest Cricket Captain,8,Stephen Fleming
+8,Greatest Cricket Captain,9,Allan Border
+8,Greatest Cricket Captain,10,Kapil Dev
+8,Greatest Cricket Captain,11,Eoin Morgan
+8,Greatest Cricket Captain,12,Mahela Jayawardene
+8,Greatest Cricket Captain,13,Sourav Ganguly
+8,Greatest Cricket Captain,14,Hansie Cronje
+8,Greatest Cricket Captain,15,Michael Clarke
+8,Greatest Cricket Captain,16,Kane Williamson
+8,Greatest Cricket Captain,17,Steve Smith
+8,Greatest Cricket Captain,18,Pat Cummins
+8,Greatest Cricket Captain,19,Arjuna Ranatunga
+8,Greatest Cricket Captain,20,Misbah-ul-Haq
+9,Greatest IPL Player,1,Virat Kohli
+9,Greatest IPL Player,2,MS Dhoni
+9,Greatest IPL Player,3,Rohit Sharma
+9,Greatest IPL Player,4,AB de Villiers
+9,Greatest IPL Player,5,Chris Gayle
+9,Greatest IPL Player,6,Suresh Raina
+9,Greatest IPL Player,7,Jasprit Bumrah
+9,Greatest IPL Player,8,Lasith Malinga
+9,Greatest IPL Player,9,Andre Russell
+9,Greatest IPL Player,10,Rashid Khan
+9,Greatest IPL Player,11,Kieron Pollard
+9,Greatest IPL Player,12,David Warner
+9,Greatest IPL Player,13,Sunil Narine
+9,Greatest IPL Player,14,Ravindra Jadeja
+9,Greatest IPL Player,15,Hardik Pandya
+9,Greatest IPL Player,16,KL Rahul
+9,Greatest IPL Player,17,Shubman Gill
+9,Greatest IPL Player,18,Jos Buttler
+9,Greatest IPL Player,19,Yuzvendra Chahal
+9,Greatest IPL Player,20,Dwayne Bravo
+10,Greatest Wicketkeeper,1,MS Dhoni
+10,Greatest Wicketkeeper,2,Adam Gilchrist
+10,Greatest Wicketkeeper,3,Kumar Sangakkara
+10,Greatest Wicketkeeper,4,Mark Boucher
+10,Greatest Wicketkeeper,5,Ian Healy
+10,Greatest Wicketkeeper,6,Rodney Marsh
+10,Greatest Wicketkeeper,7,Andy Flower
+10,Greatest Wicketkeeper,8,Brendon McCullum
+10,Greatest Wicketkeeper,9,Alec Stewart
+10,Greatest Wicketkeeper,10,Rishabh Pant
+10,Greatest Wicketkeeper,11,Quinton de Kock
+10,Greatest Wicketkeeper,12,Jos Buttler
+10,Greatest Wicketkeeper,13,Syed Kirmani
+10,Greatest Wicketkeeper,14,Jeff Dujon
+10,Greatest Wicketkeeper,15,Dinesh Karthik
+10,Greatest Wicketkeeper,16,Les Ames
+10,Greatest Wicketkeeper,17,Jonny Bairstow
+10,Greatest Wicketkeeper,18,Tim Paine
+10,Greatest Wicketkeeper,19,Sarah Taylor
+10,Greatest Wicketkeeper,20,Nayan Mongia
+11,Greatest Basketball Player,1,Michael Jordan
+11,Greatest Basketball Player,2,LeBron James
+11,Greatest Basketball Player,3,Kareem Abdul-Jabbar
+11,Greatest Basketball Player,4,Bill Russell
+11,Greatest Basketball Player,5,Magic Johnson
+11,Greatest Basketball Player,6,Larry Bird
+11,Greatest Basketball Player,7,Wilt Chamberlain
+11,Greatest Basketball Player,8,Kobe Bryant
+11,Greatest Basketball Player,9,Shaquille O'Neal
+11,Greatest Basketball Player,10,Tim Duncan
+11,Greatest Basketball Player,11,Stephen Curry
+11,Greatest Basketball Player,12,Hakeem Olajuwon
+11,Greatest Basketball Player,13,Oscar Robertson
+11,Greatest Basketball Player,14,Kevin Durant
+11,Greatest Basketball Player,15,Nikola Jokić
+11,Greatest Basketball Player,16,Giannis Antetokounmpo
+11,Greatest Basketball Player,17,Jerry West
+11,Greatest Basketball Player,18,Moses Malone
+11,Greatest Basketball Player,19,Karl Malone
+11,Greatest Basketball Player,20,Julius Erving
+12,Greatest Basketball Team,1,1996 Chicago Bulls
+12,Greatest Basketball Team,2,2017 Golden State Warriors
+12,Greatest Basketball Team,3,1986 Boston Celtics
+12,Greatest Basketball Team,4,1987 Los Angeles Lakers
+12,Greatest Basketball Team,5,2001 Los Angeles Lakers
+12,Greatest Basketball Team,6,1991 Chicago Bulls
+12,Greatest Basketball Team,7,2014 San Antonio Spurs
+12,Greatest Basketball Team,8,1983 Philadelphia 76ers
+12,Greatest Basketball Team,9,2004 Detroit Pistons
+12,Greatest Basketball Team,10,2015 Golden State Warriors
+12,Greatest Basketball Team,11,2000 Los Angeles Lakers
+12,Greatest Basketball Team,12,1965 Boston Celtics
+12,Greatest Basketball Team,13,1971 Milwaukee Bucks
+12,Greatest Basketball Team,14,2013 Miami Heat
+12,Greatest Basketball Team,15,2016 Cleveland Cavaliers
+12,Greatest Basketball Team,16,1999 San Antonio Spurs
+12,Greatest Basketball Team,17,1980 Los Angeles Lakers
+12,Greatest Basketball Team,18,1977 Portland Trail Blazers
+12,Greatest Basketball Team,19,2008 Boston Celtics
+12,Greatest Basketball Team,20,2024 Boston Celtics
+13,Greatest Male Tennis Player,1,Novak Djokovic
+13,Greatest Male Tennis Player,2,Roger Federer
+13,Greatest Male Tennis Player,3,Rafael Nadal
+13,Greatest Male Tennis Player,4,Rod Laver
+13,Greatest Male Tennis Player,5,Björn Borg
+13,Greatest Male Tennis Player,6,Pete Sampras
+13,Greatest Male Tennis Player,7,Carlos Alcaraz
+13,Greatest Male Tennis Player,8,Andre Agassi
+13,Greatest Male Tennis Player,9,John McEnroe
+13,Greatest Male Tennis Player,10,Ivan Lendl
+13,Greatest Male Tennis Player,11,Jimmy Connors
+13,Greatest Male Tennis Player,12,Roy Emerson
+13,Greatest Male Tennis Player,13,Ken Rosewall
+13,Greatest Male Tennis Player,14,Boris Becker
+13,Greatest Male Tennis Player,15,Stefan Edberg
+13,Greatest Male Tennis Player,16,Mats Wilander
+13,Greatest Male Tennis Player,17,Guillermo Vilas
+13,Greatest Male Tennis Player,18,Andy Murray
+13,Greatest Male Tennis Player,19,John Newcombe
+13,Greatest Male Tennis Player,20,Arthur Ashe
+14,Greatest Female Tennis Player,1,Serena Williams
+14,Greatest Female Tennis Player,2,Steffi Graf
+14,Greatest Female Tennis Player,3,Martina Navratilova
+14,Greatest Female Tennis Player,4,Margaret Court
+14,Greatest Female Tennis Player,5,Chris Evert
+14,Greatest Female Tennis Player,6,Billie Jean King
+14,Greatest Female Tennis Player,7,Monica Seles
+14,Greatest Female Tennis Player,8,Venus Williams
+14,Greatest Female Tennis Player,9,Martina Hingis
+14,Greatest Female Tennis Player,10,Justine Henin
+14,Greatest Female Tennis Player,11,Evonne Goolagong Cawley
+14,Greatest Female Tennis Player,12,Maria Sharapova
+14,Greatest Female Tennis Player,13,Iga Świątek
+14,Greatest Female Tennis Player,14,Naomi Osaka
+14,Greatest Female Tennis Player,15,Lindsay Davenport
+14,Greatest Female Tennis Player,16,Helen Wills Moody
+14,Greatest Female Tennis Player,17,Suzanne Lenglen
+14,Greatest Female Tennis Player,18,Ashleigh Barty
+14,Greatest Female Tennis Player,19,Amélie Mauresmo
+14,Greatest Female Tennis Player,20,Simona Halep
+15,Greatest Boxer,1,Muhammad Ali
+15,Greatest Boxer,2,Sugar Ray Robinson
+15,Greatest Boxer,3,Floyd Mayweather Jr.
+15,Greatest Boxer,4,Mike Tyson
+15,Greatest Boxer,5,Manny Pacquiao
+15,Greatest Boxer,6,Joe Louis
+15,Greatest Boxer,7,Sugar Ray Leonard
+15,Greatest Boxer,8,Roberto Durán
+15,Greatest Boxer,9,Henry Armstrong
+15,Greatest Boxer,10,Rocky Marciano
+15,Greatest Boxer,11,George Foreman
+15,Greatest Boxer,12,Jack Dempsey
+15,Greatest Boxer,13,Julio César Chávez
+15,Greatest Boxer,14,Marvin Hagler
+15,Greatest Boxer,15,Joe Frazier
+15,Greatest Boxer,16,Lennox Lewis
+15,Greatest Boxer,17,Oscar De La Hoya
+15,Greatest Boxer,18,Bernard Hopkins
+15,Greatest Boxer,19,Roy Jones Jr.
+15,Greatest Boxer,20,Evander Holyfield
+16,Greatest MMA Fighter,1,Jon Jones
+16,Greatest MMA Fighter,2,Georges St-Pierre
+16,Greatest MMA Fighter,3,Anderson Silva
+16,Greatest MMA Fighter,4,Demetrious Johnson
+16,Greatest MMA Fighter,5,Khabib Nurmagomedov
+16,Greatest MMA Fighter,6,Amanda Nunes
+16,Greatest MMA Fighter,7,Fedor Emelianenko
+16,Greatest MMA Fighter,8,José Aldo
+16,Greatest MMA Fighter,9,Stipe Miocic
+16,Greatest MMA Fighter,10,Daniel Cormier
+16,Greatest MMA Fighter,11,Islam Makhachev
+16,Greatest MMA Fighter,12,Valentina Shevchenko
+16,Greatest MMA Fighter,13,Alexander Volkanovski
+16,Greatest MMA Fighter,14,Israel Adesanya
+16,Greatest MMA Fighter,15,Kamaru Usman
+16,Greatest MMA Fighter,16,Conor McGregor
+16,Greatest MMA Fighter,17,Ronda Rousey
+16,Greatest MMA Fighter,18,Max Holloway
+16,Greatest MMA Fighter,19,Chuck Liddell
+16,Greatest MMA Fighter,20,Randy Couture
+17,Greatest Wrestler,1,Stone Cold Steve Austin
+17,Greatest Wrestler,2,The Rock
+17,Greatest Wrestler,3,The Undertaker
+17,Greatest Wrestler,4,Hulk Hogan
+17,Greatest Wrestler,5,John Cena
+17,Greatest Wrestler,6,Shawn Michaels
+17,Greatest Wrestler,7,Ric Flair
+17,Greatest Wrestler,8,Bret Hart
+17,Greatest Wrestler,9,Triple H
+17,Greatest Wrestler,10,Eddie Guerrero
+17,Greatest Wrestler,11,Chris Jericho
+17,Greatest Wrestler,12,Kurt Angle
+17,Greatest Wrestler,13,Brock Lesnar
+17,Greatest Wrestler,14,André the Giant
+17,Greatest Wrestler,15,Randy Savage
+17,Greatest Wrestler,16,Rey Mysterio
+17,Greatest Wrestler,17,Roman Reigns
+17,Greatest Wrestler,18,CM Punk
+17,Greatest Wrestler,19,Mick Foley
+17,Greatest Wrestler,20,Bruno Sammartino
+18,Greatest F1 Driver,1,Lewis Hamilton
+18,Greatest F1 Driver,2,Michael Schumacher
+18,Greatest F1 Driver,3,Ayrton Senna
+18,Greatest F1 Driver,4,Juan Manuel Fangio
+18,Greatest F1 Driver,5,Alain Prost
+18,Greatest F1 Driver,6,Max Verstappen
+18,Greatest F1 Driver,7,Sebastian Vettel
+18,Greatest F1 Driver,8,Jackie Stewart
+18,Greatest F1 Driver,9,Niki Lauda
+18,Greatest F1 Driver,10,Jim Clark
+18,Greatest F1 Driver,11,Fernando Alonso
+18,Greatest F1 Driver,12,Nigel Mansell
+18,Greatest F1 Driver,13,Nelson Piquet
+18,Greatest F1 Driver,14,Alberto Ascari
+18,Greatest F1 Driver,15,Stirling Moss
+18,Greatest F1 Driver,16,Mika Häkkinen
+18,Greatest F1 Driver,17,Graham Hill
+18,Greatest F1 Driver,18,Jack Brabham
+18,Greatest F1 Driver,19,Kimi Räikkönen
+18,Greatest F1 Driver,20,Emerson Fittipaldi
+19,Greatest F1 Team,1,Ferrari
+19,Greatest F1 Team,2,McLaren
+19,Greatest F1 Team,3,Mercedes
+19,Greatest F1 Team,4,Red Bull Racing
+19,Greatest F1 Team,5,Williams
+19,Greatest F1 Team,6,Team Lotus
+19,Greatest F1 Team,7,Brabham
+19,Greatest F1 Team,8,Renault
+19,Greatest F1 Team,9,Tyrrell
+19,Greatest F1 Team,10,Benetton
+19,Greatest F1 Team,11,Cooper
+19,Greatest F1 Team,12,Brawn GP
+19,Greatest F1 Team,13,Jordan
+19,Greatest F1 Team,14,Alfa Romeo
+19,Greatest F1 Team,15,Maserati
+19,Greatest F1 Team,16,BMW Sauber
+19,Greatest F1 Team,17,BAR
+19,Greatest F1 Team,18,Ligier
+19,Greatest F1 Team,19,Racing Point
+19,Greatest F1 Team,20,Force India
+20,Greatest MotoGP Rider,1,Valentino Rossi
+20,Greatest MotoGP Rider,2,Giacomo Agostini
+20,Greatest MotoGP Rider,3,Marc Márquez
+20,Greatest MotoGP Rider,4,Casey Stoner
+20,Greatest MotoGP Rider,5,Mick Doohan
+20,Greatest MotoGP Rider,6,Jorge Lorenzo
+20,Greatest MotoGP Rider,7,Dani Pedrosa
+20,Greatest MotoGP Rider,8,Mike Hailwood
+20,Greatest MotoGP Rider,9,Wayne Rainey
+20,Greatest MotoGP Rider,10,Eddie Lawson
+20,Greatest MotoGP Rider,11,Kevin Schwantz
+20,Greatest MotoGP Rider,12,Kenny Roberts
+20,Greatest MotoGP Rider,13,Phil Read
+20,Greatest MotoGP Rider,14,John Surtees
+20,Greatest MotoGP Rider,15,Francesco Bagnaia
+20,Greatest MotoGP Rider,16,Álex Crivillé
+20,Greatest MotoGP Rider,17,Freddie Spencer
+20,Greatest MotoGP Rider,18,Max Biaggi
+20,Greatest MotoGP Rider,19,Ángel Nieto
+20,Greatest MotoGP Rider,20,Nicky Hayden
+21,Greatest Track Athlete,1,Contender 1
+21,Greatest Track Athlete,2,Contender 2
+21,Greatest Track Athlete,3,Contender 3
+21,Greatest Track Athlete,4,Contender 4
+21,Greatest Track Athlete,5,Contender 5
+21,Greatest Track Athlete,6,Contender 6
+21,Greatest Track Athlete,7,Contender 7
+21,Greatest Track Athlete,8,Contender 8
+21,Greatest Track Athlete,9,Contender 9
+21,Greatest Track Athlete,10,Contender 10
+21,Greatest Track Athlete,11,Contender 11
+21,Greatest Track Athlete,12,Contender 12
+21,Greatest Track Athlete,13,Contender 13
+21,Greatest Track Athlete,14,Contender 14
+21,Greatest Track Athlete,15,Contender 15
+21,Greatest Track Athlete,16,Contender 16
+21,Greatest Track Athlete,17,Contender 17
+21,Greatest Track Athlete,18,Contender 18
+21,Greatest Track Athlete,19,Contender 19
+21,Greatest Track Athlete,20,Contender 20
+22,Greatest Swimmer,1,Contender 1
+22,Greatest Swimmer,2,Contender 2
+22,Greatest Swimmer,3,Contender 3
+22,Greatest Swimmer,4,Contender 4
+22,Greatest Swimmer,5,Contender 5
+22,Greatest Swimmer,6,Contender 6
+22,Greatest Swimmer,7,Contender 7
+22,Greatest Swimmer,8,Contender 8
+22,Greatest Swimmer,9,Contender 9
+22,Greatest Swimmer,10,Contender 10
+22,Greatest Swimmer,11,Contender 11
+22,Greatest Swimmer,12,Contender 12
+22,Greatest Swimmer,13,Contender 13
+22,Greatest Swimmer,14,Contender 14
+22,Greatest Swimmer,15,Contender 15
+22,Greatest Swimmer,16,Contender 16
+22,Greatest Swimmer,17,Contender 17
+22,Greatest Swimmer,18,Contender 18
+22,Greatest Swimmer,19,Contender 19
+22,Greatest Swimmer,20,Contender 20
+23,Greatest Golfer,1,Contender 1
+23,Greatest Golfer,2,Contender 2
+23,Greatest Golfer,3,Contender 3
+23,Greatest Golfer,4,Contender 4
+23,Greatest Golfer,5,Contender 5
+23,Greatest Golfer,6,Contender 6
+23,Greatest Golfer,7,Contender 7
+23,Greatest Golfer,8,Contender 8
+23,Greatest Golfer,9,Contender 9
+23,Greatest Golfer,10,Contender 10
+23,Greatest Golfer,11,Contender 11
+23,Greatest Golfer,12,Contender 12
+23,Greatest Golfer,13,Contender 13
+23,Greatest Golfer,14,Contender 14
+23,Greatest Golfer,15,Contender 15
+23,Greatest Golfer,16,Contender 16
+23,Greatest Golfer,17,Contender 17
+23,Greatest Golfer,18,Contender 18
+23,Greatest Golfer,19,Contender 19
+23,Greatest Golfer,20,Contender 20
+24,Greatest Hockey Player,1,Contender 1
+24,Greatest Hockey Player,2,Contender 2
+24,Greatest Hockey Player,3,Contender 3
+24,Greatest Hockey Player,4,Contender 4
+24,Greatest Hockey Player,5,Contender 5
+24,Greatest Hockey Player,6,Contender 6
+24,Greatest Hockey Player,7,Contender 7
+24,Greatest Hockey Player,8,Contender 8
+24,Greatest Hockey Player,9,Contender 9
+24,Greatest Hockey Player,10,Contender 10
+24,Greatest Hockey Player,11,Contender 11
+24,Greatest Hockey Player,12,Contender 12
+24,Greatest Hockey Player,13,Contender 13
+24,Greatest Hockey Player,14,Contender 14
+24,Greatest Hockey Player,15,Contender 15
+24,Greatest Hockey Player,16,Contender 16
+24,Greatest Hockey Player,17,Contender 17
+24,Greatest Hockey Player,18,Contender 18
+24,Greatest Hockey Player,19,Contender 19
+24,Greatest Hockey Player,20,Contender 20
+25,Greatest Gymnast,1,Contender 1
+25,Greatest Gymnast,2,Contender 2
+25,Greatest Gymnast,3,Contender 3
+25,Greatest Gymnast,4,Contender 4
+25,Greatest Gymnast,5,Contender 5
+25,Greatest Gymnast,6,Contender 6
+25,Greatest Gymnast,7,Contender 7
+25,Greatest Gymnast,8,Contender 8
+25,Greatest Gymnast,9,Contender 9
+25,Greatest Gymnast,10,Contender 10
+25,Greatest Gymnast,11,Contender 11
+25,Greatest Gymnast,12,Contender 12
+25,Greatest Gymnast,13,Contender 13
+25,Greatest Gymnast,14,Contender 14
+25,Greatest Gymnast,15,Contender 15
+25,Greatest Gymnast,16,Contender 16
+25,Greatest Gymnast,17,Contender 17
+25,Greatest Gymnast,18,Contender 18
+25,Greatest Gymnast,19,Contender 19
+25,Greatest Gymnast,20,Contender 20
+26,Greatest Cyclist,1,Contender 1
+26,Greatest Cyclist,2,Contender 2
+26,Greatest Cyclist,3,Contender 3
+26,Greatest Cyclist,4,Contender 4
+26,Greatest Cyclist,5,Contender 5
+26,Greatest Cyclist,6,Contender 6
+26,Greatest Cyclist,7,Contender 7
+26,Greatest Cyclist,8,Contender 8
+26,Greatest Cyclist,9,Contender 9
+26,Greatest Cyclist,10,Contender 10
+26,Greatest Cyclist,11,Contender 11
+26,Greatest Cyclist,12,Contender 12
+26,Greatest Cyclist,13,Contender 13
+26,Greatest Cyclist,14,Contender 14
+26,Greatest Cyclist,15,Contender 15
+26,Greatest Cyclist,16,Contender 16
+26,Greatest Cyclist,17,Contender 17
+26,Greatest Cyclist,18,Contender 18
+26,Greatest Cyclist,19,Contender 19
+26,Greatest Cyclist,20,Contender 20
+27,Greatest Chess Player,1,Contender 1
+27,Greatest Chess Player,2,Contender 2
+27,Greatest Chess Player,3,Contender 3
+27,Greatest Chess Player,4,Contender 4
+27,Greatest Chess Player,5,Contender 5
+27,Greatest Chess Player,6,Contender 6
+27,Greatest Chess Player,7,Contender 7
+27,Greatest Chess Player,8,Contender 8
+27,Greatest Chess Player,9,Contender 9
+27,Greatest Chess Player,10,Contender 10
+27,Greatest Chess Player,11,Contender 11
+27,Greatest Chess Player,12,Contender 12
+27,Greatest Chess Player,13,Contender 13
+27,Greatest Chess Player,14,Contender 14
+27,Greatest Chess Player,15,Contender 15
+27,Greatest Chess Player,16,Contender 16
+27,Greatest Chess Player,17,Contender 17
+27,Greatest Chess Player,18,Contender 18
+27,Greatest Chess Player,19,Contender 19
+27,Greatest Chess Player,20,Contender 20
+28,Greatest Esports Player,1,Contender 1
+28,Greatest Esports Player,2,Contender 2
+28,Greatest Esports Player,3,Contender 3
+28,Greatest Esports Player,4,Contender 4
+28,Greatest Esports Player,5,Contender 5
+28,Greatest Esports Player,6,Contender 6
+28,Greatest Esports Player,7,Contender 7
+28,Greatest Esports Player,8,Contender 8
+28,Greatest Esports Player,9,Contender 9
+28,Greatest Esports Player,10,Contender 10
+28,Greatest Esports Player,11,Contender 11
+28,Greatest Esports Player,12,Contender 12
+28,Greatest Esports Player,13,Contender 13
+28,Greatest Esports Player,14,Contender 14
+28,Greatest Esports Player,15,Contender 15
+28,Greatest Esports Player,16,Contender 16
+28,Greatest Esports Player,17,Contender 17
+28,Greatest Esports Player,18,Contender 18
+28,Greatest Esports Player,19,Contender 19
+28,Greatest Esports Player,20,Contender 20
+29,Greatest Poker Player,1,Contender 1
+29,Greatest Poker Player,2,Contender 2
+29,Greatest Poker Player,3,Contender 3
+29,Greatest Poker Player,4,Contender 4
+29,Greatest Poker Player,5,Contender 5
+29,Greatest Poker Player,6,Contender 6
+29,Greatest Poker Player,7,Contender 7
+29,Greatest Poker Player,8,Contender 8
+29,Greatest Poker Player,9,Contender 9
+29,Greatest Poker Player,10,Contender 10
+29,Greatest Poker Player,11,Contender 11
+29,Greatest Poker Player,12,Contender 12
+29,Greatest Poker Player,13,Contender 13
+29,Greatest Poker Player,14,Contender 14
+29,Greatest Poker Player,15,Contender 15
+29,Greatest Poker Player,16,Contender 16
+29,Greatest Poker Player,17,Contender 17
+29,Greatest Poker Player,18,Contender 18
+29,Greatest Poker Player,19,Contender 19
+29,Greatest Poker Player,20,Contender 20
+30,Greatest Hollywood Actor,1,Marlon Brando
+30,Greatest Hollywood Actor,2,Robert De Niro
+30,Greatest Hollywood Actor,3,Daniel Day-Lewis
+30,Greatest Hollywood Actor,4,Jack Nicholson
+30,Greatest Hollywood Actor,5,Al Pacino
+30,Greatest Hollywood Actor,6,Leonardo DiCaprio
+30,Greatest Hollywood Actor,7,Tom Hanks
+30,Greatest Hollywood Actor,8,Denzel Washington
+30,Greatest Hollywood Actor,9,Dustin Hoffman
+30,Greatest Hollywood Actor,10,Anthony Hopkins
+30,Greatest Hollywood Actor,11,Joaquin Phoenix
+30,Greatest Hollywood Actor,12,Paul Newman
+30,Greatest Hollywood Actor,13,Humphrey Bogart
+30,Greatest Hollywood Actor,14,James Stewart
+30,Greatest Hollywood Actor,15,Christian Bale
+30,Greatest Hollywood Actor,16,Gary Oldman
+30,Greatest Hollywood Actor,17,Philip Seymour Hoffman
+30,Greatest Hollywood Actor,18,Morgan Freeman
+30,Greatest Hollywood Actor,19,Sidney Poitier
+30,Greatest Hollywood Actor,20,Heath Ledger
+31,Greatest Hollywood Actress,1,Meryl Streep
+31,Greatest Hollywood Actress,2,Katharine Hepburn
+31,Greatest Hollywood Actress,3,Cate Blanchett
+31,Greatest Hollywood Actress,4,Elizabeth Taylor
+31,Greatest Hollywood Actress,5,Audrey Hepburn
+31,Greatest Hollywood Actress,6,Viola Davis
+31,Greatest Hollywood Actress,7,Frances McDormand
+31,Greatest Hollywood Actress,8,Ingrid Bergman
+31,Greatest Hollywood Actress,9,Bette Davis
+31,Greatest Hollywood Actress,10,Jodie Foster
+31,Greatest Hollywood Actress,11,Julianne Moore
+31,Greatest Hollywood Actress,12,Nicole Kidman
+31,Greatest Hollywood Actress,13,Natalie Portman
+31,Greatest Hollywood Actress,14,Charlize Theron
+31,Greatest Hollywood Actress,15,Michelle Yeoh
+31,Greatest Hollywood Actress,16,Olivia de Havilland
+31,Greatest Hollywood Actress,17,Vivien Leigh
+31,Greatest Hollywood Actress,18,Jessica Chastain
+31,Greatest Hollywood Actress,19,Saoirse Ronan
+31,Greatest Hollywood Actress,20,Sigourney Weaver
+32,Greatest Bollywood Actor,1,Amitabh Bachchan
+32,Greatest Bollywood Actor,2,Shah Rukh Khan
+32,Greatest Bollywood Actor,3,Dilip Kumar
+32,Greatest Bollywood Actor,4,Aamir Khan
+32,Greatest Bollywood Actor,5,Raj Kapoor
+32,Greatest Bollywood Actor,6,Naseeruddin Shah
+32,Greatest Bollywood Actor,7,Irrfan Khan
+32,Greatest Bollywood Actor,8,Ranbir Kapoor
+32,Greatest Bollywood Actor,9,Manoj Bajpayee
+32,Greatest Bollywood Actor,10,Hrithik Roshan
+32,Greatest Bollywood Actor,11,Akshay Kumar
+32,Greatest Bollywood Actor,12,Anil Kapoor
+32,Greatest Bollywood Actor,13,Rajkummar Rao
+32,Greatest Bollywood Actor,14,Dharmendra
+32,Greatest Bollywood Actor,15,Dev Anand
+32,Greatest Bollywood Actor,16,Kamal Haasan
+32,Greatest Bollywood Actor,17,Nawazuddin Siddiqui
+32,Greatest Bollywood Actor,18,Sunny Deol
+32,Greatest Bollywood Actor,19,Pankaj Tripathi
+32,Greatest Bollywood Actor,20,Ranveer Singh
+33,Greatest Bollywood Actress,1,Madhubala
+33,Greatest Bollywood Actress,2,Sridevi
+33,Greatest Bollywood Actress,3,Madhuri Dixit
+33,Greatest Bollywood Actress,4,Nargis
+33,Greatest Bollywood Actress,5,Meena Kumari
+33,Greatest Bollywood Actress,6,Rekha
+33,Greatest Bollywood Actress,7,Shabana Azmi
+33,Greatest Bollywood Actress,8,Tabu
+33,Greatest Bollywood Actress,9,Deepika Padukone
+33,Greatest Bollywood Actress,10,Priyanka Chopra Jonas
+33,Greatest Bollywood Actress,11,Kajol
+33,Greatest Bollywood Actress,12,Waheeda Rehman
+33,Greatest Bollywood Actress,13,Nutan
+33,Greatest Bollywood Actress,14,Smita Patil
+33,Greatest Bollywood Actress,15,Alia Bhatt
+33,Greatest Bollywood Actress,16,Kareena Kapoor Khan
+33,Greatest Bollywood Actress,17,Hema Malini
+33,Greatest Bollywood Actress,18,Vidya Balan
+33,Greatest Bollywood Actress,19,Rani Mukerji
+33,Greatest Bollywood Actress,20,Aishwarya Rai Bachchan
+34,Greatest Korean Actor,1,Song Kang-ho
+34,Greatest Korean Actor,2,Choi Min-sik
+34,Greatest Korean Actor,3,Lee Byung-hun
+34,Greatest Korean Actor,4,Ha Jung-woo
+34,Greatest Korean Actor,5,Song Joong-ki
+34,Greatest Korean Actor,6,Gong Yoo
+34,Greatest Korean Actor,7,Lee Jung-jae
+34,Greatest Korean Actor,8,Hwang Jung-min
+34,Greatest Korean Actor,9,Park Hae-il
+34,Greatest Korean Actor,10,Yoo Ah-in
+34,Greatest Korean Actor,11,Ma Dong-seok
+34,Greatest Korean Actor,12,Sol Kyung-gu
+34,Greatest Korean Actor,13,Kim Soo-hyun
+34,Greatest Korean Actor,14,Jung Woo-sung
+34,Greatest Korean Actor,15,Park Seo-joon
+34,Greatest Korean Actor,16,Choi Woo-shik
+34,Greatest Korean Actor,17,Won Bin
+34,Greatest Korean Actor,18,Hyun Bin
+34,Greatest Korean Actor,19,Kim Nam-gil
+34,Greatest Korean Actor,20,Park Bo-gum
+35,Greatest Film Director,1,Steven Spielberg
+35,Greatest Film Director,2,Martin Scorsese
+35,Greatest Film Director,3,Stanley Kubrick
+35,Greatest Film Director,4,Alfred Hitchcock
+35,Greatest Film Director,5,Akira Kurosawa
+35,Greatest Film Director,6,Christopher Nolan
+35,Greatest Film Director,7,Francis Ford Coppola
+35,Greatest Film Director,8,Quentin Tarantino
+35,Greatest Film Director,9,Ingmar Bergman
+35,Greatest Film Director,10,Federico Fellini
+35,Greatest Film Director,11,Satyajit Ray
+35,Greatest Film Director,12,Hayao Miyazaki
+35,Greatest Film Director,13,David Fincher
+35,Greatest Film Director,14,Bong Joon-ho
+35,Greatest Film Director,15,Denis Villeneuve
+35,Greatest Film Director,16,Orson Welles
+35,Greatest Film Director,17,Ridley Scott
+35,Greatest Film Director,18,David Lynch
+35,Greatest Film Director,19,Paul Thomas Anderson
+35,Greatest Film Director,20,Jean Renoir
+36,Greatest Film,1,The Godfather
+36,Greatest Film,2,The Shawshank Redemption
+36,Greatest Film,3,The Godfather Part II
+36,Greatest Film,4,Citizen Kane
+36,Greatest Film,5,2001: A Space Odyssey
+36,Greatest Film,6,Pulp Fiction
+36,Greatest Film,7,Schindler's List
+36,Greatest Film,8,The Dark Knight
+36,Greatest Film,9,Seven Samurai
+36,Greatest Film,10,Parasite
+36,Greatest Film,11,Goodfellas
+36,Greatest Film,12,Casablanca
+36,Greatest Film,13,Apocalypse Now
+36,Greatest Film,14,Taxi Driver
+36,Greatest Film,15,Raging Bull
+36,Greatest Film,16,The Lord of the Rings: The Return of the King
+36,Greatest Film,17,Forrest Gump
+36,Greatest Film,18,Inception
+36,Greatest Film,19,Interstellar
+36,Greatest Film,20,Fight Club
+37,Greatest TV Show,1,Breaking Bad
+37,Greatest TV Show,2,The Sopranos
+37,Greatest TV Show,3,The Wire
+37,Greatest TV Show,4,Game of Thrones
+37,Greatest TV Show,5,Better Call Saul
+37,Greatest TV Show,6,Succession
+37,Greatest TV Show,7,Mad Men
+37,Greatest TV Show,8,The Simpsons
+37,Greatest TV Show,9,Seinfeld
+37,Greatest TV Show,10,The Office
+37,Greatest TV Show,11,Friends
+37,Greatest TV Show,12,Chernobyl
+37,Greatest TV Show,13,True Detective
+37,Greatest TV Show,14,The Twilight Zone
+37,Greatest TV Show,15,Fleabag
+37,Greatest TV Show,16,Dark
+37,Greatest TV Show,17,Black Mirror
+37,Greatest TV Show,18,The Bear
+37,Greatest TV Show,19,Stranger Things
+37,Greatest TV Show,20,The West Wing
+38,Greatest Animated Film,1,Spirited Away
+38,Greatest Animated Film,2,The Lion King
+38,Greatest Animated Film,3,Toy Story
+38,Greatest Animated Film,4,WALL-E
+38,Greatest Animated Film,5,Spider-Man: Into the Spider-Verse
+38,Greatest Animated Film,6,Princess Mononoke
+38,Greatest Animated Film,7,Toy Story 3
+38,Greatest Animated Film,8,Up
+38,Greatest Animated Film,9,Finding Nemo
+38,Greatest Animated Film,10,Ratatouille
+38,Greatest Animated Film,11,The Incredibles
+38,Greatest Animated Film,12,My Neighbor Totoro
+38,Greatest Animated Film,13,How to Train Your Dragon
+38,Greatest Animated Film,14,Shrek
+38,Greatest Animated Film,15,Coco
+38,Greatest Animated Film,16,Akira
+38,Greatest Animated Film,17,Grave of the Fireflies
+38,Greatest Animated Film,18,Inside Out
+38,Greatest Animated Film,19,Beauty and the Beast
+38,Greatest Animated Film,20,The Iron Giant
+39,Greatest Movie Villain,1,Darth Vader
+39,Greatest Movie Villain,2,The Joker
+39,Greatest Movie Villain,3,Hannibal Lecter
+39,Greatest Movie Villain,4,Voldemort
+39,Greatest Movie Villain,5,Thanos
+39,Greatest Movie Villain,6,Sauron
+39,Greatest Movie Villain,7,Magneto
+39,Greatest Movie Villain,8,Norman Bates
+39,Greatest Movie Villain,9,Anton Chigurh
+39,Greatest Movie Villain,10,Hans Landa
+39,Greatest Movie Villain,11,Agent Smith
+39,Greatest Movie Villain,12,T-1000
+39,Greatest Movie Villain,13,Emperor Palpatine
+39,Greatest Movie Villain,14,Scar
+39,Greatest Movie Villain,15,Green Goblin
+39,Greatest Movie Villain,16,Killmonger
+39,Greatest Movie Villain,17,Nurse Ratched
+39,Greatest Movie Villain,18,HAL 9000
+39,Greatest Movie Villain,19,Pennywise
+39,Greatest Movie Villain,20,Keyser Söze
+40,Greatest Comedian,1,George Carlin
+40,Greatest Comedian,2,Richard Pryor
+40,Greatest Comedian,3,Dave Chappelle
+40,Greatest Comedian,4,Robin Williams
+40,Greatest Comedian,5,Eddie Murphy
+40,Greatest Comedian,6,Bill Hicks
+40,Greatest Comedian,7,Jerry Seinfeld
+40,Greatest Comedian,8,Chris Rock
+40,Greatest Comedian,9,Steve Martin
+40,Greatest Comedian,10,Norm Macdonald
+40,Greatest Comedian,11,Louis C.K.
+40,Greatest Comedian,12,Mitch Hedberg
+40,Greatest Comedian,13,Joan Rivers
+40,Greatest Comedian,14,Don Rickles
+40,Greatest Comedian,15,John Mulaney
+40,Greatest Comedian,16,Bill Burr
+40,Greatest Comedian,17,Ricky Gervais
+40,Greatest Comedian,18,Peter Sellers
+40,Greatest Comedian,19,Eddie Izzard
+40,Greatest Comedian,20,Contender 20
+41,Greatest Singer,1,Michael Jackson
+41,Greatest Singer,2,Freddie Mercury
+41,Greatest Singer,3,Aretha Franklin
+41,Greatest Singer,4,Whitney Houston
+41,Greatest Singer,5,Elvis Presley
+41,Greatest Singer,6,Frank Sinatra
+41,Greatest Singer,7,Stevie Wonder
+41,Greatest Singer,8,Mariah Carey
+41,Greatest Singer,9,Celine Dion
+41,Greatest Singer,10,Beyoncé
+41,Greatest Singer,11,Prince
+41,Greatest Singer,12,Bob Dylan
+41,Greatest Singer,13,Ray Charles
+41,Greatest Singer,14,Marvin Gaye
+41,Greatest Singer,15,Nina Simone
+41,Greatest Singer,16,Adele
+41,Greatest Singer,17,Sam Cooke
+41,Greatest Singer,18,Tina Turner
+41,Greatest Singer,19,David Bowie
+41,Greatest Singer,20,Otis Redding
+42,Greatest Rapper,1,Tupac Shakur
+42,Greatest Rapper,2,The Notorious B.I.G.
+42,Greatest Rapper,3,Jay-Z
+42,Greatest Rapper,4,Eminem
+42,Greatest Rapper,5,Nas
+42,Greatest Rapper,6,Kendrick Lamar
+42,Greatest Rapper,7,Kanye West
+42,Greatest Rapper,8,Lil Wayne
+42,Greatest Rapper,9,Drake
+42,Greatest Rapper,10,Rakim
+42,Greatest Rapper,11,André 3000
+42,Greatest Rapper,12,Ice Cube
+42,Greatest Rapper,13,Snoop Dogg
+42,Greatest Rapper,14,MF DOOM
+42,Greatest Rapper,15,Lauryn Hill
+42,Greatest Rapper,16,Nicki Minaj
+42,Greatest Rapper,17,J. Cole
+42,Greatest Rapper,18,Travis Scott
+42,Greatest Rapper,19,Future
+42,Greatest Rapper,20,50 Cent
+43,Greatest Band,1,The Beatles
+43,Greatest Band,2,Pink Floyd
+43,Greatest Band,3,Led Zeppelin
+43,Greatest Band,4,Queen
+43,Greatest Band,5,The Rolling Stones
+43,Greatest Band,6,Nirvana
+43,Greatest Band,7,Radiohead
+43,Greatest Band,8,Fleetwood Mac
+43,Greatest Band,9,The Beach Boys
+43,Greatest Band,10,Black Sabbath
+43,Greatest Band,11,AC/DC
+43,Greatest Band,12,Metallica
+43,Greatest Band,13,U2
+43,Greatest Band,14,The Who
+43,Greatest Band,15,Eagles
+43,Greatest Band,16,The Doors
+43,Greatest Band,17,The Smiths
+43,Greatest Band,18,Red Hot Chili Peppers
+43,Greatest Band,19,Coldplay
+43,Greatest Band,20,Guns N' Roses
+44,Greatest Guitarist,1,Jimi Hendrix
+44,Greatest Guitarist,2,Eric Clapton
+44,Greatest Guitarist,3,Jimmy Page
+44,Greatest Guitarist,4,Eddie Van Halen
+44,Greatest Guitarist,5,Stevie Ray Vaughan
+44,Greatest Guitarist,6,David Gilmour
+44,Greatest Guitarist,7,Jeff Beck
+44,Greatest Guitarist,8,B.B. King
+44,Greatest Guitarist,9,Carlos Santana
+44,Greatest Guitarist,10,Slash
+44,Greatest Guitarist,11,Brian May
+44,Greatest Guitarist,12,Mark Knopfler
+44,Greatest Guitarist,13,Keith Richards
+44,Greatest Guitarist,14,Chuck Berry
+44,Greatest Guitarist,15,John Frusciante
+44,Greatest Guitarist,16,Joe Satriani
+44,Greatest Guitarist,17,Steve Vai
+44,Greatest Guitarist,18,Ritchie Blackmore
+44,Greatest Guitarist,19,Tom Morello
+44,Greatest Guitarist,20,Randy Rhoads
+45,Greatest Drummer,1,John Bonham
+45,Greatest Drummer,2,Neil Peart
+45,Greatest Drummer,3,Buddy Rich
+45,Greatest Drummer,4,Keith Moon
+45,Greatest Drummer,5,Ginger Baker
+45,Greatest Drummer,6,Gene Krupa
+45,Greatest Drummer,7,Stewart Copeland
+45,Greatest Drummer,8,Dave Grohl
+45,Greatest Drummer,9,Mitch Mitchell
+45,Greatest Drummer,10,Ringo Starr
+45,Greatest Drummer,11,Bill Bruford
+45,Greatest Drummer,12,Tony Williams
+45,Greatest Drummer,13,Phil Collins
+45,Greatest Drummer,14,Elvin Jones
+45,Greatest Drummer,15,Lars Ulrich
+45,Greatest Drummer,16,Chad Smith
+45,Greatest Drummer,17,Questlove
+45,Greatest Drummer,18,Terry Bozzio
+45,Greatest Drummer,19,Steve Gadd
+45,Greatest Drummer,20,Danny Carey
+46,Greatest Composer,1,Johann Sebastian Bach
+46,Greatest Composer,2,Ludwig van Beethoven
+46,Greatest Composer,3,Wolfgang Amadeus Mozart
+46,Greatest Composer,4,Frédéric Chopin
+46,Greatest Composer,5,Richard Wagner
+46,Greatest Composer,6,Pyotr Tchaikovsky
+46,Greatest Composer,7,Antonio Vivaldi
+46,Greatest Composer,8,Claude Debussy
+46,Greatest Composer,9,Igor Stravinsky
+46,Greatest Composer,10,Joseph Haydn
+46,Greatest Composer,11,Franz Schubert
+46,Greatest Composer,12,Johannes Brahms
+46,Greatest Composer,13,George Frideric Handel
+46,Greatest Composer,14,Gustav Mahler
+46,Greatest Composer,15,Sergei Rachmaninoff
+46,Greatest Composer,16,Sergei Prokofiev
+46,Greatest Composer,17,Giuseppe Verdi
+46,Greatest Composer,18,Maurice Ravel
+46,Greatest Composer,19,Richard Strauss
+46,Greatest Composer,20,Gustav Holst
+47,Greatest Music Producer,1,Quincy Jones
+47,Greatest Music Producer,2,Dr. Dre
+47,Greatest Music Producer,3,George Martin
+47,Greatest Music Producer,4,Rick Rubin
+47,Greatest Music Producer,5,Brian Eno
+47,Greatest Music Producer,6,Phil Spector
+47,Greatest Music Producer,7,Max Martin
+47,Greatest Music Producer,8,Nigel Godrich
+47,Greatest Music Producer,9,Timbaland
+47,Greatest Music Producer,10,J Dilla
+47,Greatest Music Producer,11,Pharrell Williams
+47,Greatest Music Producer,12,Metro Boomin
+47,Greatest Music Producer,13,Danger Mouse
+47,Greatest Music Producer,14,Mark Ronson
+47,Greatest Music Producer,15,The Neptunes
+47,Greatest Music Producer,16,Clive Davis
+47,Greatest Music Producer,17,Butch Vig
+47,Greatest Music Producer,18,Babyface
+47,Greatest Music Producer,19,Finneas
+47,Greatest Music Producer,20,Nile Rodgers
+48,Greatest DJ,1,David Guetta
+48,Greatest DJ,2,Calvin Harris
+48,Greatest DJ,3,Tiësto
+48,Greatest DJ,4,Avicii
+48,Greatest DJ,5,Martin Garrix
+48,Greatest DJ,6,Armin van Buuren
+48,Greatest DJ,7,Carl Cox
+48,Greatest DJ,8,Skrillex
+48,Greatest DJ,9,deadmau5
+48,Greatest DJ,10,Paul Oakenfold
+48,Greatest DJ,11,Fatboy Slim
+48,Greatest DJ,12,Diplo
+48,Greatest DJ,13,Eric Prydz
+48,Greatest DJ,14,Richie Hawtin
+48,Greatest DJ,15,Peggy Gou
+48,Greatest DJ,16,Charlotte de Witte
+48,Greatest DJ,17,DJ Snake
+48,Greatest DJ,18,Marshmello
+48,Greatest DJ,19,Kaskade
+48,Greatest DJ,20,Steve Aoki
+49,Greatest Album,1,The Dark Side of the Moon
+49,Greatest Album,2,Abbey Road
+49,Greatest Album,3,Thriller
+49,Greatest Album,4,OK Computer
+49,Greatest Album,5,Sgt. Pepper's Lonely Hearts Club Band
+49,Greatest Album,6,Rumours
+49,Greatest Album,7,To Pimp a Butterfly
+49,Greatest Album,8,Pet Sounds
+49,Greatest Album,9,Nevermind
+49,Greatest Album,10,Purple Rain
+49,Greatest Album,11,Blonde
+49,Greatest Album,12,Illmatic
+49,Greatest Album,13,The Miseducation of Lauryn Hill
+49,Greatest Album,14,Kind of Blue
+49,Greatest Album,15,Led Zeppelin IV
+49,Greatest Album,16,What's Going On
+49,Greatest Album,17,Back to Black
+49,Greatest Album,18,My Beautiful Dark Twisted Fantasy
+49,Greatest Album,19,Born to Run
+49,Greatest Album,20,Revolver
+50,Greatest Playback Singer,1,Lata Mangeshkar
+50,Greatest Playback Singer,2,Asha Bhosle
+50,Greatest Playback Singer,3,Mohammed Rafi
+50,Greatest Playback Singer,4,Kishore Kumar
+50,Greatest Playback Singer,5,K. J. Yesudas
+50,Greatest Playback Singer,6,S. P. Balasubrahmanyam
+50,Greatest Playback Singer,7,Alka Yagnik
+50,Greatest Playback Singer,8,Shreya Ghoshal
+50,Greatest Playback Singer,9,Sonu Nigam
+50,Greatest Playback Singer,10,Udit Narayan
+50,Greatest Playback Singer,11,Kumar Sanu
+50,Greatest Playback Singer,12,Geeta Dutt
+50,Greatest Playback Singer,13,Manna Dey
+50,Greatest Playback Singer,14,Talat Mahmood
+50,Greatest Playback Singer,15,Kavita Krishnamurti
+50,Greatest Playback Singer,16,Hariharan
+50,Greatest Playback Singer,17,Arijit Singh
+50,Greatest Playback Singer,18,Mukesh
+50,Greatest Playback Singer,19,Hemant Kumar
+50,Greatest Playback Singer,20,S. Janaki
+51,Greatest K-pop Group,1,BTS
+51,Greatest K-pop Group,2,BLACKPINK
+51,Greatest K-pop Group,3,EXO
+51,Greatest K-pop Group,4,BIGBANG
+51,Greatest K-pop Group,5,Girls' Generation
+51,Greatest K-pop Group,6,TWICE
+51,Greatest K-pop Group,7,SEVENTEEN
+51,Greatest K-pop Group,8,SHINee
+51,Greatest K-pop Group,9,Red Velvet
+51,Greatest K-pop Group,10,NewJeans
+51,Greatest K-pop Group,11,Stray Kids
+51,Greatest K-pop Group,12,aespa
+51,Greatest K-pop Group,13,TVXQ
+51,Greatest K-pop Group,14,Super Junior
+51,Greatest K-pop Group,15,Wonder Girls
+51,Greatest K-pop Group,16,2NE1
+51,Greatest K-pop Group,17,IVE
+51,Greatest K-pop Group,18,LE SSERAFIM
+51,Greatest K-pop Group,19,NCT
+51,Greatest K-pop Group,20,TXT
+52,Greatest Scientist,1,Albert Einstein
+52,Greatest Scientist,2,Isaac Newton
+52,Greatest Scientist,3,Charles Darwin
+52,Greatest Scientist,4,Marie Curie
+52,Greatest Scientist,5,Galileo Galilei
+52,Greatest Scientist,6,Nikola Tesla
+52,Greatest Scientist,7,Stephen Hawking
+52,Greatest Scientist,8,Richard Feynman
+52,Greatest Scientist,9,Louis Pasteur
+52,Greatest Scientist,10,James Clerk Maxwell
+52,Greatest Scientist,11,Michael Faraday
+52,Greatest Scientist,12,Alan Turing
+52,Greatest Scientist,13,Rosalind Franklin
+52,Greatest Scientist,14,Gregor Mendel
+52,Greatest Scientist,15,Carl Linnaeus
+52,Greatest Scientist,16,Niels Bohr
+52,Greatest Scientist,17,Erwin Schrödinger
+52,Greatest Scientist,18,Werner Heisenberg
+52,Greatest Scientist,19,Alexander Fleming
+52,Greatest Scientist,20,Jane Goodall
+53,Greatest Physicist,1,Isaac Newton
+53,Greatest Physicist,2,Albert Einstein
+53,Greatest Physicist,3,James Clerk Maxwell
+53,Greatest Physicist,4,Galileo Galilei
+53,Greatest Physicist,5,Richard Feynman
+53,Greatest Physicist,6,Niels Bohr
+53,Greatest Physicist,7,Max Planck
+53,Greatest Physicist,8,Michael Faraday
+53,Greatest Physicist,9,Paul Dirac
+53,Greatest Physicist,10,Werner Heisenberg
+53,Greatest Physicist,11,Erwin Schrödinger
+53,Greatest Physicist,12,Ernest Rutherford
+53,Greatest Physicist,13,Enrico Fermi
+53,Greatest Physicist,14,Stephen Hawking
+53,Greatest Physicist,15,J. Robert Oppenheimer
+53,Greatest Physicist,16,Marie Curie
+53,Greatest Physicist,17,Wolfgang Pauli
+53,Greatest Physicist,18,Satyendra Nath Bose
+53,Greatest Physicist,19,C. V. Raman
+53,Greatest Physicist,20,Contender 20
+54,Greatest Mathematician,1,Carl Friedrich Gauss
+54,Greatest Mathematician,2,Leonhard Euler
+54,Greatest Mathematician,3,Isaac Newton
+54,Greatest Mathematician,4,Euclid
+54,Greatest Mathematician,5,Archimedes
+54,Greatest Mathematician,6,Bernhard Riemann
+54,Greatest Mathematician,7,Srinivasa Ramanujan
+54,Greatest Mathematician,8,Henri Poincaré
+54,Greatest Mathematician,9,David Hilbert
+54,Greatest Mathematician,10,Kurt Gödel
+54,Greatest Mathematician,11,Alan Turing
+54,Greatest Mathematician,12,Pierre-Simon Laplace
+54,Greatest Mathematician,13,Évariste Galois
+54,Greatest Mathematician,14,Gottfried Wilhelm Leibniz
+54,Greatest Mathematician,15,Georg Cantor
+54,Greatest Mathematician,16,Emmy Noether
+54,Greatest Mathematician,17,John von Neumann
+54,Greatest Mathematician,18,Fibonacci
+54,Greatest Mathematician,19,Terence Tao
+54,Greatest Mathematician,20,Grigori Perelman
+55,Greatest Chemist,1,Antoine Lavoisier
+55,Greatest Chemist,2,Dmitri Mendeleev
+55,Greatest Chemist,3,Marie Curie
+55,Greatest Chemist,4,Linus Pauling
+55,Greatest Chemist,5,Robert Bunsen
+55,Greatest Chemist,6,John Dalton
+55,Greatest Chemist,7,Robert Boyle
+55,Greatest Chemist,8,Humphry Davy
+55,Greatest Chemist,9,Michael Faraday
+55,Greatest Chemist,10,Justus von Liebig
+55,Greatest Chemist,11,Alfred Nobel
+55,Greatest Chemist,12,Svante Arrhenius
+55,Greatest Chemist,13,August Kekulé
+55,Greatest Chemist,14,Gilbert N. Lewis
+55,Greatest Chemist,15,Fritz Haber
+55,Greatest Chemist,16,Dorothy Hodgkin
+55,Greatest Chemist,17,Glenn T. Seaborg
+55,Greatest Chemist,18,Irving Langmuir
+55,Greatest Chemist,19,Amedeo Avogadro
+55,Greatest Chemist,20,Joseph Priestley
+56,Greatest Biologist,1,Charles Darwin
+56,Greatest Biologist,2,Gregor Mendel
+56,Greatest Biologist,3,Louis Pasteur
+56,Greatest Biologist,4,Carl Linnaeus
+56,Greatest Biologist,5,James Watson
+56,Greatest Biologist,6,Francis Crick
+56,Greatest Biologist,7,Barbara McClintock
+56,Greatest Biologist,8,E. O. Wilson
+56,Greatest Biologist,9,Rachel Carson
+56,Greatest Biologist,10,Jane Goodall
+56,Greatest Biologist,11,Rosalind Franklin
+56,Greatest Biologist,12,Ernst Mayr
+56,Greatest Biologist,13,Alexander Fleming
+56,Greatest Biologist,14,Theodosius Dobzhansky
+56,Greatest Biologist,15,Lynn Margulis
+56,Greatest Biologist,16,Richard Dawkins
+56,Greatest Biologist,17,Stephen Jay Gould
+56,Greatest Biologist,18,Thomas Hunt Morgan
+56,Greatest Biologist,19,Edward Jenner
+56,Greatest Biologist,20,Antonie van Leeuwenhoek
+57,Greatest Philosopher,1,Aristotle
+57,Greatest Philosopher,2,Plato
+57,Greatest Philosopher,3,Socrates
+57,Greatest Philosopher,4,Immanuel Kant
+57,Greatest Philosopher,5,Friedrich Nietzsche
+57,Greatest Philosopher,6,René Descartes
+57,Greatest Philosopher,7,Confucius
+57,Greatest Philosopher,8,David Hume
+57,Greatest Philosopher,9,John Locke
+57,Greatest Philosopher,10,Karl Marx
+57,Greatest Philosopher,11,Søren Kierkegaard
+57,Greatest Philosopher,12,Jean-Paul Sartre
+57,Greatest Philosopher,13,Baruch Spinoza
+57,Greatest Philosopher,14,Thomas Aquinas
+57,Greatest Philosopher,15,Laozi
+57,Greatest Philosopher,16,Epicurus
+57,Greatest Philosopher,17,Marcus Aurelius
+57,Greatest Philosopher,18,Simone de Beauvoir
+57,Greatest Philosopher,19,Michel Foucault
+57,Greatest Philosopher,20,Ludwig Wittgenstein
+58,Greatest Economist,1,Adam Smith
+58,Greatest Economist,2,John Maynard Keynes
+58,Greatest Economist,3,Milton Friedman
+58,Greatest Economist,4,David Ricardo
+58,Greatest Economist,5,Karl Marx
+58,Greatest Economist,6,Friedrich Hayek
+58,Greatest Economist,7,Joseph Schumpeter
+58,Greatest Economist,8,Amartya Sen
+58,Greatest Economist,9,Thomas Malthus
+58,Greatest Economist,10,Alfred Marshall
+58,Greatest Economist,11,Paul Samuelson
+58,Greatest Economist,12,Kenneth Arrow
+58,Greatest Economist,13,Ronald Coase
+58,Greatest Economist,14,Gary Becker
+58,Greatest Economist,15,Joseph Stiglitz
+58,Greatest Economist,16,Robert Solow
+58,Greatest Economist,17,Esther Duflo
+58,Greatest Economist,18,Robert Lucas
+58,Greatest Economist,19,Daron Acemoglu
+58,Greatest Economist,20,Joan Robinson
+59,Greatest Inventor,1,Thomas Edison
+59,Greatest Inventor,2,Nikola Tesla
+59,Greatest Inventor,3,Leonardo da Vinci
+59,Greatest Inventor,4,Alexander Graham Bell
+59,Greatest Inventor,5,James Watt
+59,Greatest Inventor,6,Johannes Gutenberg
+59,Greatest Inventor,7,Benjamin Franklin
+59,Greatest Inventor,8,Eli Whitney
+59,Greatest Inventor,9,George Stephenson
+59,Greatest Inventor,10,Samuel Morse
+59,Greatest Inventor,11,Guglielmo Marconi
+59,Greatest Inventor,12,Orville Wright
+59,Greatest Inventor,13,Wilbur Wright
+59,Greatest Inventor,14,Hedy Lamarr
+59,Greatest Inventor,15,James Dyson
+59,Greatest Inventor,16,Garrett Morgan
+59,Greatest Inventor,17,Tim Berners-Lee
+59,Greatest Inventor,18,Steve Wozniak
+59,Greatest Inventor,19,Charles Babbage
+59,Greatest Inventor,20,Archimedes
+60,Greatest Astronaut,1,Neil Armstrong
+60,Greatest Astronaut,2,Yuri Gagarin
+60,Greatest Astronaut,3,Buzz Aldrin
+60,Greatest Astronaut,4,Valentina Tereshkova
+60,Greatest Astronaut,5,John Glenn
+60,Greatest Astronaut,6,Chris Hadfield
+60,Greatest Astronaut,7,Sally Ride
+60,Greatest Astronaut,8,Alan Shepard
+60,Greatest Astronaut,9,Michael Collins
+60,Greatest Astronaut,10,Peggy Whitson
+60,Greatest Astronaut,11,Jim Lovell
+60,Greatest Astronaut,12,Mae Jemison
+60,Greatest Astronaut,13,Alexei Leonov
+60,Greatest Astronaut,14,Scott Kelly
+60,Greatest Astronaut,15,Eileen Collins
+60,Greatest Astronaut,16,Kalpana Chawla
+60,Greatest Astronaut,17,Sunita Williams
+60,Greatest Astronaut,18,Gene Cernan
+60,Greatest Astronaut,19,Frank Borman
+60,Greatest Astronaut,20,Rakesh Sharma
+61,Greatest Novelist,1,Leo Tolstoy
+61,Greatest Novelist,2,Fyodor Dostoevsky
+61,Greatest Novelist,3,William Shakespeare
+61,Greatest Novelist,4,Jane Austen
+61,Greatest Novelist,5,Charles Dickens
+61,Greatest Novelist,6,George Orwell
+61,Greatest Novelist,7,Gabriel García Márquez
+61,Greatest Novelist,8,Franz Kafka
+61,Greatest Novelist,9,James Joyce
+61,Greatest Novelist,10,Virginia Woolf
+61,Greatest Novelist,11,Ernest Hemingway
+61,Greatest Novelist,12,F. Scott Fitzgerald
+61,Greatest Novelist,13,Mark Twain
+61,Greatest Novelist,14,Victor Hugo
+61,Greatest Novelist,15,J. R. R. Tolkien
+61,Greatest Novelist,16,Toni Morrison
+61,Greatest Novelist,17,Haruki Murakami
+61,Greatest Novelist,18,Salman Rushdie
+61,Greatest Novelist,19,Kazuo Ishiguro
+61,Greatest Novelist,20,Herman Melville
+62,Greatest Poet,1,William Shakespeare
+62,Greatest Poet,2,Homer
+62,Greatest Poet,3,Dante Alighieri
+62,Greatest Poet,4,Rumi
+62,Greatest Poet,5,William Wordsworth
+62,Greatest Poet,6,John Keats
+62,Greatest Poet,7,T. S. Eliot
+62,Greatest Poet,8,Pablo Neruda
+62,Greatest Poet,9,Emily Dickinson
+62,Greatest Poet,10,Walt Whitman
+62,Greatest Poet,11,Robert Frost
+62,Greatest Poet,12,Rabindranath Tagore
+62,Greatest Poet,13,Sylvia Plath
+62,Greatest Poet,14,W. B. Yeats
+62,Greatest Poet,15,Lord Byron
+62,Greatest Poet,16,Percy Bysshe Shelley
+62,Greatest Poet,17,Mirza Ghalib
+62,Greatest Poet,18,Hafez
+62,Greatest Poet,19,Maya Angelou
+62,Greatest Poet,20,Langston Hughes
+63,Greatest Playwright,1,William Shakespeare
+63,Greatest Playwright,2,Sophocles
+63,Greatest Playwright,3,Henrik Ibsen
+63,Greatest Playwright,4,Anton Chekhov
+63,Greatest Playwright,5,Arthur Miller
+63,Greatest Playwright,6,Tennessee Williams
+63,Greatest Playwright,7,George Bernard Shaw
+63,Greatest Playwright,8,Oscar Wilde
+63,Greatest Playwright,9,Samuel Beckett
+63,Greatest Playwright,10,Eugene O'Neill
+63,Greatest Playwright,11,Molière
+63,Greatest Playwright,12,Bertolt Brecht
+63,Greatest Playwright,13,Jean Racine
+63,Greatest Playwright,14,Christopher Marlowe
+63,Greatest Playwright,15,Tom Stoppard
+63,Greatest Playwright,16,Harold Pinter
+63,Greatest Playwright,17,Lorraine Hansberry
+63,Greatest Playwright,18,August Wilson
+63,Greatest Playwright,19,Kalidasa
+63,Greatest Playwright,20,Euripides
+64,Greatest Book,1,Don Quixote
+64,Greatest Book,2,War and Peace
+64,Greatest Book,3,The Brothers Karamazov
+64,Greatest Book,4,1984
+64,Greatest Book,5,To Kill a Mockingbird
+64,Greatest Book,6,The Great Gatsby
+64,Greatest Book,7,One Hundred Years of Solitude
+64,Greatest Book,8,The Odyssey
+64,Greatest Book,9,The Iliad
+64,Greatest Book,10,Crime and Punishment
+64,Greatest Book,11,The Lord of the Rings
+64,Greatest Book,12,Pride and Prejudice
+64,Greatest Book,13,The Catcher in the Rye
+64,Greatest Book,14,Brave New World
+64,Greatest Book,15,Anna Karenina
+64,Greatest Book,16,The Alchemist
+64,Greatest Book,17,Harry Potter and the Philosopher's Stone
+64,Greatest Book,18,The Little Prince
+64,Greatest Book,19,Moby-Dick
+64,Greatest Book,20,The Divine Comedy
+65,Greatest US President,1,Abraham Lincoln
+65,Greatest US President,2,George Washington
+65,Greatest US President,3,Franklin D. Roosevelt
+65,Greatest US President,4,Thomas Jefferson
+65,Greatest US President,5,Theodore Roosevelt
+65,Greatest US President,6,Harry Truman
+65,Greatest US President,7,Dwight D. Eisenhower
+65,Greatest US President,8,John F. Kennedy
+65,Greatest US President,9,Barack Obama
+65,Greatest US President,10,Ronald Reagan
+65,Greatest US President,11,Woodrow Wilson
+65,Greatest US President,12,James Madison
+65,Greatest US President,13,James Monroe
+65,Greatest US President,14,Lyndon B. Johnson
+65,Greatest US President,15,Bill Clinton
+65,Greatest US President,16,John Adams
+65,Greatest US President,17,Andrew Jackson
+65,Greatest US President,18,Ulysses S. Grant
+65,Greatest US President,19,Joe Biden
+65,Greatest US President,20,Donald Trump
+66,Greatest Indian Prime Minister,1,Jawaharlal Nehru
+66,Greatest Indian Prime Minister,2,Narendra Modi
+66,Greatest Indian Prime Minister,3,Indira Gandhi
+66,Greatest Indian Prime Minister,4,Atal Bihari Vajpayee
+66,Greatest Indian Prime Minister,5,Lal Bahadur Shastri
+66,Greatest Indian Prime Minister,6,Manmohan Singh
+66,Greatest Indian Prime Minister,7,P. V. Narasimha Rao
+66,Greatest Indian Prime Minister,8,Rajiv Gandhi
+66,Greatest Indian Prime Minister,9,Morarji Desai
+66,Greatest Indian Prime Minister,10,V. P. Singh
+66,Greatest Indian Prime Minister,11,Charan Singh
+66,Greatest Indian Prime Minister,12,H. D. Deve Gowda
+66,Greatest Indian Prime Minister,13,I. K. Gujral
+66,Greatest Indian Prime Minister,14,Chandra Shekhar
+66,Greatest Indian Prime Minister,15,Gulzarilal Nanda
+66,Greatest Indian Prime Minister,16,Contender 16
+66,Greatest Indian Prime Minister,17,Contender 17
+66,Greatest Indian Prime Minister,18,Contender 18
+66,Greatest Indian Prime Minister,19,Contender 19
+66,Greatest Indian Prime Minister,20,Contender 20
+67,Greatest World Leader,1,Abraham Lincoln
+67,Greatest World Leader,2,Mahatma Gandhi
+67,Greatest World Leader,3,Nelson Mandela
+67,Greatest World Leader,4,Winston Churchill
+67,Greatest World Leader,5,George Washington
+67,Greatest World Leader,6,Franklin D. Roosevelt
+67,Greatest World Leader,7,Alexander the Great
+67,Greatest World Leader,8,Napoleon Bonaparte
+67,Greatest World Leader,9,Genghis Khan
+67,Greatest World Leader,10,Mustafa Kemal Atatürk
+67,Greatest World Leader,11,Jawaharlal Nehru
+67,Greatest World Leader,12,Martin Luther King Jr.
+67,Greatest World Leader,13,Theodore Roosevelt
+67,Greatest World Leader,14,Charles de Gaulle
+67,Greatest World Leader,15,Lee Kuan Yew
+67,Greatest World Leader,16,Otto von Bismarck
+67,Greatest World Leader,17,Sun Yat-sen
+67,Greatest World Leader,18,Deng Xiaoping
+67,Greatest World Leader,19,Queen Elizabeth II
+67,Greatest World Leader,20,Margaret Thatcher
+68,Greatest Political Leader,1,Abraham Lincoln
+68,Greatest Political Leader,2,Mahatma Gandhi
+68,Greatest Political Leader,3,Nelson Mandela
+68,Greatest Political Leader,4,Winston Churchill
+68,Greatest Political Leader,5,George Washington
+68,Greatest Political Leader,6,Franklin D. Roosevelt
+68,Greatest Political Leader,7,Jawaharlal Nehru
+68,Greatest Political Leader,8,Martin Luther King Jr.
+68,Greatest Political Leader,9,Mustafa Kemal Atatürk
+68,Greatest Political Leader,10,Napoleon Bonaparte
+68,Greatest Political Leader,11,Theodore Roosevelt
+68,Greatest Political Leader,12,Thomas Jefferson
+68,Greatest Political Leader,13,John F. Kennedy
+68,Greatest Political Leader,14,Margaret Thatcher
+68,Greatest Political Leader,15,Ronald Reagan
+68,Greatest Political Leader,16,Lee Kuan Yew
+68,Greatest Political Leader,17,Charles de Gaulle
+68,Greatest Political Leader,18,Indira Gandhi
+68,Greatest Political Leader,19,Angela Merkel
+68,Greatest Political Leader,20,Barack Obama
+69,Greatest Statesman,1,Winston Churchill
+69,Greatest Statesman,2,Abraham Lincoln
+69,Greatest Statesman,3,George Washington
+69,Greatest Statesman,4,Nelson Mandela
+69,Greatest Statesman,5,Mahatma Gandhi
+69,Greatest Statesman,6,Charles de Gaulle
+69,Greatest Statesman,7,Otto von Bismarck
+69,Greatest Statesman,8,Franklin D. Roosevelt
+69,Greatest Statesman,9,Theodore Roosevelt
+69,Greatest Statesman,10,Jawaharlal Nehru
+69,Greatest Statesman,11,Benjamin Disraeli
+69,Greatest Statesman,12,Henry Kissinger
+69,Greatest Statesman,13,Klemens von Metternich
+69,Greatest Statesman,14,Konrad Adenauer
+69,Greatest Statesman,15,Lee Kuan Yew
+69,Greatest Statesman,16,Mustafa Kemal Atatürk
+69,Greatest Statesman,17,Dwight D. Eisenhower
+69,Greatest Statesman,18,John F. Kennedy
+69,Greatest Statesman,19,Deng Xiaoping
+69,Greatest Statesman,20,Margaret Thatcher
+70,Greatest Revolutionary,1,Mahatma Gandhi
+70,Greatest Revolutionary,2,George Washington
+70,Greatest Revolutionary,3,Vladimir Lenin
+70,Greatest Revolutionary,4,Che Guevara
+70,Greatest Revolutionary,5,Nelson Mandela
+70,Greatest Revolutionary,6,Fidel Castro
+70,Greatest Revolutionary,7,Simón Bolívar
+70,Greatest Revolutionary,8,Ho Chi Minh
+70,Greatest Revolutionary,9,Mao Zedong
+70,Greatest Revolutionary,10,Subhas Chandra Bose
+70,Greatest Revolutionary,11,Bhagat Singh
+70,Greatest Revolutionary,12,Toussaint Louverture
+70,Greatest Revolutionary,13,Sun Yat-sen
+70,Greatest Revolutionary,14,Emiliano Zapata
+70,Greatest Revolutionary,15,José Martí
+70,Greatest Revolutionary,16,Maximilien Robespierre
+70,Greatest Revolutionary,17,Thomas Jefferson
+70,Greatest Revolutionary,18,Lech Wałęsa
+70,Greatest Revolutionary,19,Patrick Henry
+70,Greatest Revolutionary,20,Contender 20
+71,Greatest King,1,Alexander the Great
+71,Greatest King,2,Ashoka
+71,Greatest King,3,Cyrus the Great
+71,Greatest King,4,Charlemagne
+71,Greatest King,5,Akbar
+71,Greatest King,6,Richard the Lionheart
+71,Greatest King,7,Henry VIII
+71,Greatest King,8,Louis XIV
+71,Greatest King,9,Alfred the Great
+71,Greatest King,10,Chandragupta Maurya
+71,Greatest King,11,Hammurabi
+71,Greatest King,12,Ramses II
+71,Greatest King,13,Leonidas I
+71,Greatest King,14,William the Conqueror
+71,Greatest King,15,Sejong the Great
+71,Greatest King,16,Sargon of Akkad
+71,Greatest King,17,Frederick II
+71,Greatest King,18,Harald Hardrada
+71,Greatest King,19,Edward III
+71,Greatest King,20,Alfonso X
+72,Greatest Queen,1,Cleopatra
+72,Greatest Queen,2,Elizabeth I
+72,Greatest Queen,3,Queen Victoria
+72,Greatest Queen,4,Hatshepsut
+72,Greatest Queen,5,Catherine the Great
+72,Greatest Queen,6,Isabella I of Castile
+72,Greatest Queen,7,Wu Zetian
+72,Greatest Queen,8,Boudica
+72,Greatest Queen,9,Zenobia
+72,Greatest Queen,10,Elizabeth II
+72,Greatest Queen,11,"Mary, Queen of Scots"
+72,Greatest Queen,12,Nefertiti
+72,Greatest Queen,13,Eleanor of Aquitaine
+72,Greatest Queen,14,Tamar of Georgia
+72,Greatest Queen,15,Rani Lakshmibai
+72,Greatest Queen,16,Razia Sultan
+72,Greatest Queen,17,Ahmose-Nefertari
+72,Greatest Queen,18,Anne of Great Britain
+72,Greatest Queen,19,Mary I of England
+72,Greatest Queen,20,Ranavalona I
+73,Greatest Monarch,1,Alexander the Great
+73,Greatest Monarch,2,Augustus
+73,Greatest Monarch,3,Ashoka
+73,Greatest Monarch,4,Elizabeth I
+73,Greatest Monarch,5,Akbar
+73,Greatest Monarch,6,Genghis Khan
+73,Greatest Monarch,7,Cyrus the Great
+73,Greatest Monarch,8,Charlemagne
+73,Greatest Monarch,9,Qin Shi Huang
+73,Greatest Monarch,10,Louis XIV
+73,Greatest Monarch,11,Queen Victoria
+73,Greatest Monarch,12,Suleiman the Magnificent
+73,Greatest Monarch,13,Constantine the Great
+73,Greatest Monarch,14,Trajan
+73,Greatest Monarch,15,Napoleon Bonaparte
+73,Greatest Monarch,16,Peter the Great
+73,Greatest Monarch,17,Chandragupta Maurya
+73,Greatest Monarch,18,Justinian I
+73,Greatest Monarch,19,Henry VIII
+73,Greatest Monarch,20,Marcus Aurelius
+74,Greatest Emperor,1,Augustus
+74,Greatest Emperor,2,Qin Shi Huang
+74,Greatest Emperor,3,Ashoka
+74,Greatest Emperor,4,Genghis Khan
+74,Greatest Emperor,5,Constantine the Great
+74,Greatest Emperor,6,Charlemagne
+74,Greatest Emperor,7,Akbar
+74,Greatest Emperor,8,Trajan
+74,Greatest Emperor,9,Justinian I
+74,Greatest Emperor,10,Napoleon Bonaparte
+74,Greatest Emperor,11,Cyrus the Great
+74,Greatest Emperor,12,Marcus Aurelius
+74,Greatest Emperor,13,Chandragupta Maurya
+74,Greatest Emperor,14,Kublai Khan
+74,Greatest Emperor,15,Suleiman the Magnificent
+74,Greatest Emperor,16,Hadrian
+74,Greatest Emperor,17,Peter the Great
+74,Greatest Emperor,18,Meiji
+74,Greatest Emperor,19,Shah Jahan
+74,Greatest Emperor,20,Hirohito
+75,Greatest Empress,1,Wu Zetian
+75,Greatest Empress,2,Theodora
+75,Greatest Empress,3,Catherine the Great
+75,Greatest Empress,4,Empress Suiko
+75,Greatest Empress,5,Empress Jingu
+75,Greatest Empress,6,Maria Theresa
+75,Greatest Empress,7,Empress Dowager Cixi
+75,Greatest Empress,8,Irene of Athens
+75,Greatest Empress,9,Galla Placidia
+75,Greatest Empress,10,Pulcheria
+75,Greatest Empress,11,Zenobia
+75,Greatest Empress,12,Hatshepsut
+75,Greatest Empress,13,Tzu Hsi
+75,Greatest Empress,14,Amalasuntha
+75,Greatest Empress,15,Zoë Porphyrogenita
+75,Greatest Empress,16,Theophanu
+75,Greatest Empress,17,Urraca of León
+75,Greatest Empress,18,Matilda of Tuscany
+75,Greatest Empress,19,Agrippina the Younger
+75,Greatest Empress,20,Eudoxia
+76,Greatest Sultan,1,Suleiman the Magnificent
+76,Greatest Sultan,2,Mehmed II
+76,Greatest Sultan,3,Saladin
+76,Greatest Sultan,4,Selim I
+76,Greatest Sultan,5,Bayezid I
+76,Greatest Sultan,6,Osman I
+76,Greatest Sultan,7,Murad II
+76,Greatest Sultan,8,Murad I
+76,Greatest Sultan,9,Mahmud II
+76,Greatest Sultan,10,Abdul Hamid II
+76,Greatest Sultan,11,Alauddin Khalji
+76,Greatest Sultan,12,Muhammad bin Tughluq
+76,Greatest Sultan,13,Iltutmish
+76,Greatest Sultan,14,Balban
+76,Greatest Sultan,15,Sikandar Lodi
+76,Greatest Sultan,16,Shah Jahan
+76,Greatest Sultan,17,Aurangzeb
+76,Greatest Sultan,18,Tipu Sultan
+76,Greatest Sultan,19,Mahmud of Ghazni
+76,Greatest Sultan,20,Nizamuddin Auliya
+77,Greatest Pharaoh,1,Ramesses II
+77,Greatest Pharaoh,2,Hatshepsut
+77,Greatest Pharaoh,3,Tutankhamun
+77,Greatest Pharaoh,4,Khufu
+77,Greatest Pharaoh,5,Thutmose III
+77,Greatest Pharaoh,6,Akhenaten
+77,Greatest Pharaoh,7,Cleopatra VII
+77,Greatest Pharaoh,8,Djoser
+77,Greatest Pharaoh,9,Sneferu
+77,Greatest Pharaoh,10,Amenhotep III
+77,Greatest Pharaoh,11,Seti I
+77,Greatest Pharaoh,12,Narmer
+77,Greatest Pharaoh,13,Ramses III
+77,Greatest Pharaoh,14,Pepi II
+77,Greatest Pharaoh,15,Mentuhotep II
+77,Greatest Pharaoh,16,Ahmose I
+77,Greatest Pharaoh,17,Thutmose I
+77,Greatest Pharaoh,18,Khafre
+77,Greatest Pharaoh,19,Unas
+77,Greatest Pharaoh,20,Psamtik I
+78,Greatest Caliph,1,Abu Bakr
+78,Greatest Caliph,2,Umar ibn al-Khattab
+78,Greatest Caliph,3,Uthman ibn Affan
+78,Greatest Caliph,4,Ali ibn Abi Talib
+78,Greatest Caliph,5,Abd al-Malik ibn Marwan
+78,Greatest Caliph,6,Harun al-Rashid
+78,Greatest Caliph,7,Al-Ma'mun
+78,Greatest Caliph,8,Umar II
+78,Greatest Caliph,9,Mu'awiya I
+78,Greatest Caliph,10,Al-Mansur
+78,Greatest Caliph,11,Abd al-Rahman III
+78,Greatest Caliph,12,Al-Mu'tasim
+78,Greatest Caliph,13,Al-Mahdi
+78,Greatest Caliph,14,Al-Mutawakkil
+78,Greatest Caliph,15,Al-Mu'tamid
+78,Greatest Caliph,16,Al-Muqtadir
+78,Greatest Caliph,17,Al-Nasir
+78,Greatest Caliph,18,Al-Hakim bi-Amr Allah
+78,Greatest Caliph,19,Umar ibn Abd al-Aziz
+78,Greatest Caliph,20,Al-Mustansir
+79,Greatest Maharaja,1,Chandragupta Maurya
+79,Greatest Maharaja,2,Ashoka
+79,Greatest Maharaja,3,Akbar
+79,Greatest Maharaja,4,Shivaji Maharaj
+79,Greatest Maharaja,5,Ranjit Singh
+79,Greatest Maharaja,6,Krishnadevaraya
+79,Greatest Maharaja,7,Samudragupta
+79,Greatest Maharaja,8,Harshavardhana
+79,Greatest Maharaja,9,Vikramaditya
+79,Greatest Maharaja,10,Raja Raja Chola I
+79,Greatest Maharaja,11,Rajendra Chola I
+79,Greatest Maharaja,12,Prithviraj Chauhan
+79,Greatest Maharaja,13,Maharana Pratap
+79,Greatest Maharaja,14,Jai Singh II
+79,Greatest Maharaja,15,Yashwantrao Holkar
+79,Greatest Maharaja,16,Sayajirao Gaekwad III
+79,Greatest Maharaja,17,Sawai Jai Singh II
+79,Greatest Maharaja,18,Bhoja
+79,Greatest Maharaja,19,Lalitaditya Muktapida
+79,Greatest Maharaja,20,Contender 20
+80,Greatest Roman Emperor,1,Augustus
+80,Greatest Roman Emperor,2,Trajan
+80,Greatest Roman Emperor,3,Marcus Aurelius
+80,Greatest Roman Emperor,4,Constantine the Great
+80,Greatest Roman Emperor,5,Hadrian
+80,Greatest Roman Emperor,6,Diocletian
+80,Greatest Roman Emperor,7,Justinian I
+80,Greatest Roman Emperor,8,Aurelian
+80,Greatest Roman Emperor,9,Vespasian
+80,Greatest Roman Emperor,10,Titus
+80,Greatest Roman Emperor,11,Antoninus Pius
+80,Greatest Roman Emperor,12,Claudius
+80,Greatest Roman Emperor,13,Septimius Severus
+80,Greatest Roman Emperor,14,Theodosius I
+80,Greatest Roman Emperor,15,Nero
+80,Greatest Roman Emperor,16,Caligula
+80,Greatest Roman Emperor,17,Commodus
+80,Greatest Roman Emperor,18,Caracalla
+80,Greatest Roman Emperor,19,Julian
+80,Greatest Roman Emperor,20,Contender 20
+81,Greatest British Monarch,1,Elizabeth I
+81,Greatest British Monarch,2,Queen Victoria
+81,Greatest British Monarch,3,William the Conqueror
+81,Greatest British Monarch,4,Alfred the Great
+81,Greatest British Monarch,5,Henry II
+81,Greatest British Monarch,6,Henry VII
+81,Greatest British Monarch,7,Elizabeth II
+81,Greatest British Monarch,8,Richard I
+81,Greatest British Monarch,9,Edward III
+81,Greatest British Monarch,10,Henry V
+81,Greatest British Monarch,11,Edward I
+81,Greatest British Monarch,12,James I
+81,Greatest British Monarch,13,George III
+81,Greatest British Monarch,14,William III
+81,Greatest British Monarch,15,Charles II
+81,Greatest British Monarch,16,Henry VIII
+81,Greatest British Monarch,17,Edward the Confessor
+81,Greatest British Monarch,18,Richard III
+81,Greatest British Monarch,19,Mary I
+81,Greatest British Monarch,20,George VI
+82,Greatest French Monarch,1,Charlemagne
+82,Greatest French Monarch,2,Louis XIV
+82,Greatest French Monarch,3,Napoleon Bonaparte
+82,Greatest French Monarch,4,Clovis I
+82,Greatest French Monarch,5,Philip II Augustus
+82,Greatest French Monarch,6,Louis IX
+82,Greatest French Monarch,7,Henry IV
+82,Greatest French Monarch,8,Francis I
+82,Greatest French Monarch,9,Louis XI
+82,Greatest French Monarch,10,Charles V
+82,Greatest French Monarch,11,Philip IV
+82,Greatest French Monarch,12,Louis XIII
+82,Greatest French Monarch,13,Charles VII
+82,Greatest French Monarch,14,Hugh Capet
+82,Greatest French Monarch,15,Louis VI
+82,Greatest French Monarch,16,Louis VII
+82,Greatest French Monarch,17,Charles VIII
+82,Greatest French Monarch,18,Francis II
+82,Greatest French Monarch,19,Louis XVI
+82,Greatest French Monarch,20,Napoleon III
+83,Greatest Chinese Emperor,1,Qin Shi Huang
+83,Greatest Chinese Emperor,2,Han Wudi
+83,Greatest Chinese Emperor,3,Tang Taizong
+83,Greatest Chinese Emperor,4,Emperor Wu of Han
+83,Greatest Chinese Emperor,5,Kangxi Emperor
+83,Greatest Chinese Emperor,6,Yongle Emperor
+83,Greatest Chinese Emperor,7,Qianlong Emperor
+83,Greatest Chinese Emperor,8,Emperor Wen of Sui
+83,Greatest Chinese Emperor,9,Emperor Gaozu of Tang
+83,Greatest Chinese Emperor,10,Hongwu Emperor
+83,Greatest Chinese Emperor,11,Xuanzong of Tang
+83,Greatest Chinese Emperor,12,Guangwu Emperor
+83,Greatest Chinese Emperor,13,Wu Zetian
+83,Greatest Chinese Emperor,14,Taizong of Song
+83,Greatest Chinese Emperor,15,Emperor Wen of Han
+83,Greatest Chinese Emperor,16,Chengzu of Ming
+83,Greatest Chinese Emperor,17,Shenzong of Song
+83,Greatest Chinese Emperor,18,Zhengde Emperor
+83,Greatest Chinese Emperor,19,Jiajing Emperor
+83,Greatest Chinese Emperor,20,Xuantong Emperor
+84,Greatest Japanese Emperor,1,Emperor Meiji
+84,Greatest Japanese Emperor,2,Emperor Jimmu
+84,Greatest Japanese Emperor,3,Emperor Kanmu
+84,Greatest Japanese Emperor,4,Emperor Tenmu
+84,Greatest Japanese Emperor,5,Emperor Go-Daigo
+84,Greatest Japanese Emperor,6,Emperor Hirohito
+84,Greatest Japanese Emperor,7,Emperor Taishō
+84,Greatest Japanese Emperor,8,Emperor Akihito
+84,Greatest Japanese Emperor,9,Emperor Go-Sanjō
+84,Greatest Japanese Emperor,10,Emperor Shirakawa
+84,Greatest Japanese Emperor,11,Emperor Saga
+84,Greatest Japanese Emperor,12,Emperor Kōkaku
+84,Greatest Japanese Emperor,13,Emperor Go-Toba
+84,Greatest Japanese Emperor,14,Emperor Shōmu
+84,Greatest Japanese Emperor,15,Emperor Sujin
+84,Greatest Japanese Emperor,16,Emperor Kammu
+84,Greatest Japanese Emperor,17,Emperor Uda
+84,Greatest Japanese Emperor,18,Emperor Murakami
+84,Greatest Japanese Emperor,19,Emperor Reigen
+84,Greatest Japanese Emperor,20,Emperor Go-Mizunoo
+85,Greatest European Monarch,1,Charlemagne
+85,Greatest European Monarch,2,Alexander the Great
+85,Greatest European Monarch,3,Louis XIV
+85,Greatest European Monarch,4,Elizabeth I
+85,Greatest European Monarch,5,Queen Victoria
+85,Greatest European Monarch,6,Napoleon Bonaparte
+85,Greatest European Monarch,7,Peter the Great
+85,Greatest European Monarch,8,Catherine the Great
+85,Greatest European Monarch,9,Frederick the Great
+85,Greatest European Monarch,10,William the Conqueror
+85,Greatest European Monarch,11,Henry VIII
+85,Greatest European Monarch,12,Alfred the Great
+85,Greatest European Monarch,13,Charles V
+85,Greatest European Monarch,14,Maria Theresa
+85,Greatest European Monarch,15,Philip II of Spain
+85,Greatest European Monarch,16,Ferdinand II
+85,Greatest European Monarch,17,Suleiman the Magnificent
+85,Greatest European Monarch,18,Otto the Great
+85,Greatest European Monarch,19,Richard the Lionheart
+85,Greatest European Monarch,20,Constantine the Great
+86,Greatest Conqueror,1,Alexander the Great
+86,Greatest Conqueror,2,Genghis Khan
+86,Greatest Conqueror,3,Napoleon Bonaparte
+86,Greatest Conqueror,4,Cyrus the Great
+86,Greatest Conqueror,5,Julius Caesar
+86,Greatest Conqueror,6,Timur
+86,Greatest Conqueror,7,Attila the Hun
+86,Greatest Conqueror,8,Charlemagne
+86,Greatest Conqueror,9,Chandragupta Maurya
+86,Greatest Conqueror,10,Mehmed II
+86,Greatest Conqueror,11,Khalid ibn al-Walid
+86,Greatest Conqueror,12,Subutai
+86,Greatest Conqueror,13,Hannibal
+86,Greatest Conqueror,14,Saladin
+86,Greatest Conqueror,15,Babur
+86,Greatest Conqueror,16,Sargon of Akkad
+86,Greatest Conqueror,17,William the Conqueror
+86,Greatest Conqueror,18,Hernán Cortés
+86,Greatest Conqueror,19,Francisco Pizarro
+86,Greatest Conqueror,20,Tamerlane
+87,Greatest General,1,Alexander the Great
+87,Greatest General,2,Napoleon Bonaparte
+87,Greatest General,3,Julius Caesar
+87,Greatest General,4,Genghis Khan
+87,Greatest General,5,Sun Tzu
+87,Greatest General,6,Hannibal
+87,Greatest General,7,Khalid ibn al-Walid
+87,Greatest General,8,Georgy Zhukov
+87,Greatest General,9,Subutai
+87,Greatest General,10,Scipio Africanus
+87,Greatest General,11,Saladin
+87,Greatest General,12,Erwin Rommel
+87,Greatest General,13,Arthur Wellesley
+87,Greatest General,14,George S. Patton
+87,Greatest General,15,Ulysses S. Grant
+87,Greatest General,16,Yi Sun-sin
+87,Greatest General,17,Dwight D. Eisenhower
+87,Greatest General,18,Douglas MacArthur
+87,Greatest General,19,Belisarius
+87,Greatest General,20,Horatio Nelson
+88,Greatest Military Commander,1,Alexander the Great
+88,Greatest Military Commander,2,Napoleon Bonaparte
+88,Greatest Military Commander,3,Genghis Khan
+88,Greatest Military Commander,4,Julius Caesar
+88,Greatest Military Commander,5,Hannibal
+88,Greatest Military Commander,6,Khalid ibn al-Walid
+88,Greatest Military Commander,7,Sun Tzu
+88,Greatest Military Commander,8,Georgy Zhukov
+88,Greatest Military Commander,9,Scipio Africanus
+88,Greatest Military Commander,10,Subutai
+88,Greatest Military Commander,11,Saladin
+88,Greatest Military Commander,12,Arthur Wellesley
+88,Greatest Military Commander,13,Yi Sun-sin
+88,Greatest Military Commander,14,Erwin Rommel
+88,Greatest Military Commander,15,George S. Patton
+88,Greatest Military Commander,16,Ulysses S. Grant
+88,Greatest Military Commander,17,Dwight D. Eisenhower
+88,Greatest Military Commander,18,Douglas MacArthur
+88,Greatest Military Commander,19,Belisarius
+88,Greatest Military Commander,20,Frederick the Great
+89,Greatest Military Strategist,1,Sun Tzu
+89,Greatest Military Strategist,2,Alexander the Great
+89,Greatest Military Strategist,3,Napoleon Bonaparte
+89,Greatest Military Strategist,4,Genghis Khan
+89,Greatest Military Strategist,5,Hannibal
+89,Greatest Military Strategist,6,Julius Caesar
+89,Greatest Military Strategist,7,Subutai
+89,Greatest Military Strategist,8,Khalid ibn al-Walid
+89,Greatest Military Strategist,9,Scipio Africanus
+89,Greatest Military Strategist,10,Georgy Zhukov
+89,Greatest Military Strategist,11,Miyamoto Musashi
+89,Greatest Military Strategist,12,Carl von Clausewitz
+89,Greatest Military Strategist,13,Erwin Rommel
+89,Greatest Military Strategist,14,Saladin
+89,Greatest Military Strategist,15,Yi Sun-sin
+89,Greatest Military Strategist,16,Arthur Wellesley
+89,Greatest Military Strategist,17,Helmuth von Moltke
+89,Greatest Military Strategist,18,Belisarius
+89,Greatest Military Strategist,19,Gustavus Adolphus
+89,Greatest Military Strategist,20,Frederick the Great
+90,Greatest Naval Commander,1,Horatio Nelson
+90,Greatest Naval Commander,2,Yi Sun-sin
+90,Greatest Naval Commander,3,Chester W. Nimitz
+90,Greatest Naval Commander,4,John Jervis
+90,Greatest Naval Commander,5,Themistocles
+90,Greatest Naval Commander,6,Michiel de Ruyter
+90,Greatest Naval Commander,7,Tōgō Heihachirō
+90,Greatest Naval Commander,8,Alfred Thayer Mahan
+90,Greatest Naval Commander,9,Francis Drake
+90,Greatest Naval Commander,10,Andrew Cunningham
+90,Greatest Naval Commander,11,Raymond Spruance
+90,Greatest Naval Commander,12,George Dewey
+90,Greatest Naval Commander,13,Isoroku Yamamoto
+90,Greatest Naval Commander,14,John Paul Jones
+90,Greatest Naval Commander,15,Edward Vernon
+90,Greatest Naval Commander,16,Robert Blake
+90,Greatest Naval Commander,17,Andrea Doria
+90,Greatest Naval Commander,18,Bartholomew Roberts
+90,Greatest Naval Commander,19,William Halsey
+90,Greatest Naval Commander,20,Chester Nimitz
+91,Greatest Founder,1,Steve Jobs
+91,Greatest Founder,2,Bill Gates
+91,Greatest Founder,3,Jeff Bezos
+91,Greatest Founder,4,Elon Musk
+91,Greatest Founder,5,Mark Zuckerberg
+91,Greatest Founder,6,Larry Page
+91,Greatest Founder,7,Sergey Brin
+91,Greatest Founder,8,Walt Disney
+91,Greatest Founder,9,Henry Ford
+91,Greatest Founder,10,Larry Ellison
+91,Greatest Founder,11,Sam Walton
+91,Greatest Founder,12,Reed Hastings
+91,Greatest Founder,13,Brian Chesky
+91,Greatest Founder,14,Jack Ma
+91,Greatest Founder,15,Jensen Huang
+91,Greatest Founder,16,Michael Dell
+91,Greatest Founder,17,Phil Knight
+91,Greatest Founder,18,Richard Branson
+91,Greatest Founder,19,Melanie Perkins
+91,Greatest Founder,20,Evan Spiegel
+92,Greatest Investor,1,Warren Buffett
+92,Greatest Investor,2,Charlie Munger
+92,Greatest Investor,3,Benjamin Graham
+92,Greatest Investor,4,Peter Lynch
+92,Greatest Investor,5,George Soros
+92,Greatest Investor,6,John Templeton
+92,Greatest Investor,7,Ray Dalio
+92,Greatest Investor,8,Howard Marks
+92,Greatest Investor,9,Carl Icahn
+92,Greatest Investor,10,Bill Ackman
+92,Greatest Investor,11,Peter Thiel
+92,Greatest Investor,12,Michael Burry
+92,Greatest Investor,13,Stanley Druckenmiller
+92,Greatest Investor,14,Seth Klarman
+92,Greatest Investor,15,Joel Greenblatt
+92,Greatest Investor,16,Cathie Wood
+92,Greatest Investor,17,David Tepper
+92,Greatest Investor,18,Jim Simons
+92,Greatest Investor,19,Mohnish Pabrai
+92,Greatest Investor,20,John Paulson
+93,Greatest CEO,1,Steve Jobs
+93,Greatest CEO,2,Satya Nadella
+93,Greatest CEO,3,Jensen Huang
+93,Greatest CEO,4,Tim Cook
+93,Greatest CEO,5,Jeff Bezos
+93,Greatest CEO,6,Elon Musk
+93,Greatest CEO,7,Andy Grove
+93,Greatest CEO,8,Jack Welch
+93,Greatest CEO,9,Indra Nooyi
+93,Greatest CEO,10,Sundar Pichai
+93,Greatest CEO,11,Alan Mulally
+93,Greatest CEO,12,Reed Hastings
+93,Greatest CEO,13,Bob Iger
+93,Greatest CEO,14,Mary Barra
+93,Greatest CEO,15,Sam Walton
+93,Greatest CEO,16,Howard Schultz
+93,Greatest CEO,17,Brian Chesky
+93,Greatest CEO,18,Larry Ellison
+93,Greatest CEO,19,Jamie Dimon
+93,Greatest CEO,20,Bernard Arnault
+94,Greatest Company,1,Apple
+94,Greatest Company,2,Microsoft
+94,Greatest Company,3,Amazon
+94,Greatest Company,4,Google
+94,Greatest Company,5,Nvidia
+94,Greatest Company,6,Berkshire Hathaway
+94,Greatest Company,7,Tesla
+94,Greatest Company,8,Meta
+94,Greatest Company,9,Saudi Aramco
+94,Greatest Company,10,Walmart
+94,Greatest Company,11,Coca-Cola
+94,Greatest Company,12,Disney
+94,Greatest Company,13,Samsung
+94,Greatest Company,14,Toyota
+94,Greatest Company,15,Nike
+94,Greatest Company,16,McDonald's
+94,Greatest Company,17,Netflix
+94,Greatest Company,18,Visa
+94,Greatest Company,19,JPMorgan Chase
+94,Greatest Company,20,TSMC
+95,Greatest Entrepreneur,1,Steve Jobs
+95,Greatest Entrepreneur,2,Elon Musk
+95,Greatest Entrepreneur,3,Jeff Bezos
+95,Greatest Entrepreneur,4,Bill Gates
+95,Greatest Entrepreneur,5,Walt Disney
+95,Greatest Entrepreneur,6,Henry Ford
+95,Greatest Entrepreneur,7,Richard Branson
+95,Greatest Entrepreneur,8,Oprah Winfrey
+95,Greatest Entrepreneur,9,Mark Zuckerberg
+95,Greatest Entrepreneur,10,Coco Chanel
+95,Greatest Entrepreneur,11,Sam Walton
+95,Greatest Entrepreneur,12,Jack Ma
+95,Greatest Entrepreneur,13,Estée Lauder
+95,Greatest Entrepreneur,14,Phil Knight
+95,Greatest Entrepreneur,15,Madam C. J. Walker
+95,Greatest Entrepreneur,16,Larry Ellison
+95,Greatest Entrepreneur,17,Arianna Huffington
+95,Greatest Entrepreneur,18,Sara Blakely
+95,Greatest Entrepreneur,19,Warren Buffett
+95,Greatest Entrepreneur,20,Ralph Lauren
+96,Greatest Businessman,1,Henry Ford
+96,Greatest Businessman,2,Steve Jobs
+96,Greatest Businessman,3,Bill Gates
+96,Greatest Businessman,4,Warren Buffett
+96,Greatest Businessman,5,Jeff Bezos
+96,Greatest Businessman,6,Elon Musk
+96,Greatest Businessman,7,Sam Walton
+96,Greatest Businessman,8,Andrew Carnegie
+96,Greatest Businessman,9,John D. Rockefeller
+96,Greatest Businessman,10,J. P. Morgan
+96,Greatest Businessman,11,Walt Disney
+96,Greatest Businessman,12,Larry Ellison
+96,Greatest Businessman,13,Jack Ma
+96,Greatest Businessman,14,Ray Kroc
+96,Greatest Businessman,15,Cornelius Vanderbilt
+96,Greatest Businessman,16,Henry Clay Frick
+96,Greatest Businessman,17,George Eastman
+96,Greatest Businessman,18,Ingvar Kamprad
+96,Greatest Businessman,19,Akio Morita
+96,Greatest Businessman,20,Masayoshi Son
+97,Greatest Businesswoman,1,Madam C. J. Walker
+97,Greatest Businesswoman,2,Coco Chanel
+97,Greatest Businesswoman,3,Estée Lauder
+97,Greatest Businesswoman,4,Oprah Winfrey
+97,Greatest Businesswoman,5,Mary Kay Ash
+97,Greatest Businesswoman,6,Ruth Handler
+97,Greatest Businesswoman,7,Arianna Huffington
+97,Greatest Businesswoman,8,Sara Blakely
+97,Greatest Businesswoman,9,Indra Nooyi
+97,Greatest Businesswoman,10,Whitney Wolfe Herd
+97,Greatest Businesswoman,11,Melanie Perkins
+97,Greatest Businesswoman,12,Kiran Mazumdar-Shaw
+97,Greatest Businesswoman,13,Sheryl Sandberg
+97,Greatest Businesswoman,14,Safra Catz
+97,Greatest Businesswoman,15,Ginni Rometty
+97,Greatest Businesswoman,16,Zhang Xin
+97,Greatest Businesswoman,17,Rihanna
+97,Greatest Businesswoman,18,Jessica Alba
+97,Greatest Businesswoman,19,Diane von Furstenberg
+97,Greatest Businesswoman,20,Anita Roddick
+98,Greatest Venture Capitalist,1,John Doerr
+98,Greatest Venture Capitalist,2,Marc Andreessen
+98,Greatest Venture Capitalist,3,Ben Horowitz
+98,Greatest Venture Capitalist,4,Peter Thiel
+98,Greatest Venture Capitalist,5,Fred Wilson
+98,Greatest Venture Capitalist,6,Reid Hoffman
+98,Greatest Venture Capitalist,7,Paul Graham
+98,Greatest Venture Capitalist,8,Sequoia Capital's Don Valentine
+98,Greatest Venture Capitalist,9,Bill Gurley
+98,Greatest Venture Capitalist,10,Vinod Khosla
+98,Greatest Venture Capitalist,11,Chris Sacca
+98,Greatest Venture Capitalist,12,Mary Meeker
+98,Greatest Venture Capitalist,13,Peter Fenton
+98,Greatest Venture Capitalist,14,Mike Moritz
+98,Greatest Venture Capitalist,15,Michael Moritz
+98,Greatest Venture Capitalist,16,Khosla Ventures' Vinod Khosla
+98,Greatest Venture Capitalist,17,Ron Conway
+98,Greatest Venture Capitalist,18,Accel's Jim Schwartz
+98,Greatest Venture Capitalist,19,Aileen Lee
+98,Greatest Venture Capitalist,20,Josh Kopelman
+99,Greatest Painter,1,Leonardo da Vinci
+99,Greatest Painter,2,Vincent van Gogh
+99,Greatest Painter,3,Pablo Picasso
+99,Greatest Painter,4,Michelangelo
+99,Greatest Painter,5,Rembrandt
+99,Greatest Painter,6,Claude Monet
+99,Greatest Painter,7,Caravaggio
+99,Greatest Painter,8,Johannes Vermeer
+99,Greatest Painter,9,Salvador Dalí
+99,Greatest Painter,10,Raphael
+99,Greatest Painter,11,Edvard Munch
+99,Greatest Painter,12,Henri Matisse
+99,Greatest Painter,13,Diego Velázquez
+99,Greatest Painter,14,Francisco Goya
+99,Greatest Painter,15,Andy Warhol
+99,Greatest Painter,16,Gustav Klimt
+99,Greatest Painter,17,Paul Cézanne
+99,Greatest Painter,18,Wassily Kandinsky
+99,Greatest Painter,19,Jackson Pollock
+99,Greatest Painter,20,Frida Kahlo
+100,Greatest Photographer,1,Ansel Adams
+100,Greatest Photographer,2,Henri Cartier-Bresson
+100,Greatest Photographer,3,Annie Leibovitz
+100,Greatest Photographer,4,Dorothea Lange
+100,Greatest Photographer,5,Steve McCurry
+100,Greatest Photographer,6,Robert Capa
+100,Greatest Photographer,7,Sebastião Salgado
+100,Greatest Photographer,8,Diane Arbus
+100,Greatest Photographer,9,Cindy Sherman
+100,Greatest Photographer,10,Richard Avedon
+100,Greatest Photographer,11,Vivian Maier
+100,Greatest Photographer,12,Man Ray
+100,Greatest Photographer,13,Robert Frank
+100,Greatest Photographer,14,Irving Penn
+100,Greatest Photographer,15,Helmut Newton
+100,Greatest Photographer,16,Gordon Parks
+100,Greatest Photographer,17,Edward Weston
+100,Greatest Photographer,18,Alfred Stieglitz
+100,Greatest Photographer,19,Nan Goldin
+100,Greatest Photographer,20,David LaChapelle
+101,Greatest Architect,1,Frank Lloyd Wright
+101,Greatest Architect,2,Antoni Gaudí
+101,Greatest Architect,3,Le Corbusier
+101,Greatest Architect,4,Zaha Hadid
+101,Greatest Architect,5,Ludwig Mies van der Rohe
+101,Greatest Architect,6,Frank Gehry
+101,Greatest Architect,7,Norman Foster
+101,Greatest Architect,8,Tadao Ando
+101,Greatest Architect,9,Oscar Niemeyer
+101,Greatest Architect,10,Renzo Piano
+101,Greatest Architect,11,I. M. Pei
+101,Greatest Architect,12,Louis Kahn
+101,Greatest Architect,13,Eero Saarinen
+101,Greatest Architect,14,Charles Correa
+101,Greatest Architect,15,Bjarke Ingels
+101,Greatest Architect,16,Philip Johnson
+101,Greatest Architect,17,Alvar Aalto
+101,Greatest Architect,18,Rem Koolhaas
+101,Greatest Architect,19,Santiago Calatrava
+101,Greatest Architect,20,Balkrishna Doshi
+102,Greatest Chef,1,Gordon Ramsay
+102,Greatest Chef,2,Ferran Adrià
+102,Greatest Chef,3,Massimo Bottura
+102,Greatest Chef,4,Alain Ducasse
+102,Greatest Chef,5,Joël Robuchon
+102,Greatest Chef,6,Heston Blumenthal
+102,Greatest Chef,7,Thomas Keller
+102,Greatest Chef,8,Wolfgang Puck
+102,Greatest Chef,9,Anthony Bourdain
+102,Greatest Chef,10,Julia Child
+102,Greatest Chef,11,Marco Pierre White
+102,Greatest Chef,12,René Redzepi
+102,Greatest Chef,13,Grant Achatz
+102,Greatest Chef,14,Alice Waters
+102,Greatest Chef,15,Dominique Crenn
+102,Greatest Chef,16,Jamie Oliver
+102,Greatest Chef,17,José Andrés
+102,Greatest Chef,18,Nobu Matsuhisa
+102,Greatest Chef,19,Sanjeev Kapoor
+102,Greatest Chef,20,Vikas Khanna
+103,Greatest Fashion Designer,1,Coco Chanel
+103,Greatest Fashion Designer,2,Alexander McQueen
+103,Greatest Fashion Designer,3,Giorgio Armani
+103,Greatest Fashion Designer,4,Christian Dior
+103,Greatest Fashion Designer,5,Yves Saint Laurent
+103,Greatest Fashion Designer,6,Gianni Versace
+103,Greatest Fashion Designer,7,Ralph Lauren
+103,Greatest Fashion Designer,8,Vivienne Westwood
+103,Greatest Fashion Designer,9,Karl Lagerfeld
+103,Greatest Fashion Designer,10,Tom Ford
+103,Greatest Fashion Designer,11,Cristóbal Balenciaga
+103,Greatest Fashion Designer,12,Hubert de Givenchy
+103,Greatest Fashion Designer,13,Rei Kawakubo
+103,Greatest Fashion Designer,14,Virgil Abloh
+103,Greatest Fashion Designer,15,Donatella Versace
+103,Greatest Fashion Designer,16,Miuccia Prada
+103,Greatest Fashion Designer,17,Valentino Garavani
+103,Greatest Fashion Designer,18,Christian Louboutin
+103,Greatest Fashion Designer,19,Issey Miyake
+103,Greatest Fashion Designer,20,Manish Malhotra
+104,Greatest Dancer,1,Michael Jackson
+104,Greatest Dancer,2,Mikhail Baryshnikov
+104,Greatest Dancer,3,Fred Astaire
+104,Greatest Dancer,4,Gene Kelly
+104,Greatest Dancer,5,Rudolf Nureyev
+104,Greatest Dancer,6,Martha Graham
+104,Greatest Dancer,7,Misty Copeland
+104,Greatest Dancer,8,Savion Glover
+104,Greatest Dancer,9,Isadora Duncan
+104,Greatest Dancer,10,Gregory Hines
+104,Greatest Dancer,11,Vaslav Nijinsky
+104,Greatest Dancer,12,Ginger Rogers
+104,Greatest Dancer,13,Sylvie Guillem
+104,Greatest Dancer,14,Alvin Ailey
+104,Greatest Dancer,15,Akram Khan
+104,Greatest Dancer,16,Pina Bausch
+104,Greatest Dancer,17,Prabhu Deva
+104,Greatest Dancer,18,Hrithik Roshan
+104,Greatest Dancer,19,Madhuri Dixit
+104,Greatest Dancer,20,Shakira
+105,Greatest Sculptor,1,Michelangelo
+105,Greatest Sculptor,2,Auguste Rodin
+105,Greatest Sculptor,3,Donatello
+105,Greatest Sculptor,4,Gian Lorenzo Bernini
+105,Greatest Sculptor,5,Phidias
+105,Greatest Sculptor,6,Praxiteles
+105,Greatest Sculptor,7,Constantin Brâncuși
+105,Greatest Sculptor,8,Henry Moore
+105,Greatest Sculptor,9,Alberto Giacometti
+105,Greatest Sculptor,10,Louise Bourgeois
+105,Greatest Sculptor,11,Antonio Canova
+105,Greatest Sculptor,12,Edgar Degas
+105,Greatest Sculptor,13,Barbara Hepworth
+105,Greatest Sculptor,14,Jean-Baptiste Carpeaux
+105,Greatest Sculptor,15,Isamu Noguchi
+105,Greatest Sculptor,16,Umberto Boccioni
+105,Greatest Sculptor,17,Camille Claudel
+105,Greatest Sculptor,18,Richard Serra
+105,Greatest Sculptor,19,Anish Kapoor
+105,Greatest Sculptor,20,Jeff Koons
+106,Greatest Designer,1,Dieter Rams
+106,Greatest Designer,2,Charles Eames
+106,Greatest Designer,3,Ray Eames
+106,Greatest Designer,4,Jony Ive
+106,Greatest Designer,5,Paul Rand
+106,Greatest Designer,6,Massimo Vignelli
+106,Greatest Designer,7,Saul Bass
+106,Greatest Designer,8,Milton Glaser
+106,Greatest Designer,9,Otl Aicher
+106,Greatest Designer,10,Karim Rashid
+106,Greatest Designer,11,Jonathan Ive
+106,Greatest Designer,12,Naoto Fukasawa
+106,Greatest Designer,13,Philippe Starck
+106,Greatest Designer,14,Ettore Sottsass
+106,Greatest Designer,15,Raymond Loewy
+106,Greatest Designer,16,Charles Rennie Mackintosh
+106,Greatest Designer,17,Peter Behrens
+106,Greatest Designer,18,Issey Miyake
+106,Greatest Designer,19,Virgil Abloh
+106,Greatest Designer,20,Contender 20
+107,Greatest YouTuber,1,MrBeast
+107,Greatest YouTuber,2,PewDiePie
+107,Greatest YouTuber,3,Markiplier
+107,Greatest YouTuber,4,Casey Neistat
+107,Greatest YouTuber,5,Logan Paul
+107,Greatest YouTuber,6,KSI
+107,Greatest YouTuber,7,Ryan Trahan
+107,Greatest YouTuber,8,Marques Brownlee
+107,Greatest YouTuber,9,Dude Perfect
+107,Greatest YouTuber,10,Emma Chamberlain
+107,Greatest YouTuber,11,iJustine
+107,Greatest YouTuber,12,Philip DeFranco
+107,Greatest YouTuber,13,Smosh
+107,Greatest YouTuber,14,Shane Dawson
+107,Greatest YouTuber,15,Vsauce
+107,Greatest YouTuber,16,Veritasium
+107,Greatest YouTuber,17,Kurzgesagt
+107,Greatest YouTuber,18,Jacksepticeye
+107,Greatest YouTuber,19,Dream
+107,Greatest YouTuber,20,Airrack
+108,Greatest Streamer,1,Ninja
+108,Greatest Streamer,2,xQc
+108,Greatest Streamer,3,Kai Cenat
+108,Greatest Streamer,4,IShowSpeed
+108,Greatest Streamer,5,Pokimane
+108,Greatest Streamer,6,Ibai Llanos
+108,Greatest Streamer,7,Ludwig
+108,Greatest Streamer,8,HasanAbi
+108,Greatest Streamer,9,Shroud
+108,Greatest Streamer,10,Dr DisRespect
+108,Greatest Streamer,11,Tfue
+108,Greatest Streamer,12,Summit1g
+108,Greatest Streamer,13,Valkyrae
+108,Greatest Streamer,14,Asmongold
+108,Greatest Streamer,15,MoistCr1TiKaL
+108,Greatest Streamer,16,Adin Ross
+108,Greatest Streamer,17,Amouranth
+108,Greatest Streamer,18,Gaules
+108,Greatest Streamer,19,Tarik
+108,Greatest Streamer,20,Clix
+109,Greatest Podcaster,1,Joe Rogan
+109,Greatest Podcaster,2,Lex Fridman
+109,Greatest Podcaster,3,Andrew Huberman
+109,Greatest Podcaster,4,Marc Maron
+109,Greatest Podcaster,5,Conan O'Brien
+109,Greatest Podcaster,6,Tim Ferriss
+109,Greatest Podcaster,7,Steven Bartlett
+109,Greatest Podcaster,8,Theo Von
+109,Greatest Podcaster,9,Dax Shepard
+109,Greatest Podcaster,10,Alex Cooper
+109,Greatest Podcaster,11,Bill Simmons
+109,Greatest Podcaster,12,Guy Raz
+109,Greatest Podcaster,13,Trevor Noah
+109,Greatest Podcaster,14,Cal Newport
+109,Greatest Podcaster,15,Kara Swisher
+109,Greatest Podcaster,16,Sam Harris
+109,Greatest Podcaster,17,Sean Evans
+109,Greatest Podcaster,18,Ezra Klein
+109,Greatest Podcaster,19,Jon Stewart
+109,Greatest Podcaster,20,Terry Gross
+110,Greatest AI Startup,1,OpenAI
+110,Greatest AI Startup,2,Anthropic
+110,Greatest AI Startup,3,xAI
+110,Greatest AI Startup,4,Google DeepMind
+110,Greatest AI Startup,5,Perplexity
+110,Greatest AI Startup,6,Scale AI
+110,Greatest AI Startup,7,Anysphere
+110,Greatest AI Startup,8,Runway
+110,Greatest AI Startup,9,Midjourney
+110,Greatest AI Startup,10,ElevenLabs
+110,Greatest AI Startup,11,Hugging Face
+110,Greatest AI Startup,12,Mistral AI
+110,Greatest AI Startup,13,Cohere
+110,Greatest AI Startup,14,Character.AI
+110,Greatest AI Startup,15,Harvey
+110,Greatest AI Startup,16,Glean
+110,Greatest AI Startup,17,Sierra
+110,Greatest AI Startup,18,Replit
+110,Greatest AI Startup,19,Thinking Machines Lab
+110,Greatest AI Startup,20,Safe Superintelligence
+111,Greatest Internet Creator,1,MrBeast
+111,Greatest Internet Creator,2,PewDiePie
+111,Greatest Internet Creator,3,Logan Paul
+111,Greatest Internet Creator,4,KSI
+111,Greatest Internet Creator,5,Casey Neistat
+111,Greatest Internet Creator,6,Marques Brownlee
+111,Greatest Internet Creator,7,Emma Chamberlain
+111,Greatest Internet Creator,8,Lilly Singh
+111,Greatest Internet Creator,9,Ryan Trahan
+111,Greatest Internet Creator,10,Khaby Lame
+111,Greatest Internet Creator,11,Zach King
+111,Greatest Internet Creator,12,David Dobrik
+111,Greatest Internet Creator,13,Liza Koshy
+111,Greatest Internet Creator,14,Joji
+111,Greatest Internet Creator,15,iJustine
+111,Greatest Internet Creator,16,Philip DeFranco
+111,Greatest Internet Creator,17,Mark Rober
+111,Greatest Internet Creator,18,Dude Perfect
+111,Greatest Internet Creator,19,Ludwig
+111,Greatest Internet Creator,20,Contender 20
+112,Greatest Influencer,1,MrBeast
+112,Greatest Influencer,2,Kim Kardashian
+112,Greatest Influencer,3,Cristiano Ronaldo
+112,Greatest Influencer,4,Selena Gomez
+112,Greatest Influencer,5,Kylie Jenner
+112,Greatest Influencer,6,Dwayne Johnson
+112,Greatest Influencer,7,Taylor Swift
+112,Greatest Influencer,8,Lionel Messi
+112,Greatest Influencer,9,Charli D'Amelio
+112,Greatest Influencer,10,Virat Kohli
+112,Greatest Influencer,11,Beyoncé
+112,Greatest Influencer,12,Justin Bieber
+112,Greatest Influencer,13,Ariana Grande
+112,Greatest Influencer,14,Kendall Jenner
+112,Greatest Influencer,15,LeBron James
+112,Greatest Influencer,16,Zendaya
+112,Greatest Influencer,17,Neymar
+112,Greatest Influencer,18,Shah Rukh Khan
+112,Greatest Influencer,19,Rihanna
+112,Greatest Influencer,20,Dua Lipa
+113,Greatest Tech Creator,1,Marques Brownlee
+113,Greatest Tech Creator,2,Linus Sebastian
+113,Greatest Tech Creator,3,Mrwhosetheboss
+113,Greatest Tech Creator,4,iJustine
+113,Greatest Tech Creator,5,Unbox Therapy
+113,Greatest Tech Creator,6,Austin Evans
+113,Greatest Tech Creator,7,Sara Dietschy
+113,Greatest Tech Creator,8,Dave2D
+113,Greatest Tech Creator,9,Jonathan Morrison
+113,Greatest Tech Creator,10,Michael Fisher
+113,Greatest Tech Creator,11,UrAvgConsumer
+113,Greatest Tech Creator,12,Snazzy Labs
+113,Greatest Tech Creator,13,Justine Ezarik
+113,Greatest Tech Creator,14,Rene Ritchie
+113,Greatest Tech Creator,15,CNET's David Carnoy
+113,Greatest Tech Creator,16,Andru Edwards
+113,Greatest Tech Creator,17,JerryRigEverything
+113,Greatest Tech Creator,18,The Verge's Nilay Patel
+113,Greatest Tech Creator,19,MKBHD
+113,Greatest Tech Creator,20,Contender 20
+114,Greatest Online Community,1,Reddit
+114,Greatest Online Community,2,Wikipedia
+114,Greatest Online Community,3,Stack Overflow
+114,Greatest Online Community,4,GitHub
+114,Greatest Online Community,5,Discord
+114,Greatest Online Community,6,Twitch
+114,Greatest Online Community,7,YouTube
+114,Greatest Online Community,8,4chan
+114,Greatest Online Community,9,Hacker News
+114,Greatest Online Community,10,Quora
+114,Greatest Online Community,11,X
+114,Greatest Online Community,12,Facebook Groups
+114,Greatest Online Community,13,Steam Community
+114,Greatest Online Community,14,Minecraft community
+114,Greatest Online Community,15,Roblox community
+114,Greatest Online Community,16,Fortnite community
+114,Greatest Online Community,17,Fandom
+114,Greatest Online Community,18,Product Hunt
+114,Greatest Online Community,19,Indie Hackers
+114,Greatest Online Community,20,Lemmy
+115,Greatest Programmer,1,Donald Knuth
+115,Greatest Programmer,2,Dennis Ritchie
+115,Greatest Programmer,3,Ken Thompson
+115,Greatest Programmer,4,Bjarne Stroustrup
+115,Greatest Programmer,5,James Gosling
+115,Greatest Programmer,6,Guido van Rossum
+115,Greatest Programmer,7,Linus Torvalds
+115,Greatest Programmer,8,Brian Kernighan
+115,Greatest Programmer,9,Niklaus Wirth
+115,Greatest Programmer,10,Tim Berners-Lee
+115,Greatest Programmer,11,Margaret Hamilton
+115,Greatest Programmer,12,Grace Hopper
+115,Greatest Programmer,13,John Carmack
+115,Greatest Programmer,14,Anders Hejlsberg
+115,Greatest Programmer,15,Brendan Eich
+115,Greatest Programmer,16,Yukihiro Matsumoto
+115,Greatest Programmer,17,Rob Pike
+115,Greatest Programmer,18,Edsger W. Dijkstra
+115,Greatest Programmer,19,Alan Turing
+115,Greatest Programmer,20,Contender 20
+116,Greatest Computer Scientist,1,Alan Turing
+116,Greatest Computer Scientist,2,John von Neumann
+116,Greatest Computer Scientist,3,Donald Knuth
+116,Greatest Computer Scientist,4,Edsger W. Dijkstra
+116,Greatest Computer Scientist,5,Claude Shannon
+116,Greatest Computer Scientist,6,Grace Hopper
+116,Greatest Computer Scientist,7,Dennis Ritchie
+116,Greatest Computer Scientist,8,Ken Thompson
+116,Greatest Computer Scientist,9,Barbara Liskov
+116,Greatest Computer Scientist,10,Leslie Lamport
+116,Greatest Computer Scientist,11,E. F. Codd
+116,Greatest Computer Scientist,12,Vint Cerf
+116,Greatest Computer Scientist,13,Tim Berners-Lee
+116,Greatest Computer Scientist,14,John McCarthy
+116,Greatest Computer Scientist,15,Marvin Minsky
+116,Greatest Computer Scientist,16,Niklaus Wirth
+116,Greatest Computer Scientist,17,Bjarne Stroustrup
+116,Greatest Computer Scientist,18,Judea Pearl
+116,Greatest Computer Scientist,19,Geoffrey Hinton
+116,Greatest Computer Scientist,20,Contender 20
+117,Greatest AI Researcher,1,Geoffrey Hinton
+117,Greatest AI Researcher,2,Yann LeCun
+117,Greatest AI Researcher,3,Yoshua Bengio
+117,Greatest AI Researcher,4,Demis Hassabis
+117,Greatest AI Researcher,5,Andrew Ng
+117,Greatest AI Researcher,6,Fei-Fei Li
+117,Greatest AI Researcher,7,Ilya Sutskever
+117,Greatest AI Researcher,8,Jürgen Schmidhuber
+117,Greatest AI Researcher,9,Stuart Russell
+117,Greatest AI Researcher,10,Peter Norvig
+117,Greatest AI Researcher,11,Daphne Koller
+117,Greatest AI Researcher,12,Judea Pearl
+117,Greatest AI Researcher,13,Richard Sutton
+117,Greatest AI Researcher,14,David Silver
+117,Greatest AI Researcher,15,Ian Goodfellow
+117,Greatest AI Researcher,16,Dario Amodei
+117,Greatest AI Researcher,17,Oriol Vinyals
+117,Greatest AI Researcher,18,Andrej Karpathy
+117,Greatest AI Researcher,19,Jeff Dean
+117,Greatest AI Researcher,20,Contender 20
+118,Greatest Technologist,1,Steve Jobs
+118,Greatest Technologist,2,Bill Gates
+118,Greatest Technologist,3,Elon Musk
+118,Greatest Technologist,4,Alan Turing
+118,Greatest Technologist,5,Nikola Tesla
+118,Greatest Technologist,6,Tim Berners-Lee
+118,Greatest Technologist,7,Mark Zuckerberg
+118,Greatest Technologist,8,Larry Page
+118,Greatest Technologist,9,Sergey Brin
+118,Greatest Technologist,10,Jensen Huang
+118,Greatest Technologist,11,James Watt
+118,Greatest Technologist,12,Thomas Edison
+118,Greatest Technologist,13,Grace Hopper
+118,Greatest Technologist,14,Steve Wozniak
+118,Greatest Technologist,15,Jeff Bezos
+118,Greatest Technologist,16,Dennis Ritchie
+118,Greatest Technologist,17,Ken Thompson
+118,Greatest Technologist,18,Linus Torvalds
+118,Greatest Technologist,19,John von Neumann
+118,Greatest Technologist,20,Claude Shannon
+119,Greatest Engineer,1,Isambard Kingdom Brunel
+119,Greatest Engineer,2,Nikola Tesla
+119,Greatest Engineer,3,James Watt
+119,Greatest Engineer,4,Gustave Eiffel
+119,Greatest Engineer,5,George Stephenson
+119,Greatest Engineer,6,Thomas Edison
+119,Greatest Engineer,7,Leonardo da Vinci
+119,Greatest Engineer,8,Emily Roebling
+119,Greatest Engineer,9,Guglielmo Marconi
+119,Greatest Engineer,10,Henry Ford
+119,Greatest Engineer,11,Nikolaus Otto
+119,Greatest Engineer,12,Wernher von Braun
+119,Greatest Engineer,13,Frank Whittle
+119,Greatest Engineer,14,Kelly Johnson
+119,Greatest Engineer,15,S. P. Korolev
+119,Greatest Engineer,16,George Washington Carver
+119,Greatest Engineer,17,Elon Musk
+119,Greatest Engineer,18,Steve Wozniak
+119,Greatest Engineer,19,Margaret Hamilton
+119,Greatest Engineer,20,James Clerk Maxwell
+120,Greatest Historical Figure,1,Jesus Christ
+120,Greatest Historical Figure,2,Muhammad
+120,Greatest Historical Figure,3,Buddha
+120,Greatest Historical Figure,4,Alexander the Great
+120,Greatest Historical Figure,5,Julius Caesar
+120,Greatest Historical Figure,6,Genghis Khan
+120,Greatest Historical Figure,7,Napoleon Bonaparte
+120,Greatest Historical Figure,8,Abraham Lincoln
+120,Greatest Historical Figure,9,Mahatma Gandhi
+120,Greatest Historical Figure,10,Confucius
+120,Greatest Historical Figure,11,Leonardo da Vinci
+120,Greatest Historical Figure,12,Isaac Newton
+120,Greatest Historical Figure,13,Albert Einstein
+120,Greatest Historical Figure,14,William Shakespeare
+120,Greatest Historical Figure,15,George Washington
+120,Greatest Historical Figure,16,Nelson Mandela
+120,Greatest Historical Figure,17,Cleopatra
+120,Greatest Historical Figure,18,Charlemagne
+120,Greatest Historical Figure,19,Aristotle
+120,Greatest Historical Figure,20,Socrates
+121,Greatest Ancient Leader,1,Alexander the Great
+121,Greatest Ancient Leader,2,Julius Caesar
+121,Greatest Ancient Leader,3,Cyrus the Great
+121,Greatest Ancient Leader,4,Ashoka
+121,Greatest Ancient Leader,5,Augustus
+121,Greatest Ancient Leader,6,Hammurabi
+121,Greatest Ancient Leader,7,Qin Shi Huang
+121,Greatest Ancient Leader,8,Ramesses II
+121,Greatest Ancient Leader,9,Hannibal
+121,Greatest Ancient Leader,10,Pericles
+121,Greatest Ancient Leader,11,Leonidas I
+121,Greatest Ancient Leader,12,Darius I
+121,Greatest Ancient Leader,13,Sargon of Akkad
+121,Greatest Ancient Leader,14,Thutmose III
+121,Greatest Ancient Leader,15,Solomon
+121,Greatest Ancient Leader,16,Chandragupta Maurya
+121,Greatest Ancient Leader,17,Cleopatra
+121,Greatest Ancient Leader,18,Trajan
+121,Greatest Ancient Leader,19,Constantine the Great
+121,Greatest Ancient Leader,20,Cao Cao
+122,Greatest Medieval Leader,1,Charlemagne
+122,Greatest Medieval Leader,2,Genghis Khan
+122,Greatest Medieval Leader,3,Saladin
+122,Greatest Medieval Leader,4,Richard the Lionheart
+122,Greatest Medieval Leader,5,William the Conqueror
+122,Greatest Medieval Leader,6,Alfred the Great
+122,Greatest Medieval Leader,7,Suleiman the Magnificent
+122,Greatest Medieval Leader,8,Mehmed II
+122,Greatest Medieval Leader,9,Timur
+122,Greatest Medieval Leader,10,Mansa Musa
+122,Greatest Medieval Leader,11,Harun al-Rashid
+122,Greatest Medieval Leader,12,Alauddin Khalji
+122,Greatest Medieval Leader,13,Shivaji Maharaj
+122,Greatest Medieval Leader,14,Edward III
+122,Greatest Medieval Leader,15,Louis IX
+122,Greatest Medieval Leader,16,Frederick II
+122,Greatest Medieval Leader,17,Gustavus Adolphus
+122,Greatest Medieval Leader,18,El Cid
+122,Greatest Medieval Leader,19,Baybars
+122,Greatest Medieval Leader,20,Alfonso X
+123,Greatest Explorer,1,Christopher Columbus
+123,Greatest Explorer,2,Ferdinand Magellan
+123,Greatest Explorer,3,Marco Polo
+123,Greatest Explorer,4,Ibn Battuta
+123,Greatest Explorer,5,James Cook
+123,Greatest Explorer,6,Vasco da Gama
+123,Greatest Explorer,7,Amerigo Vespucci
+123,Greatest Explorer,8,Roald Amundsen
+123,Greatest Explorer,9,Ernest Shackleton
+123,Greatest Explorer,10,Lewis and Clark
+123,Greatest Explorer,11,Zheng He
+123,Greatest Explorer,12,Leif Erikson
+123,Greatest Explorer,13,David Livingstone
+123,Greatest Explorer,14,Francis Drake
+123,Greatest Explorer,15,Hernán Cortés
+123,Greatest Explorer,16,Jacques Cartier
+123,Greatest Explorer,17,John Cabot
+123,Greatest Explorer,18,Sacagawea
+123,Greatest Explorer,19,Richard Francis Burton
+123,Greatest Explorer,20,Fridtjof Nansen
+124,Greatest Diplomat,1,Henry Kissinger
+124,Greatest Diplomat,2,Klemens von Metternich
+124,Greatest Diplomat,3,George F. Kennan
+124,Greatest Diplomat,4,Talleyrand
+124,Greatest Diplomat,5,Benjamin Franklin
+124,Greatest Diplomat,6,Dag Hammarskjöld
+124,Greatest Diplomat,7,Madeleine Albright
+124,Greatest Diplomat,8,George C. Marshall
+124,Greatest Diplomat,9,Charles-Maurice de Talleyrand
+124,Greatest Diplomat,10,Zhou Enlai
+124,Greatest Diplomat,11,Dean Acheson
+124,Greatest Diplomat,12,Henry Clay
+124,Greatest Diplomat,13,Ralph Bunche
+124,Greatest Diplomat,14,Eleanor Roosevelt
+124,Greatest Diplomat,15,Kofi Annan
+124,Greatest Diplomat,16,Ban Ki-moon
+124,Greatest Diplomat,17,Hans-Dietrich Genscher
+124,Greatest Diplomat,18,Andrei Gromyko
+124,Greatest Diplomat,19,Shimon Peres
+124,Greatest Diplomat,20,Lakhdar Brahimi
+125,Greatest Spy,1,Richard Sorge
+125,Greatest Spy,2,Virginia Hall
+125,Greatest Spy,3,Kim Philby
+125,Greatest Spy,4,Eli Cohen
+125,Greatest Spy,5,Mata Hari
+125,Greatest Spy,6,Sidney Reilly
+125,Greatest Spy,7,Juan Pujol García
+125,Greatest Spy,8,Oleg Penkovsky
+125,Greatest Spy,9,Aldrich Ames
+125,Greatest Spy,10,Robert Hanssen
+125,Greatest Spy,11,Noor Inayat Khan
+125,Greatest Spy,12,Harold Philby
+125,Greatest Spy,13,Belle Boyd
+125,Greatest Spy,14,Nancy Wake
+125,Greatest Spy,15,Dusko Popov
+125,Greatest Spy,16,George Blake
+125,Greatest Spy,17,Klaus Fuchs
+125,Greatest Spy,18,Rudolf Abel
+125,Greatest Spy,19,James Jesus Angleton
+125,Greatest Spy,20,Peter Sichel
+126,Greatest Superhero,1,Superman
+126,Greatest Superhero,2,Batman
+126,Greatest Superhero,3,Spider-Man
+126,Greatest Superhero,4,Wonder Woman
+126,Greatest Superhero,5,Iron Man
+126,Greatest Superhero,6,Captain America
+126,Greatest Superhero,7,Thor
+126,Greatest Superhero,8,Hulk
+126,Greatest Superhero,9,Wolverine
+126,Greatest Superhero,10,Black Panther
+126,Greatest Superhero,11,The Flash
+126,Greatest Superhero,12,Green Lantern
+126,Greatest Superhero,13,Aquaman
+126,Greatest Superhero,14,Doctor Strange
+126,Greatest Superhero,15,Deadpool
+126,Greatest Superhero,16,Captain Marvel
+126,Greatest Superhero,17,Storm
+126,Greatest Superhero,18,Jean Grey
+126,Greatest Superhero,19,Daredevil
+126,Greatest Superhero,20,Hellboy
+127,Greatest Fictional Character,1,Sherlock Holmes
+127,Greatest Fictional Character,2,Harry Potter
+127,Greatest Fictional Character,3,Batman
+127,Greatest Fictional Character,4,James Bond
+127,Greatest Fictional Character,5,Don Quixote
+127,Greatest Fictional Character,6,Superman
+127,Greatest Fictional Character,7,Spider-Man
+127,Greatest Fictional Character,8,Hannibal Lecter
+127,Greatest Fictional Character,9,Gandalf
+127,Greatest Fictional Character,10,Frodo Baggins
+127,Greatest Fictional Character,11,Darth Vader
+127,Greatest Fictional Character,12,Indiana Jones
+127,Greatest Fictional Character,13,Atticus Finch
+127,Greatest Fictional Character,14,Walter White
+127,Greatest Fictional Character,15,Tony Stark
+127,Greatest Fictional Character,16,Jon Snow
+127,Greatest Fictional Character,17,Gollum
+127,Greatest Fictional Character,18,Hercule Poirot
+127,Greatest Fictional Character,19,Holden Caulfield
+127,Greatest Fictional Character,20,Elizabeth Bennet
+128,Greatest Movie Character,1,The Joker
+128,Greatest Movie Character,2,Darth Vader
+128,Greatest Movie Character,3,Indiana Jones
+128,Greatest Movie Character,4,Rocky Balboa
+128,Greatest Movie Character,5,Forrest Gump
+128,Greatest Movie Character,6,Tony Montana
+128,Greatest Movie Character,7,Michael Corleone
+128,Greatest Movie Character,8,Travis Bickle
+128,Greatest Movie Character,9,Hannibal Lecter
+128,Greatest Movie Character,10,Tyler Durden
+128,Greatest Movie Character,11,Jack Sparrow
+128,Greatest Movie Character,12,Ellen Ripley
+128,Greatest Movie Character,13,Marty McFly
+128,Greatest Movie Character,14,Neo
+128,Greatest Movie Character,15,The Dude
+128,Greatest Movie Character,16,Andy Dufresne
+128,Greatest Movie Character,17,Norman Bates
+128,Greatest Movie Character,18,Amélie Poulain
+128,Greatest Movie Character,19,John Wick
+128,Greatest Movie Character,20,Vito Corleone
+129,Greatest TV Character,1,Tony Soprano
+129,Greatest TV Character,2,Walter White
+129,Greatest TV Character,3,Don Draper
+129,Greatest TV Character,4,Saul Goodman
+129,Greatest TV Character,5,Tyrion Lannister
+129,Greatest TV Character,6,Omar Little
+129,Greatest TV Character,7,Homer Simpson
+129,Greatest TV Character,8,Michael Scott
+129,Greatest TV Character,9,Fleabag
+129,Greatest TV Character,10,Rust Cohle
+129,Greatest TV Character,11,BoJack Horseman
+129,Greatest TV Character,12,Dexter Morgan
+129,Greatest TV Character,13,Gregory House
+129,Greatest TV Character,14,Sherlock Holmes
+129,Greatest TV Character,15,Jon Snow
+129,Greatest TV Character,16,Daenerys Targaryen
+129,Greatest TV Character,17,Logan Roy
+129,Greatest TV Character,18,Jimmy McGill
+129,Greatest TV Character,19,Buffy Summers
+129,Greatest TV Character,20,Kendall Roy
+130,Greatest Anime Character,1,Goku
+130,Greatest Anime Character,2,Luffy
+130,Greatest Anime Character,3,Naruto Uzumaki
+130,Greatest Anime Character,4,Saitama
+130,Greatest Anime Character,5,Monkey D. Luffy
+130,Greatest Anime Character,6,Light Yagami
+130,Greatest Anime Character,7,Eren Yeager
+130,Greatest Anime Character,8,Levi Ackerman
+130,Greatest Anime Character,9,Gojo Satoru
+130,Greatest Anime Character,10,Edward Elric
+130,Greatest Anime Character,11,Ichigo Kurosaki
+130,Greatest Anime Character,12,Gon Freecss
+130,Greatest Anime Character,13,Killua Zoldyck
+130,Greatest Anime Character,14,Spike Spiegel
+130,Greatest Anime Character,15,Sailor Moon
+130,Greatest Anime Character,16,Vegeta
+130,Greatest Anime Character,17,Kakashi Hatake
+130,Greatest Anime Character,18,Jotaro Kujo
+130,Greatest Anime Character,19,Tanjiro Kamado
+130,Greatest Anime Character,20,L
+131,Greatest Anime,1,One Piece
+131,Greatest Anime,2,Dragon Ball Z
+131,Greatest Anime,3,Naruto
+131,Greatest Anime,4,Attack on Titan
+131,Greatest Anime,5,Death Note
+131,Greatest Anime,6,Fullmetal Alchemist: Brotherhood
+131,Greatest Anime,7,Hunter × Hunter
+131,Greatest Anime,8,Demon Slayer
+131,Greatest Anime,9,My Hero Academia
+131,Greatest Anime,10,Jujutsu Kaisen
+131,Greatest Anime,11,Cowboy Bebop
+131,Greatest Anime,12,Neon Genesis Evangelion
+131,Greatest Anime,13,Sailor Moon
+131,Greatest Anime,14,Bleach
+131,Greatest Anime,15,Code Geass
+131,Greatest Anime,16,Steins;Gate
+131,Greatest Anime,17,One Punch Man
+131,Greatest Anime,18,Vinland Saga
+131,Greatest Anime,19,Monster
+131,Greatest Anime,20,Pokémon
+132,Greatest Video Game,1,The Legend of Zelda: Ocarina of Time
+132,Greatest Video Game,2,The Last of Us
+132,Greatest Video Game,3,Minecraft
+132,Greatest Video Game,4,Grand Theft Auto V
+132,Greatest Video Game,5,Red Dead Redemption 2
+132,Greatest Video Game,6,Super Mario Bros. 3
+132,Greatest Video Game,7,The Witcher 3
+132,Greatest Video Game,8,Half-Life 2
+132,Greatest Video Game,9,Elden Ring
+132,Greatest Video Game,10,Dark Souls
+132,Greatest Video Game,11,Portal 2
+132,Greatest Video Game,12,Tetris
+132,Greatest Video Game,13,Super Mario World
+132,Greatest Video Game,14,Resident Evil 4
+132,Greatest Video Game,15,God of War
+132,Greatest Video Game,16,Skyrim
+132,Greatest Video Game,17,Mass Effect 2
+132,Greatest Video Game,18,Baldur's Gate 3
+132,Greatest Video Game,19,Chrono Trigger
+132,Greatest Video Game,20,Metal Gear Solid
+133,Greatest Video Game Character,1,Mario
+133,Greatest Video Game Character,2,Link
+133,Greatest Video Game Character,3,Kratos
+133,Greatest Video Game Character,4,Master Chief
+133,Greatest Video Game Character,5,Lara Croft
+133,Greatest Video Game Character,6,Sonic the Hedgehog
+133,Greatest Video Game Character,7,Pikachu
+133,Greatest Video Game Character,8,Geralt of Rivia
+133,Greatest Video Game Character,9,Arthur Morgan
+133,Greatest Video Game Character,10,Solid Snake
+133,Greatest Video Game Character,11,Cloud Strife
+133,Greatest Video Game Character,12,Samus Aran
+133,Greatest Video Game Character,13,Pac-Man
+133,Greatest Video Game Character,14,Donkey Kong
+133,Greatest Video Game Character,15,Kirby
+133,Greatest Video Game Character,16,Steve
+133,Greatest Video Game Character,17,Scorpion
+133,Greatest Video Game Character,18,Sub-Zero
+133,Greatest Video Game Character,19,Doom Slayer
+133,Greatest Video Game Character,20,Trevor Philips
+134,Greatest Cuisine,1,Italian
+134,Greatest Cuisine,2,Japanese
+134,Greatest Cuisine,3,French
+134,Greatest Cuisine,4,Chinese
+134,Greatest Cuisine,5,Indian
+134,Greatest Cuisine,6,Mexican
+134,Greatest Cuisine,7,Thai
+134,Greatest Cuisine,8,Spanish
+134,Greatest Cuisine,9,Greek
+134,Greatest Cuisine,10,Korean
+134,Greatest Cuisine,11,Turkish
+134,Greatest Cuisine,12,Vietnamese
+134,Greatest Cuisine,13,Lebanese
+134,Greatest Cuisine,14,Peruvian
+134,Greatest Cuisine,15,Ethiopian
+134,Greatest Cuisine,16,Moroccan
+134,Greatest Cuisine,17,Cantonese
+134,Greatest Cuisine,18,Persian
+134,Greatest Cuisine,19,Brazilian
+134,Greatest Cuisine,20,Contender 20
+135,Greatest Dish,1,Pizza
+135,Greatest Dish,2,Sushi
+135,Greatest Dish,3,Biryani
+135,Greatest Dish,4,Tacos
+135,Greatest Dish,5,Pasta
+135,Greatest Dish,6,Ramen
+135,Greatest Dish,7,Hamburger
+135,Greatest Dish,8,Curry
+135,Greatest Dish,9,Dim Sum
+135,Greatest Dish,10,Steak
+135,Greatest Dish,11,Pad Thai
+135,Greatest Dish,12,Paella
+135,Greatest Dish,13,Fried Chicken
+135,Greatest Dish,14,Lasagna
+135,Greatest Dish,15,Pho
+135,Greatest Dish,16,Butter Chicken
+135,Greatest Dish,17,Cheeseburger
+135,Greatest Dish,18,Peking Duck
+135,Greatest Dish,19,Tonkatsu
+135,Greatest Dish,20,Falafel
+136,Greatest Fast-Food Chain,1,McDonald's
+136,Greatest Fast-Food Chain,2,KFC
+136,Greatest Fast-Food Chain,3,Burger King
+136,Greatest Fast-Food Chain,4,Subway
+136,Greatest Fast-Food Chain,5,Wendy's
+136,Greatest Fast-Food Chain,6,Taco Bell
+136,Greatest Fast-Food Chain,7,Chick-fil-A
+136,Greatest Fast-Food Chain,8,Domino's
+136,Greatest Fast-Food Chain,9,Pizza Hut
+136,Greatest Fast-Food Chain,10,Popeyes
+136,Greatest Fast-Food Chain,11,Five Guys
+136,Greatest Fast-Food Chain,12,Chipotle
+136,Greatest Fast-Food Chain,13,In-N-Out Burger
+136,Greatest Fast-Food Chain,14,Shake Shack
+136,Greatest Fast-Food Chain,15,Dunkin'
+136,Greatest Fast-Food Chain,16,Starbucks
+136,Greatest Fast-Food Chain,17,Tim Hortons
+136,Greatest Fast-Food Chain,18,Jollibee
+136,Greatest Fast-Food Chain,19,Whataburger
+136,Greatest Fast-Food Chain,20,Raising Cane's
+137,Greatest Restaurant,1,Noma
+137,Greatest Restaurant,2,El Celler de Can Roca
+137,Greatest Restaurant,3,Osteria Francescana
+137,Greatest Restaurant,4,Mirazur
+137,Greatest Restaurant,5,The French Laundry
+137,Greatest Restaurant,6,Eleven Madison Park
+137,Greatest Restaurant,7,Central
+137,Greatest Restaurant,8,Asador Etxebarri
+137,Greatest Restaurant,9,Gaggan
+137,Greatest Restaurant,10,Le Bernardin
+137,Greatest Restaurant,11,Guy Savoy
+137,Greatest Restaurant,12,Arpège
+137,Greatest Restaurant,13,Per Se
+137,Greatest Restaurant,14,Alinea
+137,Greatest Restaurant,15,Maido
+137,Greatest Restaurant,16,Disfrutar
+137,Greatest Restaurant,17,Mugaritz
+137,Greatest Restaurant,18,Le Comptoir de la Gastronomie
+137,Greatest Restaurant,19,L'Arpège
+137,Greatest Restaurant,20,Geranium
+138,Greatest Luxury Brand,1,Louis Vuitton
+138,Greatest Luxury Brand,2,Chanel
+138,Greatest Luxury Brand,3,Hermès
+138,Greatest Luxury Brand,4,Gucci
+138,Greatest Luxury Brand,5,Dior
+138,Greatest Luxury Brand,6,Rolex
+138,Greatest Luxury Brand,7,Prada
+138,Greatest Luxury Brand,8,Cartier
+138,Greatest Luxury Brand,9,Burberry
+138,Greatest Luxury Brand,10,Bottega Veneta
+138,Greatest Luxury Brand,11,Saint Laurent
+138,Greatest Luxury Brand,12,Versace
+138,Greatest Luxury Brand,13,Balenciaga
+138,Greatest Luxury Brand,14,Fendi
+138,Greatest Luxury Brand,15,Tiffany & Co.
+138,Greatest Luxury Brand,16,Van Cleef & Arpels
+138,Greatest Luxury Brand,17,Loro Piana
+138,Greatest Luxury Brand,18,Brunello Cucinelli
+138,Greatest Luxury Brand,19,Tom Ford
+138,Greatest Luxury Brand,20,Armani
+139,Greatest Sports Brand,1,Nike
+139,Greatest Sports Brand,2,Adidas
+139,Greatest Sports Brand,3,Puma
+139,Greatest Sports Brand,4,Under Armour
+139,Greatest Sports Brand,5,New Balance
+139,Greatest Sports Brand,6,Reebok
+139,Greatest Sports Brand,7,Jordan Brand
+139,Greatest Sports Brand,8,Asics
+139,Greatest Sports Brand,9,Lululemon
+139,Greatest Sports Brand,10,Patagonia
+139,Greatest Sports Brand,11,The North Face
+139,Greatest Sports Brand,12,Wilson
+139,Greatest Sports Brand,13,Yonex
+139,Greatest Sports Brand,14,Fila
+139,Greatest Sports Brand,15,Umbro
+139,Greatest Sports Brand,16,Mizuno
+139,Greatest Sports Brand,17,Oakley
+139,Greatest Sports Brand,18,Converse
+139,Greatest Sports Brand,19,Vans
+139,Greatest Sports Brand,20,Champion
+140,Greatest Tech Brand,1,Apple
+140,Greatest Tech Brand,2,Microsoft
+140,Greatest Tech Brand,3,Google
+140,Greatest Tech Brand,4,Samsung
+140,Greatest Tech Brand,5,Sony
+140,Greatest Tech Brand,6,Nvidia
+140,Greatest Tech Brand,7,Intel
+140,Greatest Tech Brand,8,Amazon
+140,Greatest Tech Brand,9,Dell
+140,Greatest Tech Brand,10,Lenovo
+140,Greatest Tech Brand,11,HP
+140,Greatest Tech Brand,12,IBM
+140,Greatest Tech Brand,13,Meta
+140,Greatest Tech Brand,14,Tesla
+140,Greatest Tech Brand,15,Nintendo
+140,Greatest Tech Brand,16,Adobe
+140,Greatest Tech Brand,17,Oracle
+140,Greatest Tech Brand,18,Qualcomm
+140,Greatest Tech Brand,19,LG
+140,Greatest Tech Brand,20,Xiaomi
+141,Greatest Car Brand,1,Toyota
+141,Greatest Car Brand,2,Mercedes-Benz
+141,Greatest Car Brand,3,BMW
+141,Greatest Car Brand,4,Porsche
+141,Greatest Car Brand,5,Ferrari
+141,Greatest Car Brand,6,Lamborghini
+141,Greatest Car Brand,7,Ford
+141,Greatest Car Brand,8,Honda
+141,Greatest Car Brand,9,Volkswagen
+141,Greatest Car Brand,10,Audi
+141,Greatest Car Brand,11,Rolls-Royce
+141,Greatest Car Brand,12,Tesla
+141,Greatest Car Brand,13,Lexus
+141,Greatest Car Brand,14,Chevrolet
+141,Greatest Car Brand,15,Nissan
+141,Greatest Car Brand,16,Volvo
+141,Greatest Car Brand,17,McLaren
+141,Greatest Car Brand,18,Aston Martin
+141,Greatest Car Brand,19,Bentley
+141,Greatest Car Brand,20,Bugatti
+142,Greatest Sneaker Brand,1,Nike
+142,Greatest Sneaker Brand,2,Adidas
+142,Greatest Sneaker Brand,3,Jordan
+142,Greatest Sneaker Brand,4,New Balance
+142,Greatest Sneaker Brand,5,Puma
+142,Greatest Sneaker Brand,6,Converse
+142,Greatest Sneaker Brand,7,Vans
+142,Greatest Sneaker Brand,8,Reebok
+142,Greatest Sneaker Brand,9,ASICS
+142,Greatest Sneaker Brand,10,Skechers
+142,Greatest Sneaker Brand,11,Fila
+142,Greatest Sneaker Brand,12,Under Armour
+142,Greatest Sneaker Brand,13,On
+142,Greatest Sneaker Brand,14,Hoka
+142,Greatest Sneaker Brand,15,Saucony
+142,Greatest Sneaker Brand,16,Brooks
+142,Greatest Sneaker Brand,17,Salomon
+142,Greatest Sneaker Brand,18,Yeezy
+142,Greatest Sneaker Brand,19,Veja
+142,Greatest Sneaker Brand,20,Timberland
+143,Greatest Car,1,Porsche 911
+143,Greatest Car,2,McLaren F1
+143,Greatest Car,3,Toyota Land Cruiser
+143,Greatest Car,4,Mercedes-Benz 300 SL
+143,Greatest Car,5,Ford Mustang
+143,Greatest Car,6,Chevrolet Corvette
+143,Greatest Car,7,Honda Civic
+143,Greatest Car,8,Volkswagen Beetle
+143,Greatest Car,9,Toyota Supra
+143,Greatest Car,10,BMW M3
+143,Greatest Car,11,Audi Quattro
+143,Greatest Car,12,Lamborghini Miura
+143,Greatest Car,13,Ferrari F40
+143,Greatest Car,14,Mazda MX-5
+143,Greatest Car,15,Nissan GT-R
+143,Greatest Car,16,Jaguar E-Type
+143,Greatest Car,17,Mercedes-Benz S-Class
+143,Greatest Car,18,Tesla Model S
+143,Greatest Car,19,Ford GT40
+143,Greatest Car,20,Porsche 959
+144,Greatest Supercar,1,McLaren F1
+144,Greatest Supercar,2,Ferrari F40
+144,Greatest Supercar,3,Lamborghini Miura
+144,Greatest Supercar,4,Ferrari Enzo
+144,Greatest Supercar,5,Porsche Carrera GT
+144,Greatest Supercar,6,Mercedes-Benz SLR McLaren
+144,Greatest Supercar,7,Lamborghini Countach
+144,Greatest Supercar,8,Ferrari LaFerrari
+144,Greatest Supercar,9,McLaren P1
+144,Greatest Supercar,10,Porsche 918 Spyder
+144,Greatest Supercar,11,Lamborghini Aventador
+144,Greatest Supercar,12,Ferrari 288 GTO
+144,Greatest Supercar,13,Bugatti Veyron
+144,Greatest Supercar,14,Pagani Zonda
+144,Greatest Supercar,15,Pagani Huayra
+144,Greatest Supercar,16,Ford GT
+144,Greatest Supercar,17,Aston Martin One-77
+144,Greatest Supercar,18,Lexus LFA
+144,Greatest Supercar,19,Ferrari 458 Italia
+144,Greatest Supercar,20,Lamborghini Huracán
+145,Greatest Hypercar,1,McLaren F1
+145,Greatest Hypercar,2,Bugatti Veyron
+145,Greatest Hypercar,3,Bugatti Chiron
+145,Greatest Hypercar,4,Mercedes-AMG One
+145,Greatest Hypercar,5,Koenigsegg Jesko
+145,Greatest Hypercar,6,Pagani Huayra
+145,Greatest Hypercar,7,McLaren P1
+145,Greatest Hypercar,8,Porsche 918 Spyder
+145,Greatest Hypercar,9,Ferrari LaFerrari
+145,Greatest Hypercar,10,Rimac Nevera
+145,Greatest Hypercar,11,Koenigsegg Agera RS
+145,Greatest Hypercar,12,Aston Martin Valkyrie
+145,Greatest Hypercar,13,Gordon Murray T.50
+145,Greatest Hypercar,14,Bugatti Bolide
+145,Greatest Hypercar,15,Pagani Utopia
+145,Greatest Hypercar,16,SSC Tuatara
+145,Greatest Hypercar,17,Hennessey Venom F5
+145,Greatest Hypercar,18,Ferrari F80
+145,Greatest Hypercar,19,McLaren Speedtail
+145,Greatest Hypercar,20,Contender 20
+146,Greatest Sports Car,1,Porsche 911
+146,Greatest Sports Car,2,Mazda MX-5
+146,Greatest Sports Car,3,Chevrolet Corvette
+146,Greatest Sports Car,4,Toyota Supra
+146,Greatest Sports Car,5,Nissan GT-R
+146,Greatest Sports Car,6,Honda NSX
+146,Greatest Sports Car,7,Jaguar E-Type
+146,Greatest Sports Car,8,BMW M3
+146,Greatest Sports Car,9,Ford Mustang
+146,Greatest Sports Car,10,Chevrolet Camaro
+146,Greatest Sports Car,11,Audi TT
+146,Greatest Sports Car,12,Subaru WRX STI
+146,Greatest Sports Car,13,Mitsubishi Lancer Evolution
+146,Greatest Sports Car,14,Lotus Elise
+146,Greatest Sports Car,15,Toyota MR2
+146,Greatest Sports Car,16,Nissan 240Z
+146,Greatest Sports Car,17,Alpine A110
+146,Greatest Sports Car,18,Toyota GR86
+146,Greatest Sports Car,19,Honda S2000
+146,Greatest Sports Car,20,Porsche Cayman
+147,Greatest F1 Car,1,McLaren MP4/4
+147,Greatest F1 Car,2,Ferrari F2004
+147,Greatest F1 Car,3,Red Bull RB19
+147,Greatest F1 Car,4,Mercedes W11
+147,Greatest F1 Car,5,Williams FW14B
+147,Greatest F1 Car,6,Ferrari F2002
+147,Greatest F1 Car,7,McLaren MP4/13
+147,Greatest F1 Car,8,Lotus 79
+147,Greatest F1 Car,9,Ferrari 312T
+147,Greatest F1 Car,10,Mercedes W07
+147,Greatest F1 Car,11,Red Bull RB9
+147,Greatest F1 Car,12,Williams FW15C
+147,Greatest F1 Car,13,McLaren MP4/2
+147,Greatest F1 Car,14,Ferrari F310B
+147,Greatest F1 Car,15,Lotus 49
+147,Greatest F1 Car,16,Brabham BT52
+147,Greatest F1 Car,17,Ferrari F1-2000
+147,Greatest F1 Car,18,McLaren MP4-4
+147,Greatest F1 Car,19,Red Bull RB7
+147,Greatest F1 Car,20,Mercedes W196

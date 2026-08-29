@@ -1,0 +1,463 @@
+{
+  "footballers": [
+    "Lionel Messi",
+    "Cristiano Ronaldo",
+    "Pel\u00e9",
+    "Diego Maradona",
+    "Kylian Mbapp\u00e9",
+    "Erling Haaland",
+    "Zinedine Zidane",
+    "Johan Cruyff",
+    "Ronaldinho",
+    "Thierry Henry"
+  ],
+  "managers": [
+    "Managers 1",
+    "Managers 2",
+    "Managers 3",
+    "Managers 4",
+    "Managers 5"
+  ],
+  "goalkeepers": [
+    "Goalkeepers 1",
+    "Goalkeepers 2",
+    "Goalkeepers 3",
+    "Goalkeepers 4",
+    "Goalkeepers 5"
+  ],
+  "batsmen": [
+    "Batsmen 1",
+    "Batsmen 2",
+    "Batsmen 3",
+    "Batsmen 4",
+    "Batsmen 5"
+  ],
+  "bowlers": [
+    "Bowlers 1",
+    "Bowlers 2",
+    "Bowlers 3",
+    "Bowlers 4",
+    "Bowlers 5"
+  ],
+  "all-rounders": [
+    "All Rounders 1",
+    "All Rounders 2",
+    "All Rounders 3",
+    "All Rounders 4",
+    "All Rounders 5"
+  ],
+  "captains": [
+    "Captains 1",
+    "Captains 2",
+    "Captains 3",
+    "Captains 4",
+    "Captains 5"
+  ],
+  "ipl-players": [
+    "Ipl Players 1",
+    "Ipl Players 2",
+    "Ipl Players 3",
+    "Ipl Players 4",
+    "Ipl Players 5"
+  ],
+  "wicketkeepers": [
+    "Wicketkeepers 1",
+    "Wicketkeepers 2",
+    "Wicketkeepers 3",
+    "Wicketkeepers 4",
+    "Wicketkeepers 5"
+  ],
+  "basketball-players": [
+    "Basketball Players 1",
+    "Basketball Players 2",
+    "Basketball Players 3",
+    "Basketball Players 4",
+    "Basketball Players 5"
+  ],
+  "tennis-men": [
+    "Roger Federer",
+    "Rafael Nadal",
+    "Novak Djokovic",
+    "Pete Sampras",
+    "Andre Agassi"
+  ],
+  "tennis-women": [
+    "Serena Williams",
+    "Steffi Graf",
+    "Martina Navratilova",
+    "Naomi Osaka"
+  ],
+  "boxers": [
+    "Muhammad Ali",
+    "Mike Tyson",
+    "Floyd Mayweather Jr.",
+    "Manny Pacquiao"
+  ],
+  "mma-fighters": [
+    "Mma Fighters 1",
+    "Mma Fighters 2",
+    "Mma Fighters 3",
+    "Mma Fighters 4",
+    "Mma Fighters 5"
+  ],
+  "wrestlers": [
+    "Wrestlers 1",
+    "Wrestlers 2",
+    "Wrestlers 3",
+    "Wrestlers 4",
+    "Wrestlers 5"
+  ],
+  "f1-drivers": [
+    "Lewis Hamilton",
+    "Max Verstappen",
+    "Michael Schumacher",
+    "Ayrton Senna"
+  ],
+  "motogp-riders": [
+    "Motogp Riders 1",
+    "Motogp Riders 2",
+    "Motogp Riders 3",
+    "Motogp Riders 4",
+    "Motogp Riders 5"
+  ],
+  "track-athletes": [
+    "Track Athletes 1",
+    "Track Athletes 2",
+    "Track Athletes 3",
+    "Track Athletes 4",
+    "Track Athletes 5"
+  ],
+  "swimmers": [
+    "Swimmers 1",
+    "Swimmers 2",
+    "Swimmers 3",
+    "Swimmers 4",
+    "Swimmers 5"
+  ],
+  "golfers": [
+    "Golfers 1",
+    "Golfers 2",
+    "Golfers 3",
+    "Golfers 4",
+    "Golfers 5"
+  ],
+  "hockey-players": [
+    "Hockey Players 1",
+    "Hockey Players 2",
+    "Hockey Players 3",
+    "Hockey Players 4",
+    "Hockey Players 5"
+  ],
+  "gymnasts": [
+    "Gymnasts 1",
+    "Gymnasts 2",
+    "Gymnasts 3",
+    "Gymnasts 4",
+    "Gymnasts 5"
+  ],
+  "cyclists": [
+    "Cyclists 1",
+    "Cyclists 2",
+    "Cyclists 3",
+    "Cyclists 4",
+    "Cyclists 5"
+  ],
+  "chess-players": [
+    "Magnus Carlsen",
+    "Garry Kasparov",
+    "Bobby Fischer",
+    "Viswanathan Anand"
+  ],
+  "esports-players": [
+    "Esports Players 1",
+    "Esports Players 2",
+    "Esports Players 3",
+    "Esports Players 4",
+    "Esports Players 5"
+  ],
+  "poker-players": [
+    "Poker Players 1",
+    "Poker Players 2",
+    "Poker Players 3",
+    "Poker Players 4",
+    "Poker Players 5"
+  ],
+  "hollywood-actors": [
+    "Leonardo DiCaprio",
+    "Tom Hanks",
+    "Denzel Washington",
+    "Brad Pitt",
+    "Robert Downey Jr."
+  ],
+  "hollywood-actresses": [
+    "Meryl Streep",
+    "Scarlett Johansson",
+    "Natalie Portman",
+    "Cate Blanchett"
+  ],
+  "bollywood-actors": [
+    "Bollywood Actors 1",
+    "Bollywood Actors 2",
+    "Bollywood Actors 3",
+    "Bollywood Actors 4",
+    "Bollywood Actors 5"
+  ],
+  "bollywood-actresses": [
+    "Bollywood Actresses 1",
+    "Bollywood Actresses 2",
+    "Bollywood Actresses 3",
+    "Bollywood Actresses 4",
+    "Bollywood Actresses 5"
+  ],
+  "korean-actors": [
+    "Korean Actors 1",
+    "Korean Actors 2",
+    "Korean Actors 3",
+    "Korean Actors 4",
+    "Korean Actors 5"
+  ],
+  "directors": [
+    "Steven Spielberg",
+    "Christopher Nolan",
+    "Martin Scorsese",
+    "Quentin Tarantino"
+  ],
+  "comedians": [
+    "Comedians 1",
+    "Comedians 2",
+    "Comedians 3",
+    "Comedians 4",
+    "Comedians 5"
+  ],
+  "singers": [
+    "Beyonc\u00e9",
+    "Taylor Swift",
+    "Adele",
+    "Freddie Mercury",
+    "Michael Jackson",
+    "Ariana Grande",
+    "Ed Sheeran"
+  ],
+  "rappers": [
+    "Eminem",
+    "Jay-Z",
+    "Kendrick Lamar",
+    "Drake"
+  ],
+  "guitarists": [
+    "Guitarists 1",
+    "Guitarists 2",
+    "Guitarists 3",
+    "Guitarists 4",
+    "Guitarists 5"
+  ],
+  "drummers": [
+    "Drummers 1",
+    "Drummers 2",
+    "Drummers 3",
+    "Drummers 4",
+    "Drummers 5"
+  ],
+  "composers": [
+    "Composers 1",
+    "Composers 2",
+    "Composers 3",
+    "Composers 4",
+    "Composers 5"
+  ],
+  "producers": [
+    "Producers 1",
+    "Producers 2",
+    "Producers 3",
+    "Producers 4",
+    "Producers 5"
+  ],
+  "djs": [
+    "Djs 1",
+    "Djs 2",
+    "Djs 3",
+    "Djs 4",
+    "Djs 5"
+  ],
+  "scientists": [
+    "Albert Einstein",
+    "Marie Curie",
+    "Stephen Hawking",
+    "Isaac Newton",
+    "Charles Darwin",
+    "Nikola Tesla",
+    "Richard Feynman"
+  ],
+  "physicists": [
+    "Albert Einstein",
+    "Stephen Hawking",
+    "Richard Feynman",
+    "Niels Bohr"
+  ],
+  "mathematicians": [
+    "Mathematicians 1",
+    "Mathematicians 2",
+    "Mathematicians 3",
+    "Mathematicians 4",
+    "Mathematicians 5"
+  ],
+  "chemists": [
+    "Chemists 1",
+    "Chemists 2",
+    "Chemists 3",
+    "Chemists 4",
+    "Chemists 5"
+  ],
+  "biologists": [
+    "Biologists 1",
+    "Biologists 2",
+    "Biologists 3",
+    "Biologists 4",
+    "Biologists 5"
+  ],
+  "philosophers": [
+    "Philosophers 1",
+    "Philosophers 2",
+    "Philosophers 3",
+    "Philosophers 4",
+    "Philosophers 5"
+  ],
+  "economists": [
+    "Economists 1",
+    "Economists 2",
+    "Economists 3",
+    "Economists 4",
+    "Economists 5"
+  ],
+  "inventors": [
+    "Inventors 1",
+    "Inventors 2",
+    "Inventors 3",
+    "Inventors 4",
+    "Inventors 5"
+  ],
+  "astronauts": [
+    "Astronauts 1",
+    "Astronauts 2",
+    "Astronauts 3",
+    "Astronauts 4",
+    "Astronauts 5"
+  ],
+  "novelists": [
+    "J.K. Rowling",
+    "Stephen King",
+    "George Orwell",
+    "Jane Austen"
+  ],
+  "poets": [
+    "Poets 1",
+    "Poets 2",
+    "Poets 3",
+    "Poets 4",
+    "Poets 5"
+  ],
+  "playwrights": [
+    "Playwrights 1",
+    "Playwrights 2",
+    "Playwrights 3",
+    "Playwrights 4",
+    "Playwrights 5"
+  ],
+  "us-presidents": [
+    "Barack Obama",
+    "Abraham Lincoln",
+    "George Washington",
+    "Franklin D. Roosevelt"
+  ],
+  "indian-pms": [
+    "Indian Pms 1",
+    "Indian Pms 2",
+    "Indian Pms 3",
+    "Indian Pms 4",
+    "Indian Pms 5"
+  ],
+  "founders": [
+    "Elon Musk",
+    "Steve Jobs",
+    "Bill Gates",
+    "Jeff Bezos",
+    "Mark Zuckerberg",
+    "Sam Altman",
+    "Sundar Pichai"
+  ],
+  "investors": [
+    "Investors 1",
+    "Investors 2",
+    "Investors 3",
+    "Investors 4",
+    "Investors 5"
+  ],
+  "ceos": [
+    "Ceos 1",
+    "Ceos 2",
+    "Ceos 3",
+    "Ceos 4",
+    "Ceos 5"
+  ],
+  "painters": [
+    "Leonardo da Vinci",
+    "Pablo Picasso",
+    "Vincent van Gogh",
+    "Claude Monet"
+  ],
+  "photographers": [
+    "Photographers 1",
+    "Photographers 2",
+    "Photographers 3",
+    "Photographers 4",
+    "Photographers 5"
+  ],
+  "architects": [
+    "Architects 1",
+    "Architects 2",
+    "Architects 3",
+    "Architects 4",
+    "Architects 5"
+  ],
+  "chefs": [
+    "Chefs 1",
+    "Chefs 2",
+    "Chefs 3",
+    "Chefs 4",
+    "Chefs 5"
+  ],
+  "fashion-designers": [
+    "Fashion Designers 1",
+    "Fashion Designers 2",
+    "Fashion Designers 3",
+    "Fashion Designers 4",
+    "Fashion Designers 5"
+  ],
+  "dancers": [
+    "Dancers 1",
+    "Dancers 2",
+    "Dancers 3",
+    "Dancers 4",
+    "Dancers 5"
+  ],
+  "youtubers": [
+    "MrBeast",
+    "PewDiePie",
+    "Markiplier",
+    "Casey Neistat"
+  ],
+  "streamers": [
+    "Streamers 1",
+    "Streamers 2",
+    "Streamers 3",
+    "Streamers 4",
+    "Streamers 5"
+  ],
+  "podcasters": [
+    "Podcasters 1",
+    "Podcasters 2",
+    "Podcasters 3",
+    "Podcasters 4",
+    "Podcasters 5"
+  ]
+}

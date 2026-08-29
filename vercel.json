@@ -1,57 +1,12 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "cleanUrls": true,
-  "trailingSlash": false,
   "functions": {
-    "api/*.js": {
-      "maxDuration": 30
-    }
+    "api/checkout.js": { "includeFiles": "api/**" },
+    "api/payment-done.js": { "includeFiles": "api/**" },
+    "api/admin.js": { "includeFiles": "api/**" }
   },
-  "headers": [
-    {
-      "source": "/css/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=0, must-revalidate"
-        }
-      ]
-    },
-    {
-      "source": "/js/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=0, must-revalidate"
-        }
-      ]
-    },
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
-        {
-          "key": "Referrer-Policy",
-          "value": "strict-origin-when-cross-origin"
-        },
-        {
-          "key": "X-Frame-Options",
-          "value": "SAMEORIGIN"
-        },
-        {
-          "key": "Permissions-Policy",
-          "value": "geolocation=(), microphone=(), camera=()"
-        }
-      ]
-    }
-  ],
-  "crons": [
-    {
-      "path": "/api/images",
-      "schedule": "0 4 * * *"
-    }
+  "rewrites": [
+    { "source": "/api/checkout", "destination": "/api/checkout.js" },
+    { "source": "/api/payment-done", "destination": "/api/payment-done.js" },
+    { "source": "/api/admin", "destination": "/api/admin.js" }
   ]
 }
