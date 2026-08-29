@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="referrer" content="no-referrer">
 <title>GOAT.lol — Who's the greatest?</title>
 <meta name="description" content="Fans buy credit, then spend it backing whoever they believe in. The money is the ranking.">
-<link rel="preconnect" href="https://iuvmzlrnbwptgrbkdbbn.supabase.co" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="css/style.css">
@@ -19,28 +19,52 @@
     <nav class="topnav">
       <a href="index.html" class="active">Categories</a>
       <a href="fans.html">Fans</a>
-      <a href="about.html">About</a>
+      <a href="about.html" class="hide-xs">About</a>
       <span id="balance-pill" class="balance-pill"><a href="wallet.html">Sign in</a></span>
     </nav>
   </div>
 </header>
 
 <div class="container">
-  <div class="live-pill"><span class="live-dot"></span> <span id="online">— online</span> · <span id="backed-today">$0 backed today</span></div>
 
-  <div class="hero">
-    <h1 class="display">Who's the greatest?</h1>
-    <p>Every argument is free. This one isn't. Load $5, back who you believe in — the board is the money, nothing else.</p>
+  <!-- Tabs + sort -->
+  <div class="tabrow">
+    <div class="tabs" role="tablist">
+      <button class="tab is-active" role="tab" data-view="fights" aria-selected="true">Top fights</button>
+      <button class="tab" role="tab" data-view="boards" aria-selected="false">All boards <span id="boards-count">(—)</span></button>
+    </div>
+    <label class="sortbox">
+      <span>Sort</span>
+      <select id="sort">
+        <option value="closest">Closest race</option>
+        <option value="hottest">Most backed</option>
+        <option value="open">Still open</option>
+        <option value="az">A–Z</option>
+      </select>
+    </label>
   </div>
 
-  <div id="groups"></div>
+  <!-- Group chips: every group, with how many boards it holds -->
+  <nav id="chips" class="chiprow" aria-label="Filter by group"></nav>
 
-  <div id="unclaimed" class="unclaimed" style="display:none"></div>
+  <!-- Section heading + counter -->
+  <div class="sechead">
+    <h2 id="sec-title" class="display">Top fights right now</h2>
+    <span id="sec-count" class="muted"></span>
+  </div>
 
-  <div style="margin:20px 0">
+  <div id="fights" class="fights"></div>
+  <div id="boards" class="boardgrid" hidden></div>
+  <p id="empty-state" class="empty" hidden></p>
+
+  <div id="more-wrap" class="morewrap" hidden>
+    <button id="more" class="btn-ghost">Show more boards</button>
+  </div>
+
+  <section style="margin:28px 0 20px">
     <h2 class="display" style="font-size:18px">Live activity</h2>
     <div id="activity" class="activity"></div>
-  </div>
+  </section>
 </div>
 
 <footer class="footer">GOAT.lol — pay to rank. <a href="rules.html">Rules</a> · <a href="wallet.html">Wallet</a> · <a href="fans.html">Fans</a></footer>
@@ -49,180 +73,302 @@
 <script src="js/optimized-image.js"></script>
 <script src="js/wiki-fallback.js"></script>
 <script>
-(async function(){
-  const sb=window.supabaseClient;
-  const groupsEl=document.getElementById('groups'), unclaimedEl=document.getElementById('unclaimed'), activityEl=document.getElementById('activity');
-  const search=document.getElementById('search');
-  if(search){
-    search.addEventListener('keydown', e=>{ if(e.key==='Enter'){ const q=e.target.value.trim(); if(q) location.href='category.html?slug='+encodeURIComponent(q); }});
-  }
+(async function () {
+  const sb = window.supabaseClient;
+  const G = window.GOAT;
+  const $ = (id) => document.getElementById(id);
 
-  // Clear old stale cache
+  const esc = (v) => String(v === null || v === undefined ? '' : v)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
+  const PAGE = 30;
+  let cats = [];
+  let peopleByCat = {};
+  let view = 'fights';
+  let group = 'all';
+  let sort = 'closest';
+  let shown = PAGE;
+
+  $('search').addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter') return;
+    const q = e.target.value.trim();
+    if (q) location.href = 'category.html?slug=' + encodeURIComponent(q);
+  });
+
+  // ------------------------------------------------------------------ data
+
   try {
     localStorage.removeItem('goat_home_cache');
     localStorage.removeItem('goat_home_cache_v2');
-  } catch(e) {}
+  } catch (e) { /* private mode */ }
 
-  let cats = [];
   let people = [];
-
   try {
-    const [catsRes, p0, p1, p2, p3, p4, p5] = await Promise.all([
+    const cols = 'id,slug,name,photo_path,total_cents,category_id,first_backed_at';
+    const pages = [0, 1, 2, 3, 4, 5].map((n) =>
+      sb.from('people').select(cols).order('total_cents', { ascending: false })
+        .range(n * 1000, n * 1000 + 999));
+    const [catsRes, ...peopleRes] = await Promise.all([
       sb.from('categories').select('*').order('sort_order'),
-      sb.from('people').select('id,slug,name,photo_path,total_cents,category_id,first_backed_at').order('total_cents',{ascending:false}).range(0, 999),
-      sb.from('people').select('id,slug,name,photo_path,total_cents,category_id,first_backed_at').order('total_cents',{ascending:false}).range(1000, 1999),
-      sb.from('people').select('id,slug,name,photo_path,total_cents,category_id,first_backed_at').order('total_cents',{ascending:false}).range(2000, 2999),
-      sb.from('people').select('id,slug,name,photo_path,total_cents,category_id,first_backed_at').order('total_cents',{ascending:false}).range(3000, 3999),
-      sb.from('people').select('id,slug,name,photo_path,total_cents,category_id,first_backed_at').order('total_cents',{ascending:false}).range(4000, 4999),
-      sb.from('people').select('id,slug,name,photo_path,total_cents,category_id,first_backed_at').order('total_cents',{ascending:false}).range(5000, 5999)
+      ...pages,
     ]);
     cats = catsRes?.data || [];
-    people = [
-      ...(p0?.data || []),
-      ...(p1?.data || []),
-      ...(p2?.data || []),
-      ...(p3?.data || []),
-      ...(p4?.data || []),
-      ...(p5?.data || [])
-    ];
-  } catch(e) {
+    people = peopleRes.flatMap((r) => r?.data || []);
+  } catch (e) {
     console.warn('DB fetch error:', e);
   }
 
-  // Fallback if DB empty
-  if((!cats || !cats.length) || (!people || !people.length)){
-    const fallback = await window.WIKI_FALLBACK?.();
-    if(fallback){
-      if(!cats || !cats.length) cats = fallback.categories.map((c,i)=>({id:'fallback-'+c.slug, slug:c.slug, name:c.name, group_name:c.group, sort_order:i}));
-      if(!people || !people.length){
-        const idBySlug={}; cats.forEach(c=> idBySlug[c.slug]=c.id);
-        people = fallback.people.map(p=>({id:p.id, slug:p.slug, name:p.name, photo_path:p.photo_path, total_cents:0, category_id:idBySlug[p.category_slug]||cats[0].id, first_backed_at:null}));
+  if (!cats.length || !people.length) {
+    const fb = await window.WIKI_FALLBACK?.();
+    if (fb) {
+      if (!cats.length) {
+        cats = fb.categories.map((c, i) => ({
+          id: 'fallback-' + c.slug, slug: c.slug, name: c.name,
+          group_name: c.group, sort_order: i,
+        }));
+      }
+      if (!people.length) {
+        const idBySlug = {};
+        cats.forEach((c) => { idBySlug[c.slug] = c.id; });
+        people = fb.people.map((p) => ({
+          id: p.id, slug: p.slug, name: p.name, photo_path: p.photo_path,
+          total_cents: 0, category_id: idBySlug[p.category_slug] || cats[0].id,
+          first_backed_at: null,
+        }));
       }
     }
   }
 
-  function renderHomepage(cats, people) {
-    if(!cats || !cats.length) return;
-    
-    // Pre-index people by category_id for instant lookups
-    const peopleByCat = {};
-    for(const p of (people || [])){
-      if(!peopleByCat[p.category_id]) peopleByCat[p.category_id] = [];
-      peopleByCat[p.category_id].push(p);
-    }
+  // Index people under their board, highest backed first.
+  peopleByCat = {};
+  for (const p of people) {
+    (peopleByCat[p.category_id] ||= []).push(p);
+  }
+  for (const id of Object.keys(peopleByCat)) {
+    peopleByCat[id].sort((a, b) => (b.total_cents || 0) - (a.total_cents || 0));
+  }
 
-    // Group categories
-    const groupMap = {};
-    cats.forEach(c => {
-      const grp = c.group_name || 'Other';
-      if(!groupMap[grp]) groupMap[grp] = [];
-      groupMap[grp].push(c);
+  $('boards-count').textContent = `(${cats.length})`;
+
+  // ----------------------------------------------------------------- chips
+
+  function renderChips() {
+    const counts = {};
+    for (const c of cats) {
+      const g = c.group_name || 'Other';
+      counts[g] = (counts[g] || 0) + 1;
+    }
+    const groups = Object.keys(counts).sort((a, b) => counts[b] - counts[a] || a.localeCompare(b));
+
+    $('chips').innerHTML =
+      `<button class="chip${group === 'all' ? ' is-active' : ''}" data-group="all">
+         All <span class="chip-n">${cats.length}</span></button>` +
+      groups.map((g) => `
+        <button class="chip${group === g ? ' is-active' : ''}" data-group="${esc(g)}">
+          ${esc(g)} <span class="chip-n">${counts[g]}</span></button>`).join('');
+  }
+
+  $('chips').addEventListener('click', (e) => {
+    const chip = e.target.closest('.chip');
+    if (!chip) return;
+    group = chip.dataset.group;
+    shown = PAGE;
+    renderChips();
+    render();
+  });
+
+  document.querySelectorAll('.tab').forEach((tab) => {
+    tab.addEventListener('click', () => {
+      view = tab.dataset.view;
+      shown = PAGE;
+      document.querySelectorAll('.tab').forEach((t) => {
+        const on = t === tab;
+        t.classList.toggle('is-active', on);
+        t.setAttribute('aria-selected', String(on));
+      });
+      render();
     });
+  });
 
-    // Sort groups by total money
-    const groupTotals = {};
-    Object.keys(groupMap).forEach(g => {
-      const ids = groupMap[g].map(c => c.id);
-      groupTotals[g] = ids.reduce((sum, cid) => {
-        const pList = peopleByCat[cid] || [];
-        return sum + pList.reduce((s, p) => s + (p.total_cents || 0), 0);
-      }, 0);
+  $('sort').addEventListener('change', (e) => { sort = e.target.value; shown = PAGE; render(); });
+  $('more').addEventListener('click', () => { shown += PAGE; render(); });
+
+  // ---------------------------------------------------------------- render
+
+  /** Boards in the current group, ordered by the chosen sort. */
+  function visibleCats() {
+    const list = cats.filter((c) => group === 'all' || (c.group_name || 'Other') === group);
+    const top = (c, i) => (peopleByCat[c.id] || [])[i];
+    const gapOf = (c) => {
+      const a = top(c, 0), b = top(c, 1);
+      if (!a || !b) return Number.MAX_SAFE_INTEGER;
+      return (a.total_cents || 0) - (b.total_cents || 0);
+    };
+    const potOf = (c) => (peopleByCat[c.id] || []).reduce((s, p) => s + (p.total_cents || 0), 0);
+
+    return list.sort((a, b) => {
+      switch (sort) {
+        case 'hottest': return potOf(b) - potOf(a);
+        case 'open':    return potOf(a) - potOf(b);
+        case 'az':      return String(a.name).localeCompare(String(b.name));
+        default:        return gapOf(a) - gapOf(b);
+      }
     });
-    const sortedGroups = Object.keys(groupMap).sort((a,b) => groupTotals[b] - groupTotals[a]);
+  }
 
-    groupsEl.innerHTML = '';
-    let tileIndex = 0;
-
-    for(const g of sortedGroups){
-      const groupCats = groupMap[g];
-      const section = document.createElement('div');
-      section.className = 'group';
-      section.innerHTML = `<div class="group-head"><h2>${g}</h2><span class="mono" style="font-size:11px;color:var(--muted)">${groupCats.length} boards</span></div><div class="cat-grid"></div>`;
-      const grid = section.querySelector('.cat-grid');
-
-      for(const cat of groupCats){
-        const catPeople = peopleByCat[cat.id] || [];
-        const p1 = catPeople[0], p2 = catPeople[1];
-        const tile = document.createElement('a');
-        tile.href = `category.html?slug=${cat.slug}`;
-        tile.className = 'cat-tile';
-
-        const priority = tileIndex < 6 ? 'eager' : 'lazy';
-        tileIndex++;
-
-        const p1Photo = p1 ? window.OptimizedImage.render({ photoPath: p1.photo_path, name: p1.name, size: 120, priority, slug: p1.slug }) : '<div class="fallback">?</div>';
-        const p2Photo = p2 ? window.OptimizedImage.render({ photoPath: p2.photo_path, name: p2.name, size: 80, priority, slug: p2.slug }) : '<div class="fallback" style="font-size:16px">?</div>';
-        const gap = p1 && p2 ? `$${(((p1.total_cents||0) - (p2.total_cents||0))/100).toFixed(0)} ahead` : p1 ? '—' : '$1 takes it';
-
-        tile.innerHTML = `
-          <div class="cat-tile-head"><strong>${cat.name}</strong><span>${catPeople.length} people</span></div>
-          <div class="cat-tile-body">
-            <div class="p1">
-              <div class="photo">${p1Photo}</div>
-              <div class="meta">
-                <div class="name display">${p1 ? p1.name : 'Empty'}</div>
-                <div class="total display">${p1 ? window.GOAT.cents(p1.total_cents||0) : '$0'}</div>
-                <div class="gap">${gap}</div>
-              </div>
-            </div>
-            <div class="p2">
-              <div class="photo" style="border-radius:12px">${p2Photo}</div>
-              <div class="meta">
-                <div class="name" style="font-size:12px;font-weight:600">${p2 ? p2.name : '—'}</div>
-                <div class="total" style="font-size:13px">${p2 ? window.GOAT.cents(p2.total_cents||0) : ''}</div>
-              </div>
-            </div>
-          </div>
-          <div class="cat-tile-foot"><span>${p1 ? window.GOAT.cents(p1.total_cents||0)+' total' : 'Unclaimed'}</span><span>View board →</span></div>`;
-        grid.appendChild(tile);
-      }
-      groupsEl.appendChild(section);
+  function fighter(person, cat, side) {
+    if (!person) {
+      return `<div class="fighter is-empty">
+        <span class="fighter-photo"><span class="fallback">?</span></span>
+        <span class="fighter-name">Open</span>
+        <span class="fighter-score">$0</span>
+        <span class="fighter-label">backed</span>
+      </div>`;
     }
+    const photo = window.OptimizedImage.render({
+      photoPath: person.photo_path, name: person.name, size: 400,
+      priority: side === 'a' ? 'eager' : 'lazy',
+    });
+    return `<a class="fighter" href="person.html?slug=${encodeURIComponent(person.slug || '')}">
+      <span class="fighter-photo">${photo}</span>
+      <span class="fighter-name">${esc(person.name)}</span>
+      <span class="fighter-score">${esc(G.cents(person.total_cents || 0))}</span>
+      <span class="fighter-label">backed</span>
+    </a>`;
   }
 
-  // Initial render with fresh data
-  renderHomepage(cats, people);
+  function fightCard(cat) {
+    const list = peopleByCat[cat.id] || [];
+    const a = list[0], b = list[1];
+    const aTotal = a?.total_cents || 0;
+    const bTotal = b?.total_cents || 0;
+    const sum = aTotal + bTotal;
+    const pct = sum > 0 ? Math.round((aTotal / sum) * 100) : 50;
 
-
-  // Unclaimed banner
-  const emptyCats = cats.filter(c => !(peopleByCat[c.id] && peopleByCat[c.id].length));
-  if(emptyCats.length && unclaimedEl){
-    unclaimedEl.style.display = 'block';
-    unclaimedEl.innerHTML = `<strong>${emptyCats.length} boards where #1 is still open. $1 takes it.</strong> <span class="mono" style="font-size:12px;color:var(--muted)">Most boards will be empty at launch — that's an offer, not a graveyard.</span>`;
-  }
-
-  // Asynchronous secondary data (bids / activity)
-  try {
-    const today = new Date(); today.setHours(0,0,0,0);
-    const [todayBidsRes, activityBidsRes] = await Promise.all([
-      sb.from('bids').select('amount_cents').gte('created_at', today.toISOString()),
-      sb.from('bids').select('amount_cents,created_at,people(name,slug),users(display_name,is_anonymous)').order('created_at',{ascending:false}).limit(10)
-    ]);
-    const backedToday = (todayBidsRes.data || []).reduce((s,r) => s + (r.amount_cents || 0), 0);
-    const backedEl = document.getElementById('backed-today');
-    if(backedEl) backedEl.textContent = window.GOAT.cents(backedToday) + ' backed today';
-
-    const bids = activityBidsRes.data;
-    if(activityEl){
-      if(bids && bids.length){
-        activityEl.innerHTML = bids.map(b => {
-          const handle = b.users?.is_anonymous ? 'Anonymous' : (b.users?.display_name || 'Someone');
-          return `<div><b>${handle}</b> put ${window.GOAT.cents(b.amount_cents)} on <a href="person.html?slug=${b.people?.slug}" style="color:var(--gold)">${b.people?.name}</a> · ${window.GOAT.fmtAgo(b.created_at)}</div>`;
-        }).join('');
-      } else {
-        activityEl.innerHTML = '<div class="mono" style="color:var(--muted)">No activity yet. Be the first.</div>';
-      }
+    let foot;
+    if (!list.length) {
+      foot = 'Nobody has backed yet — <b>$1 takes #1</b>';
+    } else if (!b) {
+      foot = `<b>${esc(a.name)}</b> is unopposed — <b>$1</b> puts someone next to them`;
+    } else if (aTotal === bTotal) {
+      foot = `Dead level — <b>$1</b> breaks the tie`;
+    } else {
+      foot = `<b>${esc(a.name)}</b> leads by <b>${esc(G.cents(aTotal - bTotal))}</b>`;
     }
-  } catch(e) {
-    if(activityEl) activityEl.innerHTML = '<div class="mono" style="color:var(--muted)">No activity yet. Be the first.</div>';
+
+    return `<article class="fight">
+      <header class="fight-head">
+        <h3 class="display"><a href="category.html?slug=${encodeURIComponent(cat.slug)}">${esc(cat.name)}</a></h3>
+        <span class="fight-tag">${esc(cat.group_name || '')}</span>
+      </header>
+      <div class="fight-body">
+        ${fighter(a, cat, 'a')}
+        <span class="vs" aria-hidden="true">VS</span>
+        ${fighter(b, cat, 'b')}
+      </div>
+      <div class="fight-bar" role="img" aria-label="${pct}% to ${esc(a?.name || 'nobody')}">
+        <span style="width:${pct}%"></span>
+      </div>
+      <p class="fight-foot">${foot}</p>
+    </article>`;
   }
 
-  // Realtime subscription
+  function boardCard(cat) {
+    const list = peopleByCat[cat.id] || [];
+    const leader = list[0];
+    const pot = list.reduce((s, p) => s + (p.total_cents || 0), 0);
+    const photo = leader
+      ? window.OptimizedImage.render({ photoPath: leader.photo_path, name: leader.name, size: 96 })
+      : '<span class="fallback">?</span>';
+
+    return `<a class="board" href="category.html?slug=${encodeURIComponent(cat.slug)}">
+      <span class="board-photo">${photo}</span>
+      <span class="board-meta">
+        <span class="board-name">${esc(cat.name)}</span>
+        <span class="board-sub">${esc(cat.group_name || '')} · ${list.length} ${list.length === 1 ? 'name' : 'names'}</span>
+        <span class="board-lead">${leader ? esc(leader.name) : 'Unclaimed — $1 takes #1'}</span>
+      </span>
+      <span class="board-pot">${esc(G.cents(pot))}</span>
+    </a>`;
+  }
+
+  function render() {
+    const list = visibleCats();
+    const slice = list.slice(0, shown);
+
+    $('sec-title').textContent = view === 'fights' ? 'Top fights right now' : 'All boards';
+    $('sec-count').textContent = list.length ? `${slice.length} of ${list.length}` : '';
+
+    $('fights').hidden = view !== 'fights';
+    $('boards').hidden = view !== 'boards';
+
+    if (!list.length) {
+      $('fights').innerHTML = '';
+      $('boards').innerHTML = '';
+      $('empty-state').hidden = false;
+      $('empty-state').textContent = 'No boards in this group yet.';
+      $('more-wrap').hidden = true;
+      return;
+    }
+    $('empty-state').hidden = true;
+
+    if (view === 'fights') {
+      $('fights').innerHTML = slice.map(fightCard).join('');
+    } else {
+      $('boards').innerHTML = slice.map(boardCard).join('');
+    }
+
+    $('more-wrap').hidden = slice.length >= list.length;
+  }
+
+  renderChips();
+  render();
+
+  // -------------------------------------------------------------- activity
+
   try {
-    sb.channel('bids-index').on('postgres_changes', {event:'INSERT', schema:'public', table:'bids'}, async () => {
-      location.reload();
-    }).subscribe();
-  } catch(e) {}
+    const { data: bids } = await sb.from('bids')
+      .select('amount_cents,created_at,people(name,slug),users(display_name,is_anonymous)')
+      .order('created_at', { ascending: false }).limit(10);
+
+    const el = $('activity');
+    if (bids && bids.length) {
+      el.innerHTML = bids.map((b) => {
+        const who = b.users?.is_anonymous ? 'Anonymous' : (b.users?.display_name || 'Someone');
+        return `<div><b>${esc(who)}</b> put ${esc(G.cents(b.amount_cents))} on
+          <a href="person.html?slug=${encodeURIComponent(b.people?.slug || '')}" style="color:var(--gold)">${esc(b.people?.name)}</a>
+          · ${esc(G.fmtAgo(b.created_at))}</div>`;
+      }).join('');
+    } else {
+      el.innerHTML = '<div class="muted">No activity yet. Be the first.</div>';
+    }
+  } catch (e) {
+    $('activity').innerHTML = '<div class="muted">No activity yet. Be the first.</div>';
+  }
+
+  // Refresh the boards in place when someone backs a name.
+  let timer = null;
+  try {
+    sb.channel('bids-index').on('postgres_changes',
+      { event: 'INSERT', schema: 'public', table: 'bids' }, () => {
+        clearTimeout(timer);
+        timer = setTimeout(async () => {
+          try {
+            const { data } = await sb.from('people')
+              .select('id,slug,name,photo_path,total_cents,category_id,first_backed_at')
+              .order('total_cents', { ascending: false }).range(0, 5999);
+            if (!data || !data.length) return;
+            peopleByCat = {};
+            for (const p of data) (peopleByCat[p.category_id] ||= []).push(p);
+            for (const id of Object.keys(peopleByCat)) {
+              peopleByCat[id].sort((x, y) => (y.total_cents || 0) - (x.total_cents || 0));
+            }
+            render();
+          } catch (err) { /* the next event retries */ }
+        }, 1200);
+      }).subscribe();
+  } catch (e) { /* realtime is optional */ }
 })();
 </script>
 </body>
